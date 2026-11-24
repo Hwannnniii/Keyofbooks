@@ -1,0 +1,2146 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>나의 책열쇠 학습지</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Jua&family=Gowun+Dodum&display=swap" rel="stylesheet">
+<style>
+:root{
+  /* 밝은 교실 화면용 단일 테마: 황금 열쇠 + 거북 초록 + 은촛대 파랑 */
+  --bg:#EEF3FA; --paper:#FFFFFF; --ink:#1E2B3C; --muted:#5A6A80; --line:#D7E0EC; --line2:#B9C6D8;
+  --key:#FFB627; --key-deep:#B87A00; --key-soft:#FFF1C9;
+  --turtle:#1F9E66; --turtle-soft:#DCF5E8;
+  --hugo:#3F55D1; --hugo-soft:#E3E8FF;
+  --pink:#E9466F; --pink-soft:#FFE2EA;
+  --ok:#15955B; --bad:#D93D45;
+  --display:'Jua','Noto Sans KR','Apple SD Gothic Neo','Malgun Gothic',sans-serif;
+  --body:'Gowun Dodum','Noto Sans KR','Apple SD Gothic Neo','Malgun Gothic',sans-serif;
+  /* 레이아웃: 왼쪽 차시 목록 + 오른쪽 수업 화면, 수업 화면 모드는 전체 덮기 */
+  color-scheme: light;
+}
+*{box-sizing:border-box}
+html,body{height:100%;margin:0}
+body{background:var(--bg);color:var(--ink);font-family:var(--body);font-size:16px;line-height:1.6}
+button,input,select,textarea{font:inherit;color:inherit}
+button{cursor:pointer}
+:focus-visible{outline:3px solid var(--hugo);outline-offset:2px;border-radius:8px}
+h1,h2,h3,h4{font-family:var(--display);font-weight:400;margin:0;text-wrap:balance;line-height:1.3}
+.app{display:grid;grid-template-columns:290px 1fr;grid-template-rows:auto 1fr;height:100%}
+.top{grid-column:1/-1;display:flex;align-items:center;gap:12px;padding:8px 18px;background:var(--paper);border-bottom:2px solid var(--line)}
+.brand{display:flex;align-items:center;gap:8px;text-decoration:none;color:inherit;background:none;border:0;padding:0}
+.brand b{font-family:var(--display);font-size:22px;font-weight:400;white-space:nowrap}
+.brand small{color:var(--muted);font-size:13px}
+.top .sp{flex:1}
+.tbtn{display:inline-flex;align-items:center;gap:6px;border:2px solid var(--line2);background:var(--paper);border-radius:999px;padding:6px 14px;font-family:var(--display);font-size:15px;box-shadow:0 3px 0 var(--line2)}
+.tbtn:hover{transform:translateY(-1px)}
+.tbtn:active{transform:translateY(2px);box-shadow:0 1px 0 var(--line2)}
+.tbtn.key{background:var(--key);border-color:var(--key-deep);box-shadow:0 3px 0 var(--key-deep)}
+.menu{display:none}
+.side{overflow:auto;background:var(--paper);border-right:2px solid var(--line);padding:14px 12px 40px}
+.side h3{font-size:15px;color:var(--muted);margin:16px 8px 6px;display:flex;align-items:center;gap:6px}
+.side h3 i{width:10px;height:10px;border-radius:50%;display:inline-block}
+.litem{display:flex;gap:10px;align-items:center;width:100%;text-align:left;background:none;border:0;border-radius:12px;padding:7px 8px}
+.litem:hover{background:var(--bg)}
+.litem.on{background:var(--key-soft)}
+.litem .no{flex:none;min-width:44px;text-align:center;font-family:var(--display);font-size:13px;padding:2px 6px;border-radius:8px;background:var(--bg);border:1.5px solid var(--line2)}
+.litem.on .no{background:var(--key);border-color:var(--key-deep)}
+.litem .tt{font-size:14px;line-height:1.35;flex:1}
+.litem .tt small{display:block;color:var(--muted);font-size:12px}
+.litem svg{flex:none}
+.main{overflow:auto;padding:24px clamp(16px,3vw,40px) 80px}
+.wrap{max-width:1040px;margin:0 auto;display:grid;gap:22px}
+.card{background:var(--paper);border:2px solid var(--line);border-radius:20px;padding:20px 22px}
+.chip{display:inline-flex;align-items:center;gap:4px;border-radius:999px;padding:2px 10px;font-size:13px;border:1.5px solid var(--line2);background:var(--paper);white-space:nowrap}
+.chip.turtle{background:var(--turtle-soft);border-color:var(--turtle);color:#0E6B43}
+.chip.hugo{background:var(--hugo-soft);border-color:var(--hugo);color:#26369A}
+.chip.key{background:var(--key-soft);border-color:var(--key-deep);color:#7A5200}
+.chip.pink{background:var(--pink-soft);border-color:var(--pink);color:#A21F45}
+/* 홈 */
+.hero{display:grid;grid-template-columns:auto 1fr;gap:18px;align-items:center;background:linear-gradient(135deg,var(--key-soft),#FFFFFF 60%);border-color:#F3D98A}
+.hero h1{font-size:clamp(26px,4vw,38px)}
+.hero p{margin:6px 0 0;color:var(--muted);max-width:60ch}
+.bubble{position:relative;background:var(--paper);border:2px solid var(--ink);border-radius:18px;padding:10px 16px;font-size:17px}
+.bubble:before{content:"";position:absolute;left:-12px;top:20px;border:10px solid transparent;border-right-color:var(--ink);border-left:0}
+.bubble:after{content:"";position:absolute;left:-8px;top:22px;border:8px solid transparent;border-right-color:var(--paper);border-left:0}
+.books{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+.bookcard{display:grid;grid-template-columns:auto 1fr;gap:14px;align-items:start}
+.bookcard.turtle{background:var(--turtle-soft);border-color:#9AD9B9}
+.bookcard.hugo{background:var(--hugo-soft);border-color:#AEB9F2}
+.bookcard h2{font-size:24px}
+.bookcard .by{font-size:13px;color:var(--muted)}
+.bookcard p{margin:8px 0}
+.bookcard .ls{display:flex;flex-wrap:wrap;gap:6px}
+.bookcard .ls button{border:0;background:var(--paper);border-radius:10px;padding:3px 9px;font-size:13px}
+.sec-h{display:flex;align-items:center;gap:10px;margin-bottom:12px}
+.sec-h h2{font-size:22px}
+.sec-h .sp{flex:1}
+.muted{color:var(--muted)}
+/* 여정 지도 */
+.journey{display:grid;gap:14px}
+.jrow{display:grid;grid-template-columns:110px 1fr;gap:10px;align-items:center}
+.jrow .lab{font-family:var(--display);font-size:17px;padding:6px 10px;border-radius:12px;text-align:center}
+.jstones{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.stone{position:relative;display:flex;flex-direction:column;align-items:center;justify-content:center;width:92px;min-height:76px;border-radius:18px;border:2px solid var(--line2);background:var(--paper);padding:6px 4px;font-size:12px;line-height:1.25;text-align:center;box-shadow:0 3px 0 var(--line2)}
+.stone b{font-family:var(--display);font-weight:400;font-size:14px}
+.stone.turtle{border-color:var(--turtle);box-shadow:0 3px 0 var(--turtle)}
+.stone.hugo{border-color:var(--hugo);box-shadow:0 3px 0 var(--hugo)}
+.stone.both{border-color:var(--pink);box-shadow:0 3px 0 var(--pink)}
+.stone.seen:after{content:"✓";position:absolute;top:-8px;right:-6px;width:20px;height:20px;border-radius:50%;background:var(--ok);color:#fff;font-size:12px;display:grid;place-items:center}
+.legend{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
+.stds{display:grid;gap:6px;margin:0;padding:0;list-style:none}
+.stds li{display:grid;grid-template-columns:auto 1fr;gap:10px;font-size:14px}
+/* 차시 */
+.lhead{border:0;color:#fff;padding:22px 24px;display:grid;grid-template-columns:1fr auto;gap:16px;align-items:center}
+.lhead.turtle{background:var(--turtle)}.lhead.hugo{background:var(--hugo)}.lhead.none{background:#2F3E57}.lhead.both{background:var(--pink)}
+.lhead .crumb{font-size:14px;opacity:.9}
+.lhead h1{font-size:clamp(26px,3.6vw,36px);margin:4px 0 8px}
+.lhead .meta{display:flex;flex-wrap:wrap;gap:6px}
+.lhead .chip{background:rgba(255,255,255,.18);border-color:rgba(255,255,255,.55);color:#fff}
+.lhead .acts{display:flex;flex-direction:column;gap:8px;align-items:flex-end}
+.goal{display:grid;grid-template-columns:auto 1fr;gap:14px;align-items:center}
+.goal ul{margin:6px 0 0;padding-left:20px}
+.flow{display:grid;gap:14px}
+.step{display:grid;grid-template-columns:76px 1fr;gap:14px}
+.step .st{display:flex;flex-direction:column;align-items:center;gap:4px}
+.st .stage{font-family:var(--display);font-size:15px;border-radius:12px;padding:4px 10px;background:var(--key-soft);border:2px solid var(--key-deep)}
+.st .stage.전개{background:var(--hugo-soft);border-color:var(--hugo)}
+.st .stage.정리{background:var(--pink-soft);border-color:var(--pink)}
+.st .min{font-size:13px;color:var(--muted)}
+.st .bar{flex:1;width:3px;background:var(--line);border-radius:2px}
+.step .body{background:var(--paper);border:2px solid var(--line);border-radius:18px;padding:16px 18px}
+.step h3{font-size:20px}
+.ask{display:flex;gap:10px;align-items:flex-start;margin:10px 0;padding:10px 14px;border-radius:14px;background:var(--key-soft);font-size:16.5px}
+.ask b{font-family:var(--display);font-weight:400;flex:none;background:var(--key);border-radius:8px;padding:0 8px}
+.step ul{margin:6px 0;padding-left:20px}
+.tip{font-size:14px;color:#5B4A12;background:#FFF8E1;border-left:4px solid var(--key);padding:8px 12px;border-radius:8px;margin-top:8px}
+.tool{margin-top:12px;border:2px dashed var(--line2);border-radius:16px;padding:14px;background:#FAFCFF}
+.tool > .th{display:flex;align-items:center;gap:8px;margin-bottom:10px;font-family:var(--display);font-size:16px}
+.tool > .th .sp{flex:1}
+.evalc{display:grid;grid-template-columns:auto 1fr;gap:12px;align-items:center;background:var(--pink-soft);border-color:#F5B3C4}
+.wslist{display:grid;gap:8px;margin:8px 0 0;padding:0;list-style:none}
+.wslist li{display:flex;gap:8px;align-items:baseline}
+.wslist li span{font-size:12px;border-radius:6px;padding:0 6px;background:var(--bg);border:1px solid var(--line2);flex:none}
+.pager{display:flex;justify-content:space-between;gap:10px}
+/* 위젯 공통 */
+.btn{border:2px solid var(--line2);background:var(--paper);border-radius:12px;padding:5px 12px;font-size:15px;box-shadow:0 2px 0 var(--line2)}
+.btn:active{transform:translateY(2px);box-shadow:none}
+.btn.pri{background:var(--key);border-color:var(--key-deep);box-shadow:0 2px 0 var(--key-deep);font-family:var(--display)}
+.btn.sm{padding:2px 9px;font-size:13px}
+.row{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.inp{border:2px solid var(--line2);border-radius:12px;padding:6px 10px;background:#fff;min-width:0}
+.cols{display:grid;gap:10px}
+.colbox{background:#fff;border:2px solid var(--line);border-radius:14px;padding:10px;min-height:120px}
+.colbox h4{font-size:16px;margin-bottom:8px}
+.stickies{display:flex;flex-wrap:wrap;gap:8px}
+.sticky{position:relative;background:#FFF3B0;border-radius:4px 14px 4px 14px;padding:10px 26px 10px 12px;min-width:120px;max-width:240px;font-size:15px;box-shadow:0 3px 6px rgba(30,43,60,.12);overflow-wrap:anywhere}
+.sticky.c1{background:#D7F3E5}.sticky.c2{background:#DDE4FF}.sticky.c3{background:#FFDDE6}.sticky.c4{background:#E9E0FF}
+.sticky .x{position:absolute;top:2px;right:4px;border:0;background:none;font-size:15px;color:var(--muted);padding:2px}
+.sticky .lk{display:block;margin-top:6px;border:1.5px solid var(--pink);background:#fff;border-radius:999px;font-size:13px;padding:0 8px;color:var(--pink)}
+.pool{display:flex;flex-wrap:wrap;gap:8px;min-height:44px;padding:8px;border-radius:12px;background:var(--bg)}
+.ccard{border:2px solid var(--line2);background:#fff;border-radius:12px;padding:6px 12px;font-size:15px;text-align:left}
+.ccard.sel{border-color:var(--hugo);background:var(--hugo-soft);box-shadow:0 0 0 3px rgba(63,85,209,.2)}
+.ccard.ok{border-color:var(--ok);background:#E3F7EC}.ccard.no{border-color:var(--bad);background:#FDE7E8}
+.bin{border:2px dashed var(--line2);border-radius:14px;padding:10px;min-height:110px;background:#fff;text-align:left;width:100%}
+.bin h4{font-size:17px;margin-bottom:8px}
+.bin.hot{border-color:var(--hugo);background:var(--hugo-soft)}
+.flips{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:10px}
+.flip{perspective:800px;border:0;background:none;padding:0;min-height:130px;text-align:center}
+.flip .in{position:relative;width:100%;height:100%;min-height:130px;transition:transform .5s;transform-style:preserve-3d}
+.flip.on .in{transform:rotateY(180deg)}
+.flip .f,.flip .b{position:absolute;inset:0;backface-visibility:hidden;border-radius:16px;display:flex;align-items:center;justify-content:center;padding:12px;border:2px solid var(--line2)}
+.flip .f{background:linear-gradient(160deg,var(--key-soft),#fff);font-family:var(--display);font-size:20px}
+.flip .f.big{font-size:28px;letter-spacing:.06em}
+.flip .b{background:#fff;transform:rotateY(180deg);font-size:15px;line-height:1.5;overflow:auto}
+.poll{display:grid;gap:6px}
+.prow{display:grid;grid-template-columns:minmax(0,1fr) 46px auto;gap:8px;align-items:center}
+.prow .lbl{position:relative;border-radius:10px;background:var(--bg);padding:6px 10px;overflow:hidden;font-size:15px}
+.prow .lbl i{position:absolute;inset:0 auto 0 0;background:var(--key);opacity:.45;border-radius:10px;transition:width .3s}
+.prow .lbl span{position:relative}
+.prow.top .lbl i{background:var(--pink);opacity:.4}
+.prow .n{font-family:var(--display);font-size:20px;text-align:center;font-variant-numeric:tabular-nums}
+.reels{display:grid;gap:10px}
+.reel{display:grid;grid-template-columns:110px 1fr auto;gap:10px;align-items:center}
+.reel .nm{font-family:var(--display);font-size:15px;color:var(--muted)}
+.reel .v{background:#fff;border:2px solid var(--ink);border-radius:14px;padding:10px 14px;font-size:18px;font-family:var(--display);min-height:52px;display:flex;align-items:center}
+.reel .v.spin{animation:jit .1s linear infinite}
+@keyframes jit{50%{transform:translateY(-2px)}}
+.lock{border:2px solid var(--line2);background:#fff;border-radius:10px;padding:4px 8px}
+.lock.on{background:var(--key);border-color:var(--key-deep)}
+.whatq{margin-top:10px;font-size:20px;font-family:var(--display);background:var(--hugo-soft);border-radius:14px;padding:12px 16px}
+.saved{margin:8px 0 0;padding-left:20px}
+.slots{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:10px;margin-bottom:10px}
+.slot{border:2px dashed var(--line2);border-radius:14px;background:#fff;padding:10px;text-align:center}
+.slot.on{border-color:var(--hugo);background:var(--hugo-soft)}
+.slot small{display:block;color:var(--muted)}
+.slot b{font-family:var(--display);font-weight:400;font-size:20px;display:block;min-height:30px}
+.vchips{display:flex;flex-wrap:wrap;gap:6px}
+.vchip{border:2px solid var(--key-deep);background:var(--key-soft);border-radius:999px;padding:3px 12px;font-family:var(--display)}
+.mood svg{width:100%;height:auto;display:block}
+.mood .scn{display:grid;grid-template-columns:repeat(5,1fr);gap:6px;font-size:13px;text-align:center;color:var(--muted);line-height:1.35}
+.rel{position:relative;width:100%;aspect-ratio:16/10;background:radial-gradient(circle at 50% 50%,#fff,#F1F4FF);border-radius:16px;border:2px solid var(--line)}
+.rel > svg{position:absolute;inset:0;width:100%;height:100%}
+.rnode{position:absolute;transform:translate(-50%,-50%);display:flex;flex-direction:column;align-items:center;border:0;background:none;padding:0;font-family:var(--display);font-size:14px}
+.rnode .fc{background:#fff;border:2.5px solid var(--line2);border-radius:50%;padding:2px;line-height:0}
+.rnode.on .fc{border-color:var(--key-deep);box-shadow:0 0 0 4px var(--key)}
+.rnode span{background:#fff;border-radius:8px;padding:0 6px;margin-top:2px}
+.rbadge{position:absolute;transform:translate(-50%,-50%);border:2px solid #fff;border-radius:50%;width:30px;height:30px;font-size:14px;display:grid;place-items:center;padding:0;box-shadow:0 2px 4px rgba(0,0,0,.15)}
+.rbadge.help{background:#CFE0FF}.rbadge.love{background:#FFD3DF}.rbadge.conflict{background:#FFD0D2}
+.rbadge.on{box-shadow:0 0 0 4px var(--key)}
+.rbadge.dim{opacity:.25}
+.rinfo{margin-top:10px;display:grid;grid-template-columns:auto 1fr;gap:12px;align-items:center;background:#fff;border:2px solid var(--line);border-radius:14px;padding:10px 14px;min-height:70px}
+.hs-tabs{display:flex;flex-wrap:wrap;gap:6px}
+.hs-tab{display:flex;align-items:center;gap:4px;border:2px solid var(--line2);background:#fff;border-radius:14px;padding:2px 10px 2px 2px;font-family:var(--display)}
+.hs-tab.on{border-color:var(--hugo);background:var(--hugo-soft)}
+.hs-stage{display:grid;grid-template-columns:auto 1fr;gap:16px;align-items:center;margin-top:12px;background:#fff;border:2px solid var(--line);border-radius:16px;padding:14px}
+.hs-q{font-family:var(--display);font-size:22px}
+.hs-ql{display:grid;gap:6px;margin-top:10px}
+.hs-ql button{text-align:left;border:1.5px solid var(--line2);background:#fff;border-radius:10px;padding:5px 10px}
+.stbl{width:100%;border-collapse:separate;border-spacing:0 6px}
+.stbl input{width:100%}
+.stbl th{font-size:13px;color:var(--muted);text-align:left;font-weight:400}
+.pads{display:grid;grid-template-columns:repeat(auto-fill,minmax(112px,1fr));gap:8px}
+.pad{border:2px solid var(--line2);background:#fff;border-radius:16px;padding:10px 6px;display:flex;flex-direction:column;align-items:center;gap:2px;box-shadow:0 3px 0 var(--line2);font-size:14px}
+.pad i{font-style:normal;font-size:26px}
+.pad.play{background:var(--key-soft);border-color:var(--key-deep)}
+.stars{display:grid;gap:6px}
+.srow{display:grid;grid-template-columns:1fr auto;gap:10px;align-items:center;background:#fff;border-radius:12px;padding:4px 10px;border:1.5px solid var(--line)}
+.srow .ss{display:flex}
+.srow .ss button{border:0;background:none;font-size:24px;padding:0 2px;color:#D4DCE7;line-height:1}
+.srow .ss button.on{color:var(--key)}
+.rolesout{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:8px;margin-top:10px}
+.rcard{background:#fff;border:2px solid var(--line2);border-radius:14px;padding:8px 10px;text-align:center}
+.rcard small{display:block;color:var(--muted)}
+.rcard b{font-family:var(--display);font-weight:400;font-size:19px}
+.parts{display:grid;gap:8px}
+.part{display:grid;grid-template-columns:auto 1fr;gap:12px;align-items:center;text-align:left;background:#fff;border:2px solid var(--line);border-radius:14px;padding:8px 12px}
+.part.done{border-color:var(--hugo);background:var(--hugo-soft)}
+.part .cd{width:34px;height:44px;display:grid;place-items:center}
+.cloud{display:flex;flex-wrap:wrap;gap:6px 14px;align-items:center;justify-content:center;min-height:120px;background:#fff;border-radius:14px;border:2px solid var(--line);padding:14px}
+.cloud span{font-family:var(--display);line-height:1.1}
+.checks{display:grid;gap:6px}
+.checks label{display:flex;gap:10px;align-items:center;background:#fff;border:1.5px solid var(--line);border-radius:12px;padding:6px 12px}
+.checks input{width:20px;height:20px;accent-color:var(--turtle)}
+.poster-w{display:grid;grid-template-columns:minmax(0,1fr) minmax(220px,320px);gap:16px}
+.poster{aspect-ratio:3/4;border-radius:16px;padding:18px;display:flex;flex-direction:column;align-items:center;justify-content:space-between;text-align:center;border:3px solid var(--ink);overflow:hidden}
+.poster .pt{font-family:var(--display);font-size:clamp(20px,2.4vw,30px);line-height:1.25;overflow-wrap:anywhere}
+.poster .ps{font-size:15px;overflow-wrap:anywhere}
+.poster .pb{font-family:var(--display);font-size:14px;border-radius:999px;padding:2px 12px;background:rgba(255,255,255,.7)}
+.sw{width:30px;height:30px;border-radius:50%;border:3px solid #fff;box-shadow:0 0 0 2px var(--line2)}
+.sw.on{box-shadow:0 0 0 3px var(--ink)}
+.acro{display:grid;gap:6px}
+.acro .ar{display:grid;grid-template-columns:52px 1fr;gap:8px;align-items:center}
+.acro .ar b{font-family:var(--display);font-weight:400;font-size:26px;background:var(--key);border-radius:12px;text-align:center}
+.scale{display:grid;gap:6px}
+.scrow{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:10px;align-items:center;background:#fff;border:1.5px solid var(--line);border-radius:12px;padding:6px 10px}
+.scrow .dots{display:flex;gap:14px}
+.scrow .dg{display:flex;flex-direction:column;align-items:center;gap:2px}
+.scrow .dg small{font-size:11px;color:var(--muted)}
+.scrow .dd{display:flex;gap:3px}
+.scrow .dd button{width:24px;height:24px;border-radius:50%;border:2px solid var(--line2);background:#fff;font-size:11px;padding:0}
+.scrow .dd button.on{background:var(--turtle);border-color:var(--turtle);color:#fff}
+.scrow .dd.c1 button.on{background:var(--pink);border-color:var(--pink)}
+.diff{font-family:var(--display);min-width:38px;text-align:center}
+.faces{display:flex;flex-wrap:wrap;gap:8px}
+.fbtn{display:flex;flex-direction:column;align-items:center;border:2px solid var(--line2);background:#fff;border-radius:16px;padding:6px 10px;font-family:var(--display);font-size:14px}
+.fbtn.on{border-color:var(--hugo);background:var(--hugo-soft)}
+.letter{margin-top:10px;background:#FFFDF5;border:2px solid #EFD88E;border-radius:14px;padding:14px 18px;font-size:16px}
+.letter p{margin:4px 0}
+.letter .to{font-family:var(--display);font-size:22px}
+/* 모달과 수업 화면 */
+.modal{position:fixed;inset:0;background:rgba(20,30,48,.55);display:none;align-items:center;justify-content:center;z-index:50;padding:16px}
+.modal.on{display:flex}
+.mbox{background:var(--paper);border-radius:24px;padding:22px;width:min(560px,100%);max-height:90vh;overflow:auto;position:relative}
+.mbox h2{font-size:24px;margin-bottom:10px}
+.mclose{position:absolute;top:12px;right:12px}
+.timer-d{font-family:var(--display);font-size:clamp(64px,12vw,120px);text-align:center;font-variant-numeric:tabular-nums;line-height:1}
+.timer-d.end{color:var(--pink);animation:jit .2s infinite}
+.tbar{height:12px;border-radius:999px;background:var(--bg);overflow:hidden;margin:12px 0}
+.tbar i{display:block;height:100%;background:var(--turtle);transition:width .3s linear}
+.pick-d{font-family:var(--display);font-size:clamp(72px,14vw,140px);text-align:center;line-height:1.1;min-height:1.1em}
+.picked{display:flex;flex-wrap:wrap;gap:4px;margin-top:8px}
+.picked span{background:var(--bg);border-radius:8px;padding:0 8px;font-size:14px}
+.show{position:fixed;inset:0;z-index:40;background:var(--bg);display:none;flex-direction:column}
+.show.on{display:flex}
+.show-top{display:flex;align-items:center;gap:10px;padding:10px 18px;background:var(--paper);border-bottom:2px solid var(--line)}
+.show-top .sp{flex:1}
+.show-body{flex:1;overflow:auto;padding:28px clamp(16px,4vw,60px)}
+.slide{max-width:1200px;margin:0 auto;display:grid;gap:20px}
+.slide .sh{display:flex;align-items:center;gap:10px}
+.slide h2{font-size:clamp(30px,4.4vw,52px)}
+.slide .sask{display:grid;grid-template-columns:auto 1fr;gap:18px;align-items:center}
+.slide .sask .bubble{font-size:clamp(20px,2.6vw,30px);font-family:var(--display);padding:16px 24px}
+.slide ul{font-size:clamp(18px,2vw,24px);margin:0;padding-left:28px}
+.slide .tool{background:#fff}
+.cover{display:grid;place-items:center;text-align:center;gap:14px;padding-top:4vh}
+.cover h1{font-size:clamp(36px,6vw,72px)}
+.cover .goal2{font-size:clamp(18px,2.2vw,26px);text-align:left;background:#fff;border-radius:20px;padding:16px 26px;border:2px solid var(--line)}
+.show-nav{display:flex;align-items:center;justify-content:center;gap:10px;padding:10px;background:var(--paper);border-top:2px solid var(--line)}
+.dots2{display:flex;gap:6px}
+.dots2 i{width:10px;height:10px;border-radius:50%;background:var(--line2)}
+.dots2 i.on{background:var(--key-deep);width:24px;border-radius:6px}
+.mtimer{font-family:var(--display);font-size:22px;font-variant-numeric:tabular-nums;min-width:70px;text-align:center}
+@media (max-width:860px){
+  .app{grid-template-columns:1fr}
+  .side{display:none;position:fixed;inset:56px 0 0 0;z-index:30}
+  .side.open{display:block}
+  .menu{display:inline-flex}
+  .books,.poster-w{grid-template-columns:1fr}
+  .lhead{grid-template-columns:1fr}.lhead .acts{align-items:flex-start;flex-direction:row;flex-wrap:wrap}
+  .step{grid-template-columns:1fr}.step .st{flex-direction:row}.st .bar{display:none}
+  .jrow{grid-template-columns:1fr}
+  .brand small{display:none}.brand b{font-size:18px}.top{gap:6px;padding:8px 10px}
+  .reel{grid-template-columns:1fr auto}.reel .nm{grid-column:1/-1}
+}
+@media (max-width:480px){.top .tbtn .lb{display:none}.hero{grid-template-columns:1fr}.hero .k{display:none}}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+
+/* 학생용: 태블릿 한 칸 화면 */
+.app.st{display:block;height:auto;min-height:100%}
+.app.st .top{position:sticky;top:0;z-index:10}
+.app.st .main{overflow:visible;padding-top:20px}
+.who{font-family:var(--display);font-size:15px;border-radius:999px;background:var(--bg);padding:4px 12px;white-space:nowrap}
+.gonext{display:grid;grid-template-columns:auto 1fr auto;gap:14px;align-items:center;text-align:left;width:100%;cursor:pointer;color:#fff;border:0;box-shadow:0 5px 0 rgba(0,0,0,.18)}
+.gonext.turtle{background:var(--turtle)}.gonext.hugo{background:var(--hugo)}.gonext.both{background:var(--pink)}.gonext.none{background:#2F3E57}
+.gonext small{display:block;opacity:.85}.gonext b{font-family:var(--display);font-weight:400;font-size:24px}.gonext .arrow{font-size:30px}
+.keys{display:grid;grid-template-columns:repeat(auto-fill,minmax(64px,1fr));gap:8px}
+.kslot{display:flex;flex-direction:column;align-items:center;border:2px solid var(--line);background:#fff;border-radius:14px;padding:6px 2px;font-size:12px}
+.kslot.on{border-color:var(--key-deep);background:var(--key-soft)}
+.lgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:12px}
+.lcard{position:relative;display:flex;flex-direction:column;align-items:flex-start;gap:4px;text-align:left;background:#fff;border:2.5px solid var(--line2);border-radius:20px;padding:14px 16px;min-height:120px;box-shadow:0 4px 0 var(--line2)}
+.lcard.turtle{border-color:var(--turtle);box-shadow:0 4px 0 var(--turtle)}.lcard.hugo{border-color:var(--hugo);box-shadow:0 4px 0 var(--hugo)}.lcard.both{border-color:var(--pink);box-shadow:0 4px 0 var(--pink)}
+.lcard.done{background:var(--key-soft)}
+.lcard .no{font-family:var(--display);font-size:14px;border-radius:8px;background:var(--bg);padding:0 8px}
+.lcard b{font-family:var(--display);font-weight:400;font-size:19px;line-height:1.3;padding-right:28px}
+.lcard small{color:var(--muted)}
+.lcard .bi{position:absolute;top:10px;right:10px}.lcard .got{position:absolute;bottom:8px;right:10px}
+.people{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:10px}
+.person{display:grid;grid-template-columns:auto 1fr;gap:10px;align-items:center;background:var(--hugo-soft);border-radius:16px;padding:10px}
+.person b{font-family:var(--display);font-weight:400;font-size:18px}.person p{margin:2px 0 0;font-size:14.5px;line-height:1.5}
+.mission{display:grid;gap:12px}
+.mh{display:flex;align-items:center;gap:10px}.mh h2{font-size:24px}
+.mno{font-family:var(--display);background:var(--key);border:2px solid var(--key-deep);border-radius:12px;padding:2px 12px;font-size:16px;white-space:nowrap}
+.sask{display:grid;grid-template-columns:auto 1fr;gap:12px;align-items:center}.sask .bubble{font-size:19px;font-family:var(--display)}
+.todo{margin:0;padding-left:24px;font-size:17px}.todo li::marker{content:"☐  "}
+.notecard{background:#FFFDF5;border-color:#EFD88E}
+.tbtn.big{font-size:19px;padding:10px 22px}
+.party{display:none;align-items:center;gap:12px;margin-top:10px;font-family:var(--display);font-size:20px}
+.party.on{display:flex}.party b{font-weight:400}
+
+/* 디지털 학습지 */
+.sheet{background:#fff;border:2px solid var(--line);border-radius:22px;padding:0 clamp(14px,3vw,30px) 24px;display:grid;gap:16px;box-shadow:0 6px 0 var(--line)}
+.shead{display:flex;align-items:center;gap:12px;margin:0 calc(-1 * clamp(14px,3vw,30px));padding:14px clamp(14px,3vw,30px);border-radius:20px 20px 0 0;color:#fff;flex-wrap:wrap}
+.sheet.turtle .shead{background:var(--turtle)}.sheet.hugo .shead{background:var(--hugo)}.sheet.both .shead{background:var(--pink)}.sheet.none .shead{background:#2F3E57}
+.shead .crumb{font-size:13px;opacity:.9}.shead h1{font-size:clamp(22px,3vw,30px)}
+.idl{background:rgba(255,255,255,.18);border:1.5px solid rgba(255,255,255,.6);border-radius:14px;padding:6px 12px;font-size:14px;display:grid;text-align:right}.idl b{font-family:var(--display);font-weight:400;font-size:18px}
+.sgoal{background:var(--key-soft);border-radius:14px;padding:10px 16px}.sgoal b{font-family:var(--display);font-weight:400;font-size:18px}.sgoal ul{margin:4px 0 0;padding-left:20px}
+.sprog{flex:1;height:12px;border-radius:999px;background:var(--bg);overflow:hidden;min-width:120px}.sprog i{display:block;height:100%;width:0;background:var(--turtle);transition:width .3s}
+.sinfo{display:flex;gap:10px;align-items:center;background:var(--hugo-soft);border-radius:14px;padding:8px 14px;font-size:16px}
+.stool{border:2px dashed var(--line2);border-radius:16px;background:#FAFCFF}.stool summary{cursor:pointer;padding:10px 14px;font-family:var(--display);font-size:17px;list-style:none}.stool summary::-webkit-details-marker{display:none}.stool summary:after{content:" ▾";color:var(--muted)}.stool[open] summary:after{content:" ▴"}.stool .tbody{padding:0 14px 14px}
+.sitem{display:grid;gap:10px;border-top:2px dotted var(--line);padding-top:14px}
+.sq{display:flex;align-items:flex-start;gap:10px}.sq h2{font-size:20px;flex:1;line-height:1.4}
+.sn{flex:none;font-family:var(--display);font-size:15px;background:var(--key);border:2px solid var(--key-deep);border-radius:10px;padding:1px 10px;white-space:nowrap}
+.dchk{flex:none;width:26px;height:26px;border-radius:50%;border:2.5px solid var(--line2)}.dchk.on{background:var(--ok);border-color:var(--ok)}.dchk.on:after{content:"✓";color:#fff;display:grid;place-items:center;height:100%;font-weight:700}
+textarea.ans{width:100%;font-size:17px;line-height:1.7;background:repeating-linear-gradient(#fff 0 32px,#E3E9F2 32px 33px);background-attachment:local;resize:vertical}
+.tscroll{overflow-x:auto}.stab{width:100%;border-collapse:collapse;min-width:480px}.stab th{background:var(--bg);font-weight:400;font-family:var(--display);font-size:15px;padding:6px;border:1.5px solid var(--line2)}
+.stab td{border:1.5px solid var(--line2);padding:0;vertical-align:top}.stab td.lab{background:#FAFBFD;font-family:var(--display);text-align:center;vertical-align:middle;padding:6px;width:18%}
+.cell{width:100%;border:0;padding:8px;font-size:16px;resize:none;background:transparent;display:block;min-height:44px}.cell:focus{background:var(--key-soft);outline:none}
+.chs{display:flex;flex-wrap:wrap;gap:8px}.ch{border:2px solid var(--line2);background:#fff;border-radius:14px;padding:8px 14px;font-size:16px;text-align:left}
+.ch.on{border-color:var(--hugo);background:var(--hugo-soft)}.ch.ok{border-color:var(--ok);background:#E3F7EC}.ch.no{border-color:var(--bad);background:#FDE7E8}
+.mcs{display:grid;gap:12px}.mcq{display:grid;gap:6px}.mq{font-size:17px}.pg{font-size:13px;color:var(--hugo);background:var(--hugo-soft);border-radius:6px;padding:0 6px}
+.hint{font-size:14px;color:#8A5A00}.score{font-family:var(--display);font-size:18px}
+.pad{width:100%;height:auto;border:2px solid var(--line2);border-radius:14px;touch-action:none;background:#fff;display:block;cursor:crosshair}
+.padbar{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin-bottom:8px}.pc{width:32px;height:32px;border-radius:50%;border:3px solid #fff;box-shadow:0 0 0 2px var(--line2)}.pc.on{box-shadow:0 0 0 3px var(--ink)}
+.sfoot{border-top:2px dotted var(--line);padding-top:16px;display:grid;gap:10px}
+.lcard .mini{width:100%;height:7px;border-radius:9px;background:var(--bg);overflow:hidden;margin-top:4px}.lcard .mini i{display:block;height:100%;background:var(--turtle)}
+.exportc{display:grid;grid-template-columns:auto 1fr auto;gap:14px;align-items:center;background:var(--hugo-soft);border-color:#AEB9F2}
+.xov{position:fixed;inset:0;background:rgba(20,30,48,.6);z-index:60;display:flex;align-items:center;justify-content:center;padding:14px}
+.xbox{background:#fff;border-radius:22px;padding:20px;width:min(860px,100%);max-height:92vh;overflow:auto;display:grid;gap:10px}
+.xgal{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:10px}.xgal img{width:100%;border:1.5px solid var(--line2);border-radius:6px}
+.xprev{overflow:auto;max-height:60vh;background:var(--bg);padding:10px;display:grid;gap:10px;justify-content:center}
+.phost{position:absolute;left:-10000px;top:0;width:794px}
+/* 인쇄용 A4 쪽 */
+.ppage{width:794px;height:1123px;background:#fff;padding:48px 52px;box-sizing:border-box;overflow:hidden;font-family:var(--body);color:#1E2B3C;font-size:14px;line-height:1.55}
+.ppage > *{margin-bottom:14px}
+.phead{display:flex;align-items:center;gap:12px;border-bottom:4px solid #2F3E57;padding-bottom:8px}.phead.turtle{border-color:#1F9E66}.phead.hugo{border-color:#3F55D1}.phead.both{border-color:#E9466F}
+.phead .pt{flex:1}.phead small{color:#5A6A80;font-size:11px}.phead h1{font-size:22px;margin:2px 0 0}.pid{border:1.5px solid #B9C6D8;border-radius:10px;padding:4px 10px;font-size:12px;text-align:right}.pid b{font-size:16px;font-family:var(--display);font-weight:400}
+.pgoal{background:#FFF6DA;border-radius:10px;padding:8px 12px;font-size:13px}.pgoal b{font-family:var(--display);font-weight:400}
+.pitem .pq{font-weight:700;font-size:15px;margin-bottom:6px}.pitem .pq span{font-family:var(--display);font-weight:400;background:#FFB627;border-radius:8px;padding:0 8px;margin-right:6px;font-size:13px}
+.pans{border:1.5px solid #D7E0EC;border-radius:10px;padding:8px 12px;min-height:40px;background:repeating-linear-gradient(#fff 0 26px,#EEF2F8 26px 27px)}
+.empty{color:#A8B3C4}
+.ptab{width:100%;border-collapse:collapse;font-size:13px}.ptab th{background:#EEF3FA;border:1.5px solid #B9C6D8;padding:4px 6px;font-weight:700}.ptab td{border:1.5px solid #B9C6D8;padding:5px 7px;vertical-align:top;min-height:28px;height:30px}.ptab td.lab{background:#FAFBFD;font-weight:700;text-align:center;width:18%}.ptab td.c{white-space:nowrap;color:#1F9E66}.ptab i,.pst i{color:#DDE3EC;font-style:normal}
+.pchs{display:flex;flex-wrap:wrap;gap:6px}.pchs span{border:1.5px solid #D7E0EC;border-radius:10px;padding:3px 10px;font-size:13px;color:#8A97AA}.pchs span.on{border-color:#3F55D1;background:#E3E8FF;color:#1E2B3C;font-weight:700}
+.pmc{margin:0;padding-left:22px;font-size:13px;display:grid;gap:4px}.pmc small{color:#3F55D1}.pscore{font-family:var(--display);margin-top:4px}
+.pst div{display:flex;justify-content:space-between;border-bottom:1px dashed #D7E0EC;padding:3px 0}.pst b{color:#E0A100;letter-spacing:2px}
+.pscn{display:grid;grid-template-columns:repeat(5,1fr);gap:4px;font-size:10.5px;color:#5A6A80;text-align:center}
+.pimg{width:100%;border:1.5px solid #D7E0EC;border-radius:10px;display:block}
+.plet{border:2px solid #EFD88E;background:#FFFDF5;border-radius:12px;padding:12px 16px;line-height:1.8}.plet .to{font-family:var(--display);font-size:20px}.plet .from{text-align:right;font-family:var(--display)}
+.pacro div{display:grid;grid-template-columns:40px 1fr;gap:8px;align-items:center;margin-bottom:4px}.pacro b{background:#FFB627;border-radius:8px;text-align:center;font-family:var(--display);font-weight:400;font-size:20px}.pacro span{border-bottom:1.5px dashed #B9C6D8;min-height:26px}
+.pcover{height:1027px;border:4px solid #FFB627;border-radius:28px;background:linear-gradient(170deg,#FFF1C9,#fff 55%);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;text-align:center}
+.pcover h1{font-size:48px;margin:0}.pcover p{margin:0;color:#5A6A80;font-size:16px}.pname{font-size:22px;border-bottom:2px solid #1E2B3C;padding:4px 20px}.pname b{font-family:var(--display);font-weight:400;font-size:28px}
+.pbooks{display:flex;gap:16px}.pbooks div{border:2px solid #D7E0EC;border-radius:16px;padding:10px 18px;display:flex;flex-direction:column;align-items:center;background:#fff}
+.pkeys{display:grid;grid-template-columns:repeat(8,1fr);gap:6px;width:80%}.pkeys span{display:flex;flex-direction:column;align-items:center;font-size:11px}
+.pdate{font-size:14px}
+@media (max-width:700px){.exportc{grid-template-columns:1fr}.exportc > div:first-child{display:none}}
+</style>
+</head>
+<body>
+<div class="app st">
+  <header class="top">
+    <button class="brand" id="homeBtn" aria-label="처음 화면으로"><span id="brandK"></span><span><b>나의 책열쇠 학습지</b></span></button>
+    <span class="sp"></span>
+    <span class="who" id="who"></span>
+    <button class="tbtn key" id="keyBtn" aria-label="모은 열쇠와 노트 보기"><span id="kicon"></span><span id="kcount">0</span></button>
+  </header>
+  <main class="main" id="main"></main>
+</div>
+<script>/* 책열쇠 캐릭터 그림 (모두 직접 만든 SVG) */
+window.ART = (function () {
+  // 키키: 황금 열쇠 머리를 가진 책열쇠 안내 친구
+  function kiki(opt) {
+    opt = opt || {};
+    var size = opt.size || 120, gear = opt.gear || 'none', mood = opt.mood || 'smile';
+    var back = '', front = '';
+    if (gear === 'turtle') {
+      back = '<g transform="translate(60 92)"><ellipse rx="34" ry="24" fill="#2EB67D" stroke="#1B7A52" stroke-width="3"/>' +
+        '<path d="M-14 -10 L0 -18 L14 -10 L14 6 L0 14 L-14 6 Z" fill="#7BDCB0" stroke="#1B7A52" stroke-width="2.5"/>' +
+        '<path d="M-14 -10 L-28 -4 M14 -10 L28 -4 M-14 6 L-26 12 M14 6 L26 12 M0 14 L0 22" stroke="#1B7A52" stroke-width="2.5"/></g>';
+    }
+    if (gear === 'candle') {
+      front = '<g transform="translate(98 70)"><rect x="-5" y="0" width="10" height="26" rx="2" fill="#F3F0FF" stroke="#4C5BD4" stroke-width="2.5"/>' +
+        '<path d="M-13 26 h26 l-4 6 h-18 z" fill="#C9CEE8" stroke="#4C5BD4" stroke-width="2.5"/>' +
+        '<path d="M0 -14 C7 -6 6 -1 0 0 C-6 -1 -7 -6 0 -14 Z" fill="#FFB627" stroke="#E07B00" stroke-width="2"/>' +
+        '<circle cx="0" cy="-5" r="10" fill="#FFD66B" opacity=".35"/></g>';
+    }
+    if (gear === 'mic') {
+      back = '<path d="M24 50 C24 14 96 14 96 50" fill="none" stroke="#FF6F91" stroke-width="7" stroke-linecap="round"/>';
+      front = '<rect x="14" y="44" width="16" height="24" rx="7" fill="#FF6F91" stroke="#C2355B" stroke-width="2.5"/>' +
+        '<rect x="90" y="44" width="16" height="24" rx="7" fill="#FF6F91" stroke="#C2355B" stroke-width="2.5"/>';
+    }
+    if (gear === 'brush') {
+      front = '<g transform="translate(100 62) rotate(25)"><rect x="-3" y="0" width="6" height="30" rx="3" fill="#B07A4A"/>' +
+        '<path d="M-5 0 C-5 -12 5 -12 5 0 Z" fill="#4C6EF5"/></g>';
+    }
+    if (gear === 'cap') {
+      front = '<path d="M30 30 L60 16 L90 30 L60 42 Z" fill="#3D4B6B" stroke="#1E2B3C" stroke-width="2.5"/><path d="M84 32 v14" stroke="#FFB627" stroke-width="3"/><circle cx="84" cy="48" r="3.5" fill="#FFB627"/>';
+    }
+    var eyes = mood === 'wink'
+      ? '<path d="M45 56 q5 -5 10 0" stroke="#1E2B3C" stroke-width="3.5" fill="none" stroke-linecap="round"/><circle cx="72" cy="56" r="4.6" fill="#1E2B3C"/>'
+      : mood === 'wow'
+        ? '<circle cx="49" cy="56" r="5.5" fill="#1E2B3C"/><circle cx="71" cy="56" r="5.5" fill="#1E2B3C"/><circle cx="51" cy="54" r="1.8" fill="#fff"/><circle cx="73" cy="54" r="1.8" fill="#fff"/>'
+        : '<circle cx="49" cy="56" r="4.6" fill="#1E2B3C"/><circle cx="71" cy="56" r="4.6" fill="#1E2B3C"/><circle cx="50.5" cy="54.5" r="1.5" fill="#fff"/><circle cx="72.5" cy="54.5" r="1.5" fill="#fff"/>';
+    var mouth = mood === 'wow'
+      ? '<ellipse cx="60" cy="69" rx="4.5" ry="5.5" fill="#1E2B3C"/>'
+      : '<path d="M53 66 q7 7 14 0" stroke="#1E2B3C" stroke-width="3.5" fill="none" stroke-linecap="round"/>';
+    return '<svg viewBox="0 0 120 130" width="' + size + '" height="' + (size * 130 / 120) + '" aria-hidden="true">' + back +
+      // 열쇠 몸통과 톱니 다리
+      '<rect x="53" y="86" width="14" height="30" rx="5" fill="#FFC53D" stroke="#C98A00" stroke-width="3"/>' +
+      '<rect x="40" y="104" width="15" height="10" rx="4" fill="#FFC53D" stroke="#C98A00" stroke-width="3"/>' +
+      '<rect x="65" y="110" width="15" height="10" rx="4" fill="#FFC53D" stroke="#C98A00" stroke-width="3"/>' +
+      // 열쇠 머리(얼굴)
+      '<circle cx="60" cy="58" r="34" fill="#FFC53D" stroke="#C98A00" stroke-width="3.5"/>' +
+      '<circle cx="60" cy="58" r="26" fill="#FFD66B"/>' +
+      '<circle cx="60" cy="27" r="5" fill="#FFF6D6" stroke="#C98A00" stroke-width="2.5"/>' +
+      '<circle cx="40" cy="66" r="5.5" fill="#FF9DB0" opacity=".75"/><circle cx="80" cy="66" r="5.5" fill="#FF9DB0" opacity=".75"/>' +
+      eyes + mouth + front + '</svg>';
+  }
+
+  // 레미제라블 인물 얼굴 (공공 저작물 원작을 바탕으로 새로 그린 귀여운 얼굴)
+  var P = {
+    jean:    { skin: '#F5C9A0', hair: '#8A8F98', style: 'short', beard: '#8A8F98', name: '장 발장' },
+    bishop:  { skin: '#F7D3B5', hair: '#F2F2F2', style: 'bald', hat: 'zucchetto', name: '미리엘 주교' },
+    javert:  { skin: '#EBC09A', hair: '#2D2A32', style: 'short', hat: 'bicorne', side: true, name: '자베르 형사' },
+    fantine: { skin: '#F8D5BC', hair: '#E3B04B', style: 'long', name: '팡틴' },
+    cosette: { skin: '#FADBC4', hair: '#C9822B', style: 'braids', bow: '#6C8CFF', name: '코제트' },
+    thenard: { skin: '#E8B98F', hair: '#5B3A23', style: 'messy', mus: true, name: '테나르디에 부부' },
+    marius:  { skin: '#F4CFAE', hair: '#3A2A1E', style: 'wave', name: '마리우스' },
+    eponine: { skin: '#EFC6A4', hair: '#4A2F1C', style: 'long', hat: 'cap', name: '에포닌' },
+    gavroche:{ skin: '#F1C79E', hair: '#6B4A2E', style: 'short', hat: 'cap', name: '가브로슈' }
+  };
+  function face(key, size) {
+    var p = P[key]; size = size || 64;
+    var h = '';
+    if (p.style === 'long') h += '<path d="M14 40 C10 70 20 86 26 88 L74 88 C80 86 90 70 86 40 Z" fill="' + p.hair + '"/>';
+    if (p.style === 'braids') h += '<path d="M18 50 C10 64 14 80 20 86" stroke="' + p.hair + '" stroke-width="9" fill="none" stroke-linecap="round"/><path d="M82 50 C90 64 86 80 80 86" stroke="' + p.hair + '" stroke-width="9" fill="none" stroke-linecap="round"/>';
+    var s = '<circle cx="50" cy="52" r="30" fill="' + p.skin + '"/>';
+    var top = '';
+    if (p.style === 'short' || p.style === 'long' || p.style === 'braids') top = '<path d="M20 48 C20 22 80 22 80 48 C72 36 30 36 20 48 Z" fill="' + p.hair + '"/>';
+    if (p.style === 'wave') top = '<path d="M19 50 C16 20 84 18 81 50 C76 40 70 34 62 38 C56 30 44 30 38 38 C30 34 22 40 19 50 Z" fill="' + p.hair + '"/>';
+    if (p.style === 'messy') top = '<path d="M20 48 L24 28 L32 36 L38 22 L46 34 L52 20 L60 34 L68 22 L72 36 L80 30 L80 48 C70 38 30 38 20 48 Z" fill="' + p.hair + '"/>';
+    if (p.style === 'bald') top = '<path d="M20 56 C18 46 24 42 26 48 M80 56 C82 46 76 42 74 48" stroke="' + p.hair + '" stroke-width="6" fill="none" stroke-linecap="round"/>';
+    if (p.side) top += '<rect x="19" y="46" width="6" height="18" rx="3" fill="' + p.hair + '"/><rect x="75" y="46" width="6" height="18" rx="3" fill="' + p.hair + '"/>';
+    var hat = '';
+    if (p.hat === 'zucchetto') hat = '<path d="M34 30 C38 18 62 18 66 30 Z" fill="#8E44AD"/>';
+    if (p.hat === 'bicorne') hat = '<path d="M10 34 C30 8 70 8 90 34 C70 26 30 26 10 34 Z" fill="#232838"/><circle cx="50" cy="20" r="4" fill="#E74C3C"/>';
+    if (p.hat === 'cap') hat = '<path d="M20 40 C22 18 78 18 80 40 Z" fill="#6D6875"/><path d="M60 38 h28 l-4 6 h-24 z" fill="#56505E"/>';
+    var beard = p.beard ? '<path d="M26 60 C30 86 70 86 74 60 C66 72 34 72 26 60 Z" fill="' + p.beard + '"/>' : '';
+    var mus = p.mus ? '<path d="M38 66 C44 60 48 64 50 64 C52 64 56 60 62 66 C56 66 52 68 50 66 C48 68 44 66 38 66 Z" fill="#4A2F1C"/>' : '';
+    var eyes = '<circle cx="40" cy="54" r="3.6" fill="#1E2B3C"/><circle cx="60" cy="54" r="3.6" fill="#1E2B3C"/><circle cx="41" cy="53" r="1.2" fill="#fff"/><circle cx="61" cy="53" r="1.2" fill="#fff"/>';
+    if (key === 'javert') eyes = '<path d="M34 50 l12 3 M66 50 l-12 3" stroke="#1E2B3C" stroke-width="3" stroke-linecap="round"/>' + eyes;
+    var cheek = '<circle cx="32" cy="64" r="4.5" fill="#FF9DB0" opacity=".6"/><circle cx="68" cy="64" r="4.5" fill="#FF9DB0" opacity=".6"/>';
+    var mouth = (key === 'javert') ? '<path d="M44 70 h12" stroke="#1E2B3C" stroke-width="3" stroke-linecap="round"/>'
+      : (key === 'thenard') ? '<path d="M42 72 q8 4 16 -2" stroke="#1E2B3C" stroke-width="3" fill="none" stroke-linecap="round"/>'
+      : '<path d="M44 68 q6 6 12 0" stroke="#1E2B3C" stroke-width="3" fill="none" stroke-linecap="round"/>';
+    var bow = p.bow ? '<path d="M64 26 l10 -6 v14 z M64 26 l-8 -8 v14 z" fill="' + p.bow + '"/>' : '';
+    return '<svg viewBox="0 0 100 100" width="' + size + '" height="' + size + '" aria-hidden="true">' + h + s + top + beard + mus + eyes + cheek + mouth + hat + bow + '</svg>';
+  }
+  function bookIcon(kind, size) {
+    size = size || 40;
+    if (kind === 'turtle') return '<svg viewBox="0 0 48 48" width="' + size + '" height="' + size + '" aria-hidden="true"><ellipse cx="24" cy="28" rx="16" ry="11" fill="#2EB67D" stroke="#1B7A52" stroke-width="2.5"/><path d="M17 24 L24 20 L31 24 L31 31 L24 35 L17 31 Z" fill="#7BDCB0" stroke="#1B7A52" stroke-width="2"/><circle cx="41" cy="24" r="5" fill="#9BE3C1" stroke="#1B7A52" stroke-width="2.5"/><circle cx="42.5" cy="23" r="1.3" fill="#1E2B3C"/><ellipse cx="13" cy="39" rx="4" ry="3" fill="#9BE3C1" stroke="#1B7A52" stroke-width="2"/><ellipse cx="33" cy="39" rx="4" ry="3" fill="#9BE3C1" stroke="#1B7A52" stroke-width="2"/></svg>';
+    if (kind === 'hugo') return '<svg viewBox="0 0 48 48" width="' + size + '" height="' + size + '" aria-hidden="true"><rect x="19" y="18" width="10" height="20" rx="2" fill="#EEF1FF" stroke="#3B4CC0" stroke-width="2.5"/><path d="M11 38 h26 l-3 6 h-20 z" fill="#C9CEE8" stroke="#3B4CC0" stroke-width="2.5"/><path d="M24 4 C31 12 30 17 24 18 C18 17 17 12 24 4 Z" fill="#FFB627" stroke="#E07B00" stroke-width="2"/></svg>';
+    return '<svg viewBox="0 0 48 48" width="' + size + '" height="' + size + '" aria-hidden="true"><path d="M6 12 C14 8 20 9 24 13 C28 9 34 8 42 12 V38 C34 34 28 35 24 39 C20 35 14 34 6 38 Z" fill="#FFE8A3" stroke="#C98A00" stroke-width="2.5"/><path d="M24 13 V39" stroke="#C98A00" stroke-width="2.5"/></svg>';
+  }
+  return { kiki: kiki, face: face, people: P, bookIcon: bookIcon };
+})();
+</script>
+<script>/* 생각을 여는 책열쇠 · 2026 4학년 2학기 학교자율시간(활동) 29차시 수업 데이터 */
+window.BK = {
+  stds: {
+    '01-01': '이야기의 구성 요소를 파악하고, 이야기 주제와 교훈을 이해하여 자신의 생각을 표현한다.',
+    '01-02': '책을 읽고 이야기 내용과 갈등을 파악하며 다양한 질문을 만들어 이야기 의미를 탐색한다.',
+    '01-03': '책을 읽고 떠오른 생각과 의견을 나누며, 다른 사람의 의견을 경청하고 존중하는 태도를 기른다.',
+    '01-04': '독서 경험을 바탕으로 오디오북, 책 홍보물 등 창의적 독서 표현 활동을 수행하며, 협력하여 문제를 해결한다.',
+    '01-05': '독서의 즐거움과 책이 주는 가치를 이해하고 즐기며, 독서 경험을 공유하여 독서 문화 확산에 관심을 갖는다.'
+  },
+  books: {
+    turtle: {
+      title: '슈퍼 거북', by: '유설화 글·그림 · 책읽는곰', kind: '그림책', color: 'turtle',
+      line: '토끼와의 경주에서 이긴 뒤 ‘슈퍼 거북’이라 불리게 된 꾸물이. 사람들의 기대에 맞추려 애쓰던 꾸물이는 무엇을 깨닫게 될까요?',
+      keys: ['꾸물이(거북)', '재빨라(토끼)', '동네 사람들의 기대', '나다움과 행복'],
+      scenes: ['경주에서 이기고 동네 스타가 된 꾸물이', '‘진짜 슈퍼 거북’이 되려고 공부하고 훈련하는 꾸물이', '정말 빨라졌지만 늘 지치고 피곤한 꾸물이', '재빨라의 재도전, 경주 도중 잠이 들어 진 꾸물이', '다시 느긋하게, 홀가분하게 살아가는 꾸물이']
+    },
+    hugo: {
+      title: '레 미제라블', by: '빅토르 위고 원작 · 오카다 요시에 편역 · 은하수미디어 「초등학생을 위한 세계 명작」 40', kind: '동화책', color: 'hugo',
+      line: '빵 하나를 훔친 죄로 19년을 감옥에서 보낸 장 발장. 미리엘 주교의 은촛대가 그의 삶을 바꾸어 놓아요. 딸 코제트가 아버지의 이야기를 들려주는 형식이에요. ‘레 미제라블’은 ‘불쌍한 사람들’이라는 뜻이에요.',
+      keys: ['장 발장', '미리엘 주교', '자베르 형사', '팡틴', '코제트', '테나르디에 부부', '마리우스', '에포닌'],
+      parts: [
+        { t: '1부 · 은촛대가 바꾼 삶', pg: '16~41쪽', ch: ['1. 수상한 남자', '2. 미리엘 주교와 은촛대', '3. 마들렌 시장'], cp: [16, 21, 36] },
+        { t: '2부 · 숨길 수 없는 이름', pg: '43~59쪽', ch: ['4. 팡틴', '5. 내가 장 발장이다!'], cp: [43, 53] },
+        { t: '3부 · 코제트를 찾아서', pg: '60~85쪽', ch: ['6. 코제트', '7. 막다른 길에 몰리다', '8. 불사신인 남자'], cp: [60, 72, 77] },
+        { t: '4부 · 사랑과 바리케이드', pg: '86~113쪽', ch: ['9. 시간이 흐르다', '10. 코제트의 첫사랑', '11. 우연한 만남', '12. 엇갈림', '13. 바리케이드'], cp: [86, 90, 95, 104, 109] },
+        { t: '5부 · 마지막 은촛대', pg: '114~137쪽', ch: ['14. 아버지의 마음', '15. 하수도를 지나', '16. 자베르 형사의 결심', '17. 코제트의 결혼', '18. 장 발장의 유언'], cp: [115, 119, 127, 129, 132] }
+      ]
+    }
+  },
+  units: [
+    { big: '책과 나', color: 'key' },
+    { big: '책과 대화', color: 'turtle' },
+    { big: '책과 세상', color: 'pink' }
+  ],
+  lessons: [
+  /* ───────────── 책과 나 ───────────── */
+  {
+    id: 'l1', h: '1', big: '책과 나', unit: '오리엔테이션', book: 'none', std: ['01-01'], gear: 'none',
+    title: '책열쇠 여행을 시작해요',
+    goal: ['‘생각을 여는 책열쇠’ 활동의 목표와 흐름을 안다.', '책을 읽는 까닭과 읽지 않는 까닭을 솔직하게 나눈다.'],
+    flow: [
+      { s: '도입', m: 5, t: '키키를 만나요', q: '여러분 마음속에 잠긴 문을 열어 주는 열쇠가 있다면, 그건 무엇일까요?', d: ['안내 친구 ‘키키’ 소개', '‘책열쇠’라는 이름의 뜻 짐작해 보기'] },
+      { s: '전개', m: 10, t: '29차시 책열쇠 지도 둘러보기', q: '우리는 어떤 책들과 여행하게 될까요?', d: ['책과 나 → 책과 대화 → 책과 세상 세 갈래 길 살펴보기', '그림책 「슈퍼 거북」과 동화책 「레 미제라블」 표지 미리 보기', '마지막엔 오디오북과 독서 홍보물을 직접 만든다는 것 알기'], w: 'map' },
+      { s: '전개', m: 15, t: '나는 왜 책을 읽을까?', q: '책을 읽는 까닭, 그리고 솔직히 읽기 싫을 때의 까닭은 무엇인가요?', d: ['포스트잇에 ‘읽는 까닭’, ‘읽지 않는 까닭’ 한 가지씩 쓰기', '비슷한 생각끼리 모아 보고 이야기 나누기', '책 읽기가 필요한 까닭, 책을 대하는 태도 정리하기'], w: 'why' },
+      { s: '정리', m: 10, t: '나의 책열쇠 다짐', q: '이번 학기 책열쇠 여행에서 나는 어떤 독자가 되고 싶나요?', d: ['지금의 나를 독서 온도계로 표시하기 (29차시에 다시 비교)', '다짐 한 문장 쓰고 발표하기'], w: 'temp' }
+    ],
+    widgets: {
+      map: { type: 'journey' },
+      why: { type: 'board', cols: ['📖 책을 읽는 까닭', '😴 책을 읽지 않는 까닭'], seed: [[0, '재미있는 이야기를 알 수 있어서'], [1, '글자가 많으면 지루해서']] },
+      temp: { type: 'scale', items: ['나는 책 읽기가 좋다', '책을 읽고 내 생각을 말할 수 있다', '친구와 책 이야기를 나누는 것이 즐겁다', '책에서 질문을 찾을 수 있다', '책을 다른 사람에게 소개할 수 있다'], cols: ['지금 나'] }
+    },
+    eval: '독서에 대한 자신의 생각을 솔직하게 표현하고, 친구의 생각을 끝까지 듣는가.',
+    ws: { title: '나와 책, 첫 만남', items: [
+      { t: 'table', q: '나는 왜 책을 읽을까?', cols: ['책을 읽는 까닭', '책을 읽지 않는 까닭'], rows: 3 },
+      { t: 'stars', q: '지금 나의 독서 온도 (별에 색칠하기)', items: ['나는 책 읽기가 좋다', '책을 읽고 내 생각을 말할 수 있다', '친구와 책 이야기를 나누는 것이 즐겁다', '책에서 질문을 찾을 수 있다', '책을 다른 사람에게 소개할 수 있다'] },
+      { t: 'lines', q: '이번 학기 나의 책열쇠 다짐 한 문장', n: 2 }
+    ] }
+  },
+  {
+    id: 'l2', h: '2', big: '책과 나', unit: '책과 친해져요', book: 'none', std: ['01-01'], gear: 'none',
+    title: '그림책과 동화책, 무엇이 다를까?',
+    goal: ['그림책과 동화책의 특징을 비교한다.', '책 놀이를 하며 책과 친해진다.'],
+    flow: [
+      { s: '도입', m: 5, t: '두 권 나란히 놓고 보기', q: '「슈퍼 거북」과 「레 미제라블」을 나란히 놓으면 무엇이 달라 보이나요?', d: ['두께, 그림, 글의 양, 차례를 눈으로 비교하기'] },
+      { s: '전개', m: 12, t: '특징 분류 놀이', q: '이 문장은 그림책에 가까울까요, 동화책에 가까울까요?', d: ['카드를 누르고 알맞은 바구니를 눌러 분류하기', '두 가지 모두에 해당하는 것은 없는지 이야기 나누기'], w: 'sort', tip: '정답보다 ‘왜 그렇게 생각했는지’를 묻는 데 시간을 쓰세요. 두 바구니에 모두 해당한다는 의견도 인정해 주세요.' },
+      { s: '전개', m: 15, t: '책 놀이: 초성 제목 맞히기', q: 'ㅅㅍ ㄱㅂ… 어떤 책일까요?', d: ['초성 카드를 보고 모둠별로 책 제목 맞히기', '모둠별로 학급문고 책 제목 초성 문제 만들어 내기', '표지 일부만 보여 주고 제목 맞히기도 해 보기'], w: 'chosung' },
+      { s: '정리', m: 8, t: '내가 좋아하는 책의 모습', q: '나는 그림책과 동화책 중 어떤 책을 더 좋아하나요? 그 까닭은?', d: ['한 문장으로 말하고 짝과 바꾸어 듣기'] }
+    ],
+    widgets: {
+      sort: { type: 'classify', bins: ['그림책', '동화책'], items: [
+        ['그림이 이야기의 큰 부분을 들려준다', 0], ['글이 많고 여러 장(章)으로 나뉜다', 1], ['한자리에서 처음부터 끝까지 읽기 쉽다', 0],
+        ['여러 날에 걸쳐 나누어 읽는다', 1], ['그림 속 작은 단서를 찾는 재미가 있다', 0], ['등장인물이 많고 사건이 길게 이어진다', 1],
+        ['글 없이 그림만 있는 쪽도 있다', 0], ['인물의 마음이 글로 자세히 표현된다', 1] ] },
+      chosung: { type: 'cards', front: 'big', items: [
+        ['ㅅㅍ ㄱㅂ', '슈퍼 거북'], ['ㄹ ㅁㅈㄹㅂ', '레 미제라블'], ['ㅌㄲㅇ ㄱㅂㅇ', '토끼와 거북이'], ['ㅎㅂㅇ ㄴㅂ', '흥부와 놀부'],
+        ['ㅇㄹ ㅇㅈ', '어린 왕자'], ['ㅍㄴㅋㅇ', '피노키오'], ['ㅎㄴ ㄷㄴ', '해님 달님'], ['ㅇㅅㅎ ㄴㄹㅇ ㅇㄹㅅ', '이상한 나라의 앨리스'] ] }
+    },
+    eval: '그림책과 동화책의 특징을 까닭을 들어 구분하는가.',
+    ws: { title: '그림책과 동화책 비교하기', items: [
+      { t: 'table', q: '두 책을 비교해 보아요', cols: ['', '그림책 「슈퍼 거북」', '동화책 「레 미제라블」'], rowsLabel: ['두께와 쪽수', '그림과 글', '읽는 데 걸리는 시간', '내가 느낀 점'] },
+      { t: 'box', q: '우리 모둠 초성 제목 문제 만들기 (초성 / 정답)', h: 90 },
+      { t: 'lines', q: '나는 ( 그림책 / 동화책 )을 더 좋아한다. 왜냐하면…', n: 2 }
+    ] }
+  },
+  {
+    id: 'l3', h: '3', big: '책과 나', unit: '책과 친해져요', book: 'none', std: ['01-01'], gear: 'none',
+    title: '나만의 책 고르기 기준 세우기',
+    goal: ['책을 고르는 여러 가지 기준을 안다.', '나만의 기준으로 읽고 싶은 책을 고른다.'],
+    flow: [
+      { s: '도입', m: 5, t: '책 고르기 고민', q: '도서관에 책이 1만 권 있어요. 여러분은 무엇을 보고 한 권을 고르나요?', d: ['평소에 책을 고르는 방법 떠올리기'] },
+      { s: '전개', m: 10, t: '책 고르기 기준 투표', q: '가장 중요하다고 생각하는 기준 세 가지에 투표해 보세요.', d: ['표지, 제목, 줄거리, 장르, 작가, 그림, 두께, 친구 추천 중 고르기', '우리 반 TOP 3 확인하기'], w: 'vote' },
+      { s: '전개', m: 18, t: '도서관 책 탐험', q: '내 기준에 맞는 책을 세 권 찾고, 그중 한 권을 골라 보세요.', d: ['도서관이나 학급문고에서 후보 책 3권 고르기', '기준별로 별점 매기기', '가장 점수가 높은 책을 ‘이번 달 나의 책’으로 정하기'], tip: '이 시간에 고른 책은 4~5차시 이후 쉬는 시간 독서 책으로 이어지도록 학급문고에 표시해 두면 좋아요.' },
+      { s: '정리', m: 7, t: '내가 고른 책 소개', q: '어떤 기준으로 이 책을 골랐나요?', d: ['고른 책 표지를 보여 주며 15초 소개하기'] }
+    ],
+    widgets: {
+      vote: { type: 'poll', items: ['📕 표지가 끌린다', '🏷️ 제목이 궁금하다', '📝 줄거리가 재미있다', '🧭 좋아하는 장르다', '✍️ 좋아하는 작가다', '🎨 그림이 마음에 든다', '📏 두께가 알맞다', '👫 친구가 추천했다'] }
+    },
+    eval: '자신이 세운 기준에 따라 읽을 책을 고르고 그 까닭을 말하는가.',
+    ws: { title: '나의 책 고르기 기준', items: [
+      { t: 'lines', q: '내가 책을 고르는 기준 TOP 3', n: 3 },
+      { t: 'table', q: '후보 책 별점 매기기 (★ 1~5개)', cols: ['책 제목', '기준 1', '기준 2', '기준 3', '합계'], rows: 3 },
+      { t: 'lines', q: '내가 고른 책과 고른 까닭', n: 2 }
+    ] }
+  },
+  {
+    id: 'l4', h: '4-5', big: '책과 나', unit: '그림책 속 인물과 만나요', book: 'turtle', std: ['01-02', '01-04'], gear: 'turtle',
+    title: '꾸물이는 어떤 거북일까?',
+    goal: ['「슈퍼 거북」 속 꾸물이의 말과 행동으로 성격과 가치관을 알아본다.', '꾸물이와 나의 닮은 점, 다른 점을 찾고 내가 중요하게 여기는 가치를 발표한다.'],
+    flow: [
+      { s: '도입', m: 8, t: '「토끼와 거북이」 그 뒤 이야기', q: '경주에서 이긴 거북은 그 뒤에 어떻게 살았을까요?', d: ['「토끼와 거북이」 결말 떠올리기', '「슈퍼 거북」 표지 보고 첫인상 말하기'] },
+      { s: '전개', m: 15, t: '「슈퍼 거북」 함께 읽기', q: '꾸물이의 표정이 바뀌는 장면에서 잠깐 멈춰 볼까요?', d: ['교사가 실물화상기로 읽어 주기', '장면마다 꾸물이 표정 따라 해 보기', '내용 확인 OX 퀴즈'], w: 'ox' },
+      { s: '전개', m: 15, t: '꾸물이 마음 그래프', q: '장면마다 꾸물이의 기분은 몇 점이었을까요?', d: ['다섯 장면의 기분 점수 정하기', '기분이 가장 낮은 장면과 그 까닭 이야기하기', '첫인상과 말·행동으로 알게 된 성격 비교하기'], w: 'mood' },
+      { s: '전개', m: 15, t: '꾸물이와 나, 닮은꼴 찾기', q: '나도 누군가의 기대 때문에 애쓴 적이 있나요?', d: ['꾸물이·나·짝꿍 세 칸에 특징 적기', '가족이나 모둠원과 비교해 보기'], w: 'compare' },
+      { s: '전개', m: 12, t: '성격을 바꾸면?', q: '꾸물이가 처음부터 “난 원래 느린 거북이에요!”라고 말했다면 이야기는 어떻게 달라졌을까요?', d: ['룰렛으로 바뀐 성격 뽑기', '바뀐 성격으로 한 장면 상황극 하기'], w: 'swap' },
+      { s: '정리', m: 15, t: '꾸물이의 가치, 나의 가치', q: '꾸물이가 처음엔 무엇을, 마지막엔 무엇을 중요하게 여겼을까요? 나는요?', d: ['가치 카드에서 꾸물이의 처음·마지막 가치 고르기', '내가 중요하게 생각하는 가치 하나 골라 발표하기'], w: 'values' }
+    ],
+    widgets: {
+      ox: { type: 'quiz', mode: 'ox', items: [
+        ['꾸물이는 토끼와의 경주에서 이겼다.', 'O'], ['동네 사람들은 꾸물이를 ‘슈퍼 거북’이라고 불렀다.', 'O'],
+        ['꾸물이는 빨라지기 위해 아무 노력도 하지 않았다.', 'X'], ['다시 열린 경주에서 꾸물이가 또 이겼다.', 'X'], ['이야기 끝에서 꾸물이는 마음이 홀가분해졌다.', 'O'] ] },
+      mood: { type: 'mood', who: '꾸물이', scenes: 'turtle' },
+      compare: { type: 'board', cols: ['🐢 꾸물이', '🙋 나', '👫 짝꿍'], seed: [[0, '사람들의 기대를 저버리지 않으려 애썼다']] },
+      swap: { type: 'whatif', a: ['꾸물이가', '재빨라가', '동네 사람들이'], b: ['처음부터 솔직하게 “난 원래 느려요”라고 말한다면?', '칭찬에 전혀 관심이 없다면?', '훈련하다가 친구에게 도움을 청한다면?', '경주를 거절할 용기가 있다면?', '꾸물이를 있는 그대로 좋아해 준다면?', '꾸물이에게 쉬어도 된다고 말해 준다면?'] },
+      values: { type: 'pick', items: ['인정받기', '노력', '행복', '나다움', '휴식', '우정', '성공', '자유', '용기', '정직'], slots: ['꾸물이의 처음 가치', '꾸물이의 마지막 가치', '내가 중요하게 여기는 가치'] }
+    },
+    eval: '인물의 말과 행동을 근거로 성격과 가치관을 파악하고, 자신과 비교하여 표현하는가.',
+    ws: { title: '「슈퍼 거북」 꾸물이 인물 탐구', items: [
+      { t: 'table', q: '첫인상과 진짜 모습', cols: ['첫인상 (표지·첫 장면)', '말과 행동', '그래서 알게 된 성격'], rows: 2 },
+      { t: 'mood', q: '꾸물이 마음 그래프 (장면마다 점 찍고 이어 보기)', scenes: 'turtle' },
+      { t: 'table', q: '꾸물이와 나', cols: ['닮은 점', '다른 점'], rows: 2 },
+      { t: 'lines', q: '내가 가장 중요하게 생각하는 가치와 그 까닭', n: 3 }
+    ] }
+  },
+  {
+    id: 'l5', h: '6-7', big: '책과 나', unit: '동화책 속 인물과 만나요', book: 'hugo', std: ['01-02', '01-04'], gear: 'candle',
+    title: '장 발장과 사람들, 관계도 그리기',
+    goal: ['「레 미제라블」을 몰입하여 읽는다.', '인물관계도를 그리며 주요 인물을 분석하고, ‘왜’, ‘만약에’ 질문으로 대화한다.'],
+    flow: [
+      { s: '도입', m: 8, t: '‘불쌍한 사람들’을 만나러', q: '빵 한 조각을 훔친 사람은 몇 년의 벌을 받아야 할까요?', d: ['제목의 뜻 알아보기 (레 미제라블 = 불쌍한 사람들)', '코제트가 들려주는 머리말 「코제트가 여러분에게」(14~15쪽) 함께 읽기', '읽기 지도 살펴보기 (책의 18개 장을 5부로 묶어 읽기)'], w: 'parts' },
+      { s: '전개', m: 25, t: '몰입하여 읽기', q: '읽다가 마음이 ‘쿵’ 한 곳에 연필로 작은 별을 그려 두세요.', d: ['1부(1~3장, 16~41쪽)와 2부(4~5장, 43~59쪽) 조용히 읽기 (집중 타이머 활용)', '어려운 낱말은 포스트잇에 적어 두기', '나머지 부분은 아침 독서·가정 독서로 이어 읽기'], tip: '분량이 많으므로 1장 「수상한 남자」와 2장 「미리엘 주교와 은촛대」는 교사가 소리 내어 읽어 주고, 3장부터 개별 묵독으로 바꾸면 몰입이 쉬워요.' },
+      { s: '전개', m: 25, t: '인물관계도 그리기', q: '장 발장을 가운데에 두면 누가 어디에 서게 될까요?', d: ['인물 얼굴을 눌러 특징 확인하기', '선을 눌러 두 인물의 관계 알아보기', '활동지에 나만의 관계도 그리기 (도와준 관계 ─ 파랑, 갈등 관계 ─ 빨강)'], w: 'rel' },
+      { s: '전개', m: 15, t: '‘왜?’ ‘만약에?’ 질문으로 대화하기', q: '“주교는 왜 장 발장을 경찰에게 넘기지 않았을까?”', d: ['질문 카드를 뒤집어 짝과 대화하기', '친구 질문 중 가장 궁금한 것 골라 새 이야기 상상하기'], w: 'qcards' },
+      { s: '정리', m: 7, t: '오늘의 인물 한 줄', q: '오늘 만난 인물 중 가장 마음이 가는 사람은 누구인가요?', d: ['인물 이름 + 그 까닭 한 줄 쓰기'] }
+    ],
+    widgets: {
+      parts: { type: 'progress', book: 'hugo' },
+      rel: { type: 'relmap' },
+      qcards: { type: 'cards', items: [
+        ['왜?', '주교는 왜 은그릇을 훔친 장 발장을 용서했을까?'], ['왜?', '장 발장은 왜 이름을 바꾸고 살았을까?'], ['왜?', '자베르는 왜 그토록 장 발장을 쫓았을까?'],
+        ['만약에?', '만약 주교가 장 발장을 경찰에 넘겼다면?'], ['만약에?', '만약 장 발장이 코제트를 만나지 못했다면?'], ['만약에?', '만약 내가 테나르디에 여관의 손님이었다면?'] ] }
+    },
+    eval: '인물 사이의 관계를 바르게 파악하여 관계도로 나타내고, 인물에 대한 질문을 만들어 대화하는가.',
+    ws: { title: '「레 미제라블」 인물관계도', items: [
+      { t: 'box', q: '나만의 인물관계도 (가운데: 장 발장 / 도와준 관계는 파랑, 갈등 관계는 빨강)', h: 300, center: '장 발장' },
+      { t: 'table', q: '주요 인물 분석', cols: ['인물', '성격', '그렇게 생각한 까닭 (말·행동)'], rowsLabel: ['장 발장', '미리엘 주교', '자베르', '코제트'] },
+      { t: 'lines', q: '내가 만든 ‘왜?’ 질문 / ‘만약에?’ 질문', n: 2 }
+    ] }
+  },
+  {
+    id: 'l6', h: '8', big: '책과 나', unit: '동화책 속 인물과 만나요', book: 'hugo', std: ['01-02', '01-04'], gear: 'candle',
+    title: '마음에 남은 문장, 인물에게 쓰는 편지',
+    goal: ['인상 깊은 내용이나 표현을 찾고 까닭을 발표한다.', '책 속 인물에게 내 마음을 담아 편지를 쓴다.'],
+    flow: [
+      { s: '도입', m: 5, t: '별표 친 곳 다시 펼치기', q: '읽으면서 별을 그려 둔 곳, 왜 마음이 쿵 했나요?', d: ['지난 시간 표시한 쪽 다시 찾아보기'] },
+      { s: '전개', m: 12, t: '문장 보물 상자', q: '나에게 영향을 준 단어나 문장은 무엇인가요?', d: ['인상 깊은 문장(또는 단어)과 쪽수, 까닭 적기', '친구들의 보물 문장 함께 읽기'], w: 'words' },
+      { s: '전개', m: 18, t: '인물에게 편지 쓰기', q: '장 발장에게, 코제트에게, 혹은 자베르에게… 누구에게 마음을 전하고 싶나요?', d: ['받는 사람 고르기', '편지 틀: 첫인사 → 인상 깊은 장면 → 묻고 싶은 말 → 해 주고 싶은 말 → 끝인사'], w: 'letter' },
+      { s: '정리', m: 5, t: '편지 낭독', q: '편지 한 부분을 그 인물이 듣는다고 생각하고 읽어 볼까요?', d: ['희망자 2~3명 낭독, 친구들은 인물이 되어 한마디 답장하기'] }
+    ],
+    widgets: {
+      words: { type: 'board', cols: ['✨ 보물 문장 (쪽수)', '💬 고른 까닭'], seed: [] },
+      letter: { type: 'faces', prompt: '편지를 받을 인물을 골라 보세요', keys: ['jean', 'bishop', 'javert', 'fantine', 'cosette', 'marius'] }
+    },
+    eval: '인상 깊은 표현을 찾아 까닭과 함께 말하고, 인물에게 공감하는 마음을 글로 표현하는가.',
+    ws: { title: '책 속 인물에게 보내는 편지', items: [
+      { t: 'table', q: '나의 보물 문장', cols: ['문장 (쪽수)', '고른 까닭'], rows: 2 },
+      { t: 'letter', q: '에게', n: 9 }
+    ] }
+  },
+  /* ───────────── 책과 대화 ───────────── */
+  {
+    id: 'l7', h: '9', big: '책과 대화', unit: '질문을 만들어요', book: 'turtle', std: ['01-01', '01-02', '01-03'], gear: 'turtle',
+    title: '「슈퍼 거북」으로 질문 만들기',
+    goal: ['표지와 내용을 보고 여러 가지 질문을 만든다.', '내용을 확인하는 질문과 생각하는 질문을 구분한다.'],
+    flow: [
+      { s: '도입', m: 7, t: '표지만 보고 질문 만들기', q: '표지에서 궁금한 점이 보이나요? 물음표를 붙여 말해 보세요.', d: ['표지만 보고 질문 3개 쓰기', '질문을 먼저 만들고 읽을 때 좋은 점 이야기하기 (궁금해서 더 집중된다 등)'], w: 'cover' },
+      { s: '전개', m: 13, t: '다시 읽으며 질문 만들기', q: '이번엔 내용을 읽고 떠오른 질문을 만들어 볼까요?', d: ['「슈퍼 거북」 다시 읽기', '장면마다 ‘누가, 무엇을, 왜, 어떻게’ 질문 만들기'] },
+      { s: '전개', m: 12, t: '질문 분류하기', q: '책 속에 답이 있는 질문일까요, 내 생각이 답이 되는 질문일까요?', d: ['내용 확인 질문 / 생각하는 질문으로 나누기', '내가 만든 질문도 두 바구니에 나누어 보기'], w: 'qsort' },
+      { s: '정리', m: 8, t: '오늘의 황금 질문', q: '우리가 만든 질문 중 가장 오래 생각하게 만드는 질문은?', d: ['모둠에서 ‘황금 질문’ 하나 뽑아 칠판에 붙이기'] }
+    ],
+    widgets: {
+      cover: { type: 'board', cols: ['❓ 표지를 보고 만든 질문', '📖 내용을 읽고 만든 질문'], seed: [[0, '‘슈퍼’ 거북은 무엇을 잘하는 거북일까?']] },
+      qsort: { type: 'classify', bins: ['내용 확인 질문', '생각하는 질문'], items: [
+        ['꾸물이는 누구와 경주를 했나요?', 0], ['사람들은 꾸물이를 뭐라고 불렀나요?', 0], ['꾸물이는 빨라지려고 무엇을 했나요?', 0], ['두 번째 경주에서 누가 이겼나요?', 0],
+        ['꾸물이는 왜 진짜 슈퍼 거북이 되려고 했을까?', 1], ['내가 꾸물이라면 다시 경주를 했을까?', 1], ['사람들의 기대는 꼭 따라야 할까?', 1], ['꾸물이에게 진짜 행복은 무엇일까?', 1] ] }
+    },
+    eval: '책의 내용을 바탕으로 질문을 만들고, 질문의 종류를 구분하는가.',
+    ws: { title: '질문 만들기 탐험대', items: [
+      { t: 'lines', q: '① 표지만 보고 만든 질문', n: 3 },
+      { t: 'table', q: '② 내용을 읽고 만든 질문 분류하기', cols: ['내용 확인 질문 (답이 책 속에)', '생각하는 질문 (답이 내 생각 속에)'], rows: 3 },
+      { t: 'lines', q: '③ 질문을 먼저 만들고 책을 읽으면 좋은 점', n: 2 }
+    ] }
+  },
+  {
+    id: 'l8', h: '10-11', big: '책과 대화', unit: '그림책을 탐구해요', book: 'turtle', std: ['01-01', '01-02', '01-03'], gear: 'turtle',
+    title: '그림 탐정이 되어 깊이 읽기',
+    goal: ['그림책 장면을 보고 ‘무엇이, 왜’ 질문하고 답한다.', '작가의 의도를 생각하고 다시 읽으며 새롭게 찾은 점을 발표한다.'],
+    flow: [
+      { s: '도입', m: 8, t: '그림 탐정 출동', q: '글에는 없지만 그림에만 숨어 있는 이야기가 있을까요?', d: ['돋보기 탐정 규칙: 색깔, 표정, 배경, 작은 물건 살피기'] },
+      { s: '전개', m: 25, t: '장면 탐정 카드', q: '이 장면에서 무엇이 보이나요? 작가는 왜 그렇게 그렸을까요?', d: ['장면 카드를 하나씩 뒤집어 질문하고 답하기', '찾은 단서는 포스트잇에 적어 장면 옆에 붙이기'], w: 'detect' },
+      { s: '전개', m: 22, t: '작가는 무엇을 말하고 싶었을까?', q: '유설화 작가님이 이 책으로 우리에게 전하고 싶은 말은 무엇일까요?', d: ['제목이 왜 ‘슈퍼 거북’일까 생각하기', '‘작가의 의도’ 문장 완성하기: 작가는 ○○○을 말하고 싶었을 것이다. 왜냐하면 ○○○ 장면에서…'], w: 'intent' },
+      { s: '전개', m: 15, t: '다시 읽기, 새로 보기', q: '처음 읽을 때는 몰랐는데 다시 읽으니 새로 보인 것은?', d: ['짝과 함께 처음부터 다시 넘겨 보기', '새로 찾은 점 한 가지씩 발표하기'] },
+      { s: '정리', m: 10, t: '배움 별점', q: '오늘 나는 그림을 얼마나 꼼꼼히 보았나요?', d: ['자기 평가 별점 매기기'], w: 'self' }
+    ],
+    widgets: {
+      detect: { type: 'cards', items: [
+        ['장면 1 🏁', '경주에서 이긴 꾸물이 주변에는 무엇이 보이나요? 사람들의 표정은 어떤가요?'],
+        ['장면 2 📚', '꾸물이가 빨라지려고 한 일들은 무엇인가요? 왜 그렇게까지 했을까요?'],
+        ['장면 3 😵', '빨라진 꾸물이의 얼굴과 몸짓은 어떤가요? 행복해 보이나요?'],
+        ['장면 4 💤', '두 번째 경주에서 무슨 일이 일어났나요? 꾸물이는 왜 잠이 들었을까요?'],
+        ['장면 5 🌿', '마지막 장면의 색깔과 분위기는 처음과 어떻게 다른가요? 왜 그렇게 그렸을까요?'] ] },
+      intent: { type: 'board', cols: ['🎯 작가가 말하고 싶은 것', '🔎 그렇게 생각한 장면·단서'], seed: [] },
+      self: { type: 'stars', items: ['그림 속 작은 단서까지 살펴보았다', '‘왜’ 질문에 까닭을 들어 답했다', '친구의 생각을 끝까지 들었다'] }
+    },
+    eval: '그림책의 그림과 글을 근거로 질문에 답하고 작가의 의도를 추론하는가.',
+    ws: { title: '그림 탐정 보고서', items: [
+      { t: 'table', q: '장면 탐정', cols: ['장면', '무엇이 보이나요?', '왜 그렇게 그렸을까요?'], rowsLabel: ['장면 1', '장면 2', '장면 3', '장면 4', '장면 5'] },
+      { t: 'lines', q: '작가는 ________________을(를) 말하고 싶었을 것이다. 왜냐하면…', n: 3 },
+      { t: 'lines', q: '다시 읽으며 새롭게 찾은 점', n: 2 }
+    ] }
+  },
+  {
+    id: 'l9', h: '12', big: '책과 대화', unit: '그림책을 탐구해요', book: 'turtle', std: ['01-01', '01-02', '01-03'], gear: 'turtle',
+    title: '모둠 깊이 읽기와 황금 질문 발표',
+    goal: ['모둠별로 맡은 장면을 ‘무엇이, 왜, 어떻게’ 질문으로 깊이 읽는다.', '토의하여 작가의 의도를 정리하고 우수 질문과 함께 발표한다.'],
+    flow: [
+      { s: '도입', m: 5, t: '모둠 장면 뽑기', q: '우리 모둠이 탐구할 장면은 어디일까요?', d: ['모둠별로 장면 번호 뽑기 (뽑기 도구 활용)'] },
+      { s: '전개', m: 15, t: '무엇이 · 왜 · 어떻게', q: '맡은 장면에서 ‘어떻게’ 질문까지 만들어 볼까요?', d: ['모둠원 역할: 질문 대장, 기록 대장, 발표 대장, 시간 지킴이', '장면에 대해 질문 3종 만들고 답 정하기'], w: 'roles' },
+      { s: '전개', m: 12, t: '황금 질문 뽑기', q: '어떤 질문이 가장 깊이 생각하게 만들었나요?', d: ['모둠 질문을 게시판에 올리고 ♥ 누르기', '가장 많은 ♥를 받은 질문으로 함께 이야기 나누기'], w: 'gold' },
+      { s: '정리', m: 8, t: '작가 의도 발표', q: '우리 모둠이 생각한 작가의 의도는?', d: ['모둠별 1분 발표', '다른 모둠 발표에서 배운 점 한 가지 말하기'] }
+    ],
+    widgets: {
+      roles: { type: 'roles', roles: ['🗣️ 질문 대장', '✏️ 기록 대장', '🎤 발표 대장', '⏱️ 시간 지킴이'] },
+      gold: { type: 'board', cols: ['🏆 우리 모둠 우수 질문'], like: true, seed: [[0, '꾸물이가 진짜 원했던 것은 이기는 것이었을까?']] }
+    },
+    eval: '모둠 토의에 참여하여 질문을 만들고, 친구의 의견을 존중하며 작가의 의도를 함께 정리하는가.',
+    ws: { title: '모둠 깊이 읽기 기록지', items: [
+      { t: 'table', q: '우리 모둠 장면: (     )번', cols: ['질문 종류', '우리가 만든 질문', '우리의 답'], rowsLabel: ['무엇이?', '왜?', '어떻게?'] },
+      { t: 'lines', q: '모둠이 함께 정리한 작가의 의도', n: 3 },
+      { t: 'lines', q: '다른 모둠 발표에서 배운 점', n: 2 }
+    ] }
+  },
+  {
+    id: 'l10', h: '13', big: '책과 대화', unit: '동화책을 탐구해요', book: 'hugo', std: ['01-01', '01-02', '01-03'], gear: 'candle',
+    title: '표지와 제목으로 이야기 예상하기',
+    goal: ['책 제목과 표지를 보고 내용과 작가의 의도를 추측한다.', '갈등과 사건이 뚜렷한 동화책에 몰입하여 읽는다.'],
+    flow: [
+      { s: '도입', m: 8, t: '제목 수수께끼', q: '‘레 미제라블’은 어느 나라 말일까요? 무슨 뜻일까요?', d: ['제목 카드를 뒤집어 뜻 확인하기', '책 앞부분 그림 해설과 「레 미제라블의 세계」 쪽 살펴보기', '‘불쌍한 사람들’이라는 제목을 붙인 작가의 마음 추측하기'], w: 'title' },
+      { s: '전개', m: 10, t: '표지 속 단서 찾기', q: '표지에 나온 사람은 누구일까요? 어떤 일이 일어날 것 같나요?', d: ['표지 속 인물, 물건, 색깔로 내용 예상하기', '예상을 게시판에 적어 두기 (다 읽은 뒤 확인!)'], w: 'guess' },
+      { s: '전개', m: 17, t: '갈등을 찾으며 몰입 읽기', q: '읽으면서 ‘누구와 누가 부딪히는지’ 찾아보세요.', d: ['6~7차시에 읽은 부분 이어 읽기', '갈등이 보이는 장면에 ⚡ 표시하기'] },
+      { s: '정리', m: 5, t: '예상 확인', q: '내 예상은 얼마나 맞았나요?', d: ['맞은 예상 / 빗나간 예상 이야기하기'] }
+    ],
+    widgets: {
+      title: { type: 'cards', front: 'big', items: [['Les Misérables', '프랑스어로 ‘불쌍한 사람들’, ‘비참한 사람들’이라는 뜻이에요.'], ['빅토르 위고', '프랑스의 작가. 1862년에 「레 미제라블」을 펴냈어요.'], ['은촛대', '이 이야기에서 가장 중요한 물건 중 하나예요. 왜 중요할지 예상해 보세요!']] },
+      guess: { type: 'board', cols: ['🔮 나의 예상', '✅ 읽고 나서 확인'], seed: [] }
+    },
+    eval: '제목과 표지의 단서를 활용하여 내용을 예상하고, 읽으며 갈등 장면을 찾는가.',
+    ws: { title: '표지 탐정과 예상 노트', items: [
+      { t: 'table', q: '표지 속 단서', cols: ['보이는 것 (인물·물건·색깔)', '그래서 예상한 내용'], rows: 3 },
+      { t: 'lines', q: '작가가 ‘불쌍한 사람들’이라는 제목을 붙인 까닭은 무엇일까?', n: 2 },
+      { t: 'table', q: '읽고 나서 확인하기', cols: ['맞은 예상', '빗나간 예상'], rows: 2 }
+    ] }
+  },
+  {
+    id: 'l11', h: '14', big: '책과 대화', unit: '동화책을 탐구해요', book: 'hugo', std: ['01-01', '01-02', '01-03'], gear: 'candle',
+    title: '갈등의 실타래 풀기',
+    goal: ['인물관계도를 작성하며 갈등의 원인을 분석한다.', '행동과 성격을 생각하며 ‘만약에’ 질문을 만든다.'],
+    flow: [
+      { s: '도입', m: 5, t: '갈등이란?', q: '친구와 생각이 달라 부딪힌 적 있나요? 그게 바로 갈등이에요.', d: ['갈등 = 인물 사이, 또는 인물 마음속에서 생각이 부딪히는 것'] },
+      { s: '전개', m: 15, t: '갈등 관계 찾기', q: '빨간 선으로 이어진 인물들은 왜 부딪혔을까요?', d: ['관계도에서 ‘갈등 보기’를 켜고 빨간 선 눌러 보기', '장 발장 ↔ 자베르: 법을 지키는 것과 사람을 용서하는 것', '장 발장 마음속 갈등: 정체를 밝힐까, 숨길까 (5장, 52~56쪽)', '마리우스 ↔ 할아버지 질노르망: 귀족이 아닌 사람과의 결혼 (12장, 106쪽)'], w: 'rel' },
+      { s: '전개', m: 13, t: '만약에 주사위', q: '이 인물이 다르게 행동했더라면?', d: ['주사위를 굴려 ‘만약에’ 질문 만들기', '모둠에서 질문 하나를 골라 바뀐 이야기 상상하기', '배경이나 결말이 달랐다면? 질문도 만들어 보기'], w: 'whatif' },
+      { s: '정리', m: 7, t: '갈등의 뿌리', q: '이 이야기의 갈등은 결국 무엇 때문에 생겼다고 생각하나요?', d: ['한 문장으로 정리하여 발표'] }
+    ],
+    widgets: {
+      rel: { type: 'relmap', conflict: true },
+      whatif: { type: 'whatif', a: ['장 발장이', '미리엘 주교가', '자베르가', '코제트가', '테나르디에 부부가', '마리우스가', '에포닌이'], b: ['다르게 말했더라면?', '정반대로 행동했더라면?', '그 사건이 일어나지 않았더라면?', '용기를 내지 않았더라면?', '오늘날 우리 동네에 살았더라면?', '결말이 달랐더라면?'] }
+    },
+    eval: '인물 사이 갈등의 원인을 사건과 연결하여 분석하고, 가정하는 질문을 만드는가.',
+    ws: { title: '갈등의 실타래', items: [
+      { t: 'table', q: '갈등 분석표', cols: ['갈등하는 인물', '무엇 때문에 부딪혔나?', '어떻게 풀렸나? (안 풀렸나?)'], rows: 3 },
+      { t: 'table', q: '만약에 질문 만들기', cols: ['만약 ○○이(가) ○○했더라면?', '바뀌었을 이야기'], rows: 3 }
+    ] }
+  },
+  {
+    id: 'l12', h: '15', big: '책과 대화', unit: '동화책을 탐구해요', book: 'hugo', std: ['01-01', '01-02', '01-03'], gear: 'candle',
+    title: '책 속 인물 면담하기',
+    goal: ['책 속 인물에게 묻고 싶은 질문을 만들어 면담한다.', '다른 사람의 입장이 되어 인물을 바라보고 그 까닭을 듣는다.'],
+    flow: [
+      { s: '도입', m: 5, t: '뜨거운 의자', q: '책 속 인물이 우리 교실에 왔어요! 무엇을 묻고 싶나요?', d: ['면담 규칙: 인물이 된 친구는 책 내용과 인물의 마음을 바탕으로 대답하기'] },
+      { s: '전개', m: 17, t: '인물 면담', q: '장 발장 씨, 은촛대를 받았을 때 어떤 마음이었나요?', d: ['인물을 고르고 질문 카드 확인하기', '모둠에서 한 명씩 인물이 되어 의자에 앉기', '나머지는 기자가 되어 질문하고 기록하기'], w: 'hot' },
+      { s: '전개', m: 13, t: '다른 사람이 되어 면담하기', q: '내가 장 발장이라면? 선생님이라면? 부모님이라면?', d: ['역할 바꾸기 버튼을 눌러 새 입장 정하기', '같은 질문에 다른 입장으로 대답하고 까닭 함께 듣기'] },
+      { s: '정리', m: 5, t: '면담 후기', q: '인물을 직접 만나 보니 생각이 바뀐 점이 있나요?', d: ['기자 수첩 한 줄 정리'] }
+    ],
+    widgets: {
+      hot: { type: 'hotseat' }
+    },
+    eval: '인물의 처지와 마음을 고려한 질문을 만들고, 다른 입장의 의견을 존중하며 듣는가.',
+    ws: { title: '기자 수첩: 인물 면담', items: [
+      { t: 'table', q: '면담한 인물: (           )', cols: ['나의 질문', '인물의 대답'], rows: 3 },
+      { t: 'table', q: '다른 사람이 되어 면담하기', cols: ['누구의 입장에서?', '대답', '그 까닭'], rowsLabel: ['나라면', '선생님이라면', '부모님이라면'] },
+      { t: 'lines', q: '면담 후 바뀐 내 생각', n: 2 }
+    ] }
+  },
+  {
+    id: 'l13', h: '16', big: '책과 대화', unit: '동화책을 탐구해요', book: 'hugo', std: ['01-01', '01-02', '01-03'], gear: 'candle',
+    title: '레 미제라블 토의 한마당',
+    goal: ['질문을 확인하며 토의 주제를 정한다.', '토의 주제에 대해 근거를 들어 의견을 말하고, 친구의 의견을 존중한다.'],
+    flow: [
+      { s: '도입', m: 5, t: '토의 약속', q: '토의할 때 꼭 지켜야 할 약속은 무엇일까요?', d: ['손 들고 말하기, 끝까지 듣기, “○○ 의견에 덧붙여…” 말하기', '사람이 아닌 의견에 대해 말하기'] },
+      { s: '전개', m: 8, t: '토의 주제 정하기', q: '지금까지 만든 질문 중 함께 이야기하고 싶은 주제는?', d: ['후보 주제에 투표하기', '가장 많이 뽑힌 주제로 토의하기'], w: 'topic' },
+      { s: '전개', m: 20, t: '의견 나누기', q: '내 의견은 무엇이고, 그 까닭은 책의 어느 장면인가요?', d: ['의견 + 까닭(책 장면) + 내 경험 순서로 말하기', '친구 의견을 들은 뒤 생각이 바뀌면 자리 옮기기'], w: 'opinion', tip: '찬반 토론이 아니라 토의예요. 생각을 바꾸는 것이 지는 것이 아니라 ‘더 깊이 생각한 것’이라고 칭찬해 주세요.' },
+      { s: '정리', m: 7, t: '토의 후 내 생각', q: '토의를 하고 나서 생각과 느낌이 어떻게 달라졌나요?', d: ['소감 발표, 동료 칭찬 한마디'], w: 'peer' }
+    ],
+    widgets: {
+      topic: { type: 'poll', items: ['배고픈 조카들을 위해 빵을 훔친 장 발장은 19년이나 벌을 받아야 했을까? (28쪽)', '은그릇을 ‘선물’이라고 말한 주교의 거짓말은 옳은 일이었을까? (32쪽)', '자베르는 나쁜 사람일까, 법을 지킨 사람일까? (38, 126쪽)', '장 발장은 재판에서 정체를 꼭 밝혀야 했을까? (52~56쪽)', '용서는 사람을 정말 바꿀 수 있을까?'] },
+      opinion: { type: 'board', cols: ['🙆 그렇다', '🤔 잘 모르겠다 / 둘 다', '🙅 아니다'], seed: [] },
+      peer: { type: 'stars', items: ['까닭을 들어 의견을 말했다', '친구의 말을 끝까지 들었다', '다른 의견도 존중했다'] }
+    },
+    eval: '책 내용을 근거로 의견을 제시하고, 다른 사람의 의견을 경청하고 존중하는가.',
+    ws: { title: '토의 기록지', items: [
+      { t: 'lines', q: '우리 반 토의 주제', n: 1 },
+      { t: 'table', q: '나의 의견 정리', cols: ['내 의견', '까닭 (책 장면)', '내 경험'], rows: 1, tall: true },
+      { t: 'table', q: '친구 의견 듣기', cols: ['친구 이름', '친구 의견', '내 생각'], rows: 3 },
+      { t: 'lines', q: '토의하고 나서 생각과 느낀 점', n: 2 }
+    ] }
+  },
+  {
+    id: 'l14', h: '17-18', big: '책과 대화', unit: '동화책을 탐구해요', book: 'hugo', std: ['01-01', '01-02', '01-03'], gear: 'candle',
+    title: '이야기를 바꾸어 역할극 하기',
+    goal: ['인물의 성격, 사건, 배경을 바꾸어 새로운 이야기를 상상한다.', '모둠별로 바꾼 이야기를 역할극으로 표현한다.'],
+    flow: [
+      { s: '도입', m: 8, t: '이야기 요리사', q: '이야기에서 한 가지 재료만 바꾸면 맛이 어떻게 달라질까요?', d: ['바꿀 수 있는 재료: 인물의 성격 · 사건 · 배경'] },
+      { s: '전개', m: 15, t: '이야기 바꾸기 뽑기', q: '우리 모둠은 어떤 재료를 바꾸게 될까요?', d: ['뽑기를 돌려 바꿀 재료 정하기 (마음에 들면 고정, 아니면 다시 돌리기)', '바뀐 이야기의 줄거리 4장면으로 짜기'], w: 'remix' },
+      { s: '전개', m: 30, t: '역할극 준비', q: '말투와 몸짓으로 인물의 성격을 어떻게 보여 줄 수 있을까요?', d: ['역할 나누고 대본 쓰기', '간단한 소품 만들기 (종이 은촛대, 모자 등)', '연습하며 서로 조언하기'], w: 'roles' },
+      { s: '전개', m: 20, t: '역할극 발표', q: '원래 이야기와 무엇이 달라졌는지 찾으며 보세요.', d: ['모둠별 3분 역할극', '보는 모둠은 ‘달라진 점’과 ‘좋았던 점’ 기록'] },
+      { s: '정리', m: 7, t: '바꾸어 보니', q: '이야기를 바꾸어 보니 원래 이야기에서 무엇이 중요했는지 보이나요?', d: ['소감 나누기'] }
+    ],
+    widgets: {
+      remix: { type: 'slot', reels: [
+        { name: '인물의 성격', items: ['장 발장이 겁이 아주 많다면', '자베르가 마음이 여리다면', '코제트가 용감한 모험가라면', '테나르디에 부부가 정직하다면', '주교가 엄격하고 무섭다면'] },
+        { name: '사건', items: ['주교가 장 발장을 경찰에 넘긴다면', '장 발장이 재판에서 정체를 숨긴다면', '코제트가 마리우스를 만나지 않는다면', '자베르가 장 발장과 친구가 된다면', '은촛대를 잃어버린다면'] },
+        { name: '배경', items: ['오늘날 우리 동네라면', '조선 시대 한양이라면', '우주 정거장이라면', '바닷속 왕국이라면', '우리 학교라면'] } ] },
+      roles: { type: 'roles', roles: ['🎬 감독', '🎭 배우 1', '🎭 배우 2', '🎭 배우 3', '🧺 소품 담당'] }
+    },
+    eval: '이야기 구성 요소를 바꾸어 새로운 이야기를 만들고, 협력하여 역할극으로 표현하는가.',
+    ws: { title: '바뀐 이야기 역할극 계획서', items: [
+      { t: 'table', q: '우리가 바꾼 재료', cols: ['인물의 성격', '사건', '배경'], rows: 1, tall: true },
+      { t: 'table', q: '바뀐 이야기 4장면', cols: ['장면', '무슨 일이 일어날까?', '나오는 인물'], rowsLabel: ['처음', '가운데 1', '가운데 2', '끝'] },
+      { t: 'table', q: '역할 나누기', cols: ['역할', '이름', '준비할 것'], rows: 4 }
+    ] }
+  },
+  {
+    id: 'l15', h: '19', big: '책과 대화', unit: '동화책을 탐구해요', book: 'hugo', std: ['01-01', '01-02', '01-03'], gear: 'candle',
+    title: '질문으로 내 생각 글쓰기',
+    goal: ['나에게 영향을 준 단어나 문장을 찾아 표현한다.', '가장 기억에 남는 질문과 답을 바탕으로 내 생각을 글로 쓴다.'],
+    flow: [
+      { s: '도입', m: 5, t: '나의 한 단어', q: '「레 미제라블」을 한 단어로 말한다면?', d: ['용서, 사랑, 은촛대, 자유… 한 단어씩 돌아가며 말하기'], w: 'word' },
+      { s: '전개', m: 10, t: '기억에 남는 질문 고르기', q: '그동안 만든 질문 중 아직도 마음에 남아 있는 질문은?', d: ['질문 게시판과 활동지 다시 보기', '질문 1개 + 그때의 답 + 지금의 답 적기'] },
+      { s: '전개', m: 18, t: '생각 글쓰기', q: '질문에 대한 내 생각을 까닭과 함께 글로 써 볼까요?', d: ['글의 틀: 질문 → 처음 생각 → 책 속 장면 → 지금 생각 → 나의 다짐', '5~8문장으로 쓰기'], tip: '글쓰기를 어려워하는 학생에게는 문장 시작 말 카드(“나는 처음에 ~라고 생각했다.”)를 제공하세요.' },
+      { s: '정리', m: 7, t: '생각 나누기', q: '친구의 글에서 공감되는 문장을 찾아볼까요?', d: ['짝과 글 바꾸어 읽고 공감 문장에 밑줄 긋기'] }
+    ],
+    widgets: {
+      word: { type: 'cloud' }
+    },
+    eval: '책에서 얻은 질문과 생각을 바탕으로 자신의 생각을 까닭을 들어 글로 표현하는가.',
+    ws: { title: '질문으로 쓰는 내 생각', items: [
+      { t: 'table', q: '나의 단어 / 나에게 영향을 준 문장', cols: ['한 단어', '문장 (쪽수)'], rows: 1 },
+      { t: 'table', q: '가장 기억에 남는 질문', cols: ['질문', '처음 나의 답', '지금 나의 답'], rows: 1, tall: true },
+      { t: 'lines', q: '내 생각 글쓰기 (질문 → 처음 생각 → 책 속 장면 → 지금 생각 → 다짐)', n: 8 }
+    ] }
+  },
+  /* ───────────── 책과 세상 ───────────── */
+  {
+    id: 'l16', h: '20', big: '책과 세상', unit: '책이 주는 힘을 알아보아요', book: 'none', std: ['01-05'], gear: 'cap',
+    title: '책이 주는 힘, 위인들의 독서 습관',
+    goal: ['책이 주는 다양한 가치를 나눈다.', '역사 속 인물들의 독서 습관을 알고 나의 독서 습관을 돌아본다.'],
+    flow: [
+      { s: '도입', m: 5, t: '책 선물 상자', q: '「슈퍼 거북」과 「레 미제라블」은 나에게 어떤 선물을 주었나요?', d: ['지식, 재미, 감정, 영감, 위로, 용기 중에서 고르기'], w: 'gift' },
+      { s: '전개', m: 17, t: '위인들의 독서 비밀', q: '이 사람은 책을 어떻게 읽었을까요? 카드를 뒤집어 보세요.', d: ['세종대왕, 정약용, 김득신, 링컨의 독서 습관 알아보기', '가장 따라 해 보고 싶은 습관 고르기'], w: 'greats' },
+      { s: '전개', m: 10, t: '나의 독서 습관 처방', q: '나에게 꼭 필요한 독서 습관은 무엇일까요?', d: ['위인의 습관을 내 생활에 맞게 바꾸어 나만의 독서 습관 만들기 (예: 좋아하는 책 3번 읽기)'] },
+      { s: '정리', m: 8, t: '독서 습관 선언', q: '오늘부터 실천할 나의 독서 습관은?', d: ['선언문 발표'] }
+    ],
+    widgets: {
+      gift: { type: 'poll', items: ['🧠 지식', '😆 재미', '💗 감정', '💡 영감', '🫂 위로', '🦁 용기'] },
+      greats: { type: 'cards', items: [
+        ['세종대왕', '좋아하는 책은 백 번 읽고 백 번 베껴 썼다고 해요(백독백습). 눈병이 날 만큼 책을 읽어 아버지 태종이 책을 치우게 했다는 이야기도 전해져요.'],
+        ['정약용', '18년 동안 귀양살이를 하면서도 500권이 넘는 책을 썼어요. 멀리 있는 아들들에게 편지로 “책을 읽어라”라고 당부했지요.'],
+        ['김득신', '어릴 때 배움이 아주 느렸지만, 좋아하는 글을 1만 번 넘게 되풀이해 읽으며 포기하지 않았어요. 늦은 나이에 과거에 합격해 이름난 시인이 되었어요.'],
+        ['에이브러햄 링컨', '학교에 다닌 기간은 1년 남짓이었지만 책을 빌려 와 틈날 때마다 읽었어요. 빌린 책이 비에 젖자 며칠 동안 일을 해서 책값을 갚았다고 해요.'] ] }
+    },
+    eval: '책이 주는 가치를 자신의 독서 경험과 연결하여 말하는가.',
+    ws: { title: '책이 주는 힘', items: [
+      { t: 'table', q: '두 책이 나에게 준 선물', cols: ['책', '받은 선물 (지식·재미·감정·영감·위로·용기)', '까닭'], rowsLabel: ['슈퍼 거북', '레 미제라블'] },
+      { t: 'table', q: '위인들의 독서 습관', cols: ['인물', '독서 습관', '나도 따라 할 수 있을까?'], rowsLabel: ['세종대왕', '정약용', '김득신', '링컨'] },
+      { t: 'box', q: '나의 독서 습관 선언문', h: 110 }
+    ] }
+  },
+  {
+    id: 'l17', h: '21-22', big: '책과 세상', unit: '오디오북을 만들어요', book: 'both', std: ['01-04'], gear: 'mic',
+    title: '오디오북 제작 계획과 녹음 준비',
+    goal: ['모둠별로 제작할 책을 정하고 역할을 나누어 스크립트를 쓴다.', '배경음악과 효과음 목록을 만들고 녹음을 연습하며 서로 피드백한다.'],
+    flow: [
+      { s: '도입', m: 8, t: '귀로 듣는 책', q: '눈을 감고 들어도 장면이 떠오르게 하려면 무엇이 필요할까요?', d: ['오디오북 들어 보기 (교사가 짧게 읽어 주기)', '목소리·효과음·배경음악·쉼의 역할 알기'] },
+      { s: '전개', m: 15, t: '책 고르고 역할 나누기', q: '「슈퍼 거북」 전체? 「레 미제라블」의 한 장면? 우리 모둠의 선택은?', d: ['그림책 전체 또는 동화책 한 장면 고르기', '내레이터, 인물 목소리, 효과음 담당, 녹음·편집 담당 정하기'], w: 'roles' },
+      { s: '전개', m: 25, t: '스크립트 쓰기', q: '내레이션과 대사, 효과음이 들어갈 자리를 표시해 볼까요?', d: ['한 줄에 한 사람의 말만 쓰기', '효과음과 배경음악 자리를 [ ]로 표시하기'], w: 'script' },
+      { s: '전개', m: 17, t: '효과음 실험실', q: '빗소리, 발소리, 종소리… 우리 장면에는 어떤 소리가 필요할까요?', d: ['효과음 패드로 소리 들어 보기', '교실 물건으로 효과음 만들어 보기 (종이 구기기 = 불 타는 소리 등)'], w: 'sfx' },
+      { s: '정리', m: 15, t: '리허설과 피드백', q: '친구 모둠의 리허설에서 좋은 점과 더 좋아질 점은?', d: ['모둠별 1분 리허설', '피드백: 목소리 크기, 빠르기, 감정 표현'], w: 'feedback' }
+    ],
+    widgets: {
+      roles: { type: 'roles', roles: ['📖 내레이터', '🗣️ 인물 목소리 1', '🗣️ 인물 목소리 2', '🔔 효과음 담당', '🎚️ 녹음·편집 담당'] },
+      script: { type: 'script' },
+      sfx: { type: 'sfx' },
+      feedback: { type: 'stars', items: ['목소리가 또렷하게 들린다', '알맞은 빠르기로 읽는다', '인물의 감정이 느껴진다', '효과음이 장면과 어울린다'] }
+    },
+    eval: '역할을 나누어 협력하고, 장면에 어울리는 스크립트와 효과음을 계획하는가.',
+    ws: { title: '오디오북 스크립트', items: [
+      { t: 'table', q: '우리 모둠 오디오북: 책 (                    ) 장면 (                    )', cols: ['역할', '이름'], rows: 5 },
+      { t: 'table', q: '스크립트', cols: ['순서', '누가', '대사 / 내레이션', '효과음·배경음악'], rows: 10 },
+      { t: 'lines', q: '교실에서 만들 수 있는 효과음 아이디어', n: 2 }
+    ] }
+  },
+  {
+    id: 'l18', h: '23', big: '책과 세상', unit: '오디오북을 만들어요', book: 'both', std: ['01-04'], gear: 'mic',
+    title: '오디오북 녹음하기',
+    goal: ['스크립트를 따라 대사, 효과음, 내레이션을 연결하여 녹음한다.', '실수한 부분을 다시 녹음하고 편집하여 완성도를 높인다.'],
+    flow: [
+      { s: '도입', m: 5, t: '녹음 준비 점검', q: '녹음 전에 꼭 확인해야 할 것은?', d: ['점검표 체크하기'], w: 'check' },
+      { s: '전개', m: 25, t: '녹음하기', q: '“레디, 액션!” 조용한 곳에서 장면별로 나누어 녹음해요.', d: ['태블릿 녹음 앱으로 장면별 녹음', '효과음은 녹음하며 직접 내거나 따로 녹음해 붙이기', '실수한 장면은 그 장면만 다시 녹음하기'], w: 'sfx', tip: '모둠이 동시에 녹음하면 소리가 섞여요. 복도·특별실 등 녹음 장소를 나누거나 순서를 정해 주세요.' },
+      { s: '정리', m: 10, t: '들어 보고 보완하기', q: '처음부터 끝까지 들어 보니 고칠 곳이 있나요?', d: ['전체 듣기 → 보완할 장면 표시 → 다시 녹음 또는 편집'] }
+    ],
+    widgets: {
+      check: { type: 'checklist', items: ['스크립트를 모두 한 장씩 가지고 있다', '녹음할 장소가 조용하다', '태블릿 녹음 앱이 잘 작동한다', '효과음 준비물을 챙겼다', '장면마다 녹음 순서를 정했다', '실수해도 웃으며 다시 하기로 약속했다'] },
+      sfx: { type: 'sfx' }
+    },
+    eval: '모둠원과 협력하여 녹음 과정의 문제를 해결하고 완성도를 높이는가.',
+    ws: { title: '녹음 기록표', items: [
+      { t: 'table', q: '장면별 녹음 기록', cols: ['장면', '녹음 (○/다시)', '고칠 점'], rows: 6 },
+      { t: 'lines', q: '녹음하며 생긴 문제와 우리가 해결한 방법', n: 3 }
+    ] }
+  },
+  {
+    id: 'l19', h: '24', big: '책과 세상', unit: '오디오북을 만들어요', book: 'both', std: ['01-04'], gear: 'mic',
+    title: '오디오북 발표회',
+    goal: ['모둠별 오디오북을 발표하고 감상한다.', '발표 후 소감을 나누고 서로의 작품을 칭찬한다.'],
+    flow: [
+      { s: '도입', m: 5, t: '감상 약속', q: '친구의 오디오북을 들을 때 어떤 태도가 필요할까요?', d: ['눈을 감고 장면 떠올리며 듣기', '끝나면 박수'] },
+      { s: '전개', m: 25, t: '오디오북 감상회', q: '이 오디오북을 듣고 어떤 장면이 떠올랐나요?', d: ['모둠별 발표 순서 뽑기', '모둠 소개 → 오디오북 재생 → 제작 비하인드', '감상 별점과 칭찬 한마디'], w: 'peer' },
+      { s: '정리', m: 10, t: '만들고 나서', q: '오디오북을 만들면서 책을 새롭게 이해하게 된 점은?', d: ['소감 나누기', '완성한 오디오북을 학교 누리집이나 도서관에서 공유하는 방법 이야기하기'] }
+    ],
+    widgets: {
+      peer: { type: 'stars', items: ['장면이 눈앞에 그려진다', '목소리에 감정이 담겨 있다', '효과음과 음악이 잘 어울린다', '모둠원 모두가 참여했다'] }
+    },
+    eval: '창의적 표현 결과물을 발표하고, 친구의 작품을 존중하며 감상하는가.',
+    ws: { title: '오디오북 감상 카드', items: [
+      { t: 'table', q: '모둠별 감상', cols: ['모둠', '떠오른 장면', '칭찬 한마디', '별점'], rows: 6 },
+      { t: 'lines', q: '오디오북을 만들고 나서 느낀 점', n: 3 }
+    ] }
+  },
+  {
+    id: 'l20', h: '25', big: '책과 세상', unit: '함께 책을 읽어요', book: 'none', std: ['01-04', '01-05'], gear: 'brush',
+    title: '독서 홍보 프로젝트 기획하기',
+    goal: ['학교나 온라인에서 독서를 홍보할 방법을 논의한다.', '모둠별로 홍보 주제와 형태를 정하고 역할을 나눈다.'],
+    flow: [
+      { s: '도입', m: 5, t: '책 읽는 학교 만들기', q: '우리 학교 친구들이 책을 더 많이 읽게 하려면 어떻게 해야 할까요?', d: ['학교 곳곳(복도, 도서관, 급식실 앞)과 온라인(학급 누리집) 홍보 방법 떠올리기'] },
+      { s: '전개', m: 12, t: '홍보 주제와 형태 정하기', q: '무엇을, 어떤 모양으로 알릴까요?', d: ['주제: 책 읽기의 즐거움, 책이 나에게 준 변화, 책과 함께하는 시간, 독서 습관 만들기', '형태: 영상, 포스터, 카드뉴스, 표어'], w: 'plan' },
+      { s: '전개', m: 15, t: '프로젝트 계획서', q: '누가 무엇을 언제까지 준비할까요?', d: ['모둠 구성, 역할 나누기', '필요한 준비물과 제작 순서 정하기'], w: 'roles' },
+      { s: '정리', m: 8, t: '계획 공유', q: '다른 모둠 계획에서 도움받을 아이디어가 있나요?', d: ['모둠별 30초 계획 발표'] }
+    ],
+    widgets: {
+      plan: { type: 'slot', reels: [
+        { name: '홍보 주제', items: ['책 읽기의 즐거움', '책이 나에게 준 변화', '책과 함께하는 시간', '독서 습관 만들기'] },
+        { name: '홍보 형태', items: ['🎬 영상', '🖼️ 포스터', '📱 카드뉴스', '✍️ 표어'] } ] },
+      roles: { type: 'roles', roles: ['🧭 기획 대장', '✍️ 글 담당', '🎨 그림·디자인 담당', '📣 발표·홍보 담당'] }
+    },
+    eval: '독서 문화 확산을 위한 홍보 방법을 협력하여 계획하는가.',
+    ws: { title: '독서 홍보 프로젝트 계획서', items: [
+      { t: 'table', q: '우리 모둠 프로젝트', cols: ['홍보 주제', '홍보 형태', '보여 줄 곳'], rows: 1, tall: true },
+      { t: 'table', q: '역할과 준비물', cols: ['이름', '맡은 일', '준비물'], rows: 4 },
+      { t: 'lines', q: '우리가 전하고 싶은 한마디', n: 1 }
+    ] }
+  },
+  {
+    id: 'l21', h: '26-27', big: '책과 세상', unit: '함께 책을 읽어요', book: 'none', std: ['01-04', '01-05'], gear: 'brush',
+    title: '독서 홍보물 만들기',
+    goal: ['모둠별 형태에 따라 준비물을 점검하고 독서 홍보물을 만든다.', '협력하여 제작 과정의 문제를 해결한다.'],
+    flow: [
+      { s: '도입', m: 8, t: '준비물 점검', q: '오늘 만들 홍보물에 필요한 것이 다 있나요?', d: ['모둠별 준비물 확인', '좋은 홍보물의 조건: 한눈에 보인다, 짧고 강한 문구, 책이 궁금해진다'] },
+      { s: '전개', m: 20, t: '홍보 문구 다듬기', q: '친구가 걸음을 멈추고 볼 만한 한 문장은?', d: ['미리보기 판에 표어·제목 넣어 보기', '색깔과 캐릭터 바꾸어 보며 어울리는 디자인 찾기'], w: 'poster' },
+      { s: '전개', m: 42, t: '제작하기', q: '역할에 따라 함께 만들어 볼까요?', d: ['포스터·표어: 4절지에 제작', '카드뉴스: 4~6장 장면 구성', '영상: 30초~1분 촬영 (태블릿)', '중간 점검: 다른 모둠과 바꾸어 보고 조언하기'] },
+      { s: '정리', m: 10, t: '완성 점검', q: '처음 계획과 비교해 무엇이 잘 되었나요?', d: ['계획서와 비교하여 점검', '다음 시간 전시·발표 준비'] }
+    ],
+    widgets: {
+      poster: { type: 'poster' }
+    },
+    eval: '독서의 가치가 드러나는 홍보물을 협력하여 창의적으로 제작하는가.',
+    ws: { title: '홍보물 밑그림', items: [
+      { t: 'box', q: '포스터 / 카드뉴스 밑그림 (제목·그림·문구 자리 정하기)', h: 330 },
+      { t: 'lines', q: '우리 홍보 문구 후보 (가장 좋은 것에 ○)', n: 3 }
+    ] }
+  },
+  {
+    id: 'l22', h: '28', big: '책과 세상', unit: '함께 책을 읽어요', book: 'both', std: ['01-04', '01-05'], gear: 'brush',
+    title: '전시회와 독서 이벤트',
+    goal: ['독서 홍보물을 발표하거나 전시한다.', '책 속 문장 따라 쓰기, N행시 등 독서 이벤트를 운영한다.'],
+    flow: [
+      { s: '도입', m: 5, t: '책열쇠 전시회 개막', q: '우리가 만든 홍보물로 학교에 책 바람을 일으켜 볼까요?', d: ['전시 장소와 순서 안내'] },
+      { s: '전개', m: 15, t: '갤러리 워크', q: '가장 책이 읽고 싶어지는 홍보물은 무엇인가요?', d: ['모둠별 홍보물 전시, 해설사 1명은 자리 지키기', '친구들은 돌아보며 칭찬 스티커 붙이기'] },
+      { s: '전개', m: 15, t: '독서 이벤트', q: '‘책열쇠’로 N행시를 지어 볼까요?', d: ['N행시 짓기 (책열쇠, 슈퍼거북, 은촛대 등)', '책 속 문장 따라 쓰기 챌린지'], w: 'nhaeng' },
+      { s: '정리', m: 5, t: '이벤트 소감', q: '다른 학년 친구들도 참여하게 하려면?', d: ['이벤트를 학교 전체로 넓히는 방법 이야기하기'] }
+    ],
+    widgets: {
+      nhaeng: { type: 'nhaeng' }
+    },
+    eval: '독서 경험을 다른 사람과 나누는 활동에 즐겁게 참여하는가.',
+    ws: { title: '독서 이벤트 참가 카드', items: [
+      { t: 'acro', q: 'N행시 짓기', word: '책열쇠' },
+      { t: 'lines', q: '책 속 문장 따라 쓰기 (책 제목, 쪽수)', n: 3 },
+      { t: 'lines', q: '가장 마음에 든 홍보물과 그 까닭', n: 2 }
+    ] }
+  },
+  {
+    id: 'l23', h: '29', big: '책과 세상', unit: '정리해요', book: 'both', std: ['01-05'], gear: 'none',
+    title: '책열쇠 여행을 마치며',
+    goal: ['활동 전후 나의 독서 생각 변화를 알아본다.', '인상 깊었던 활동과 소감을 나눈다.'],
+    flow: [
+      { s: '도입', m: 5, t: '여행 지도 돌아보기', q: '29차시 동안 어떤 문을 열었나요?', d: ['책열쇠 지도를 보며 지난 활동 떠올리기'], w: 'map' },
+      { s: '전개', m: 15, t: '독서 온도 비교', q: '1차시의 나와 지금의 나, 무엇이 달라졌나요?', d: ['처음과 지금 점수를 비교하기', '가장 많이 자란 부분과 그 까닭 이야기하기'], w: 'temp' },
+      { s: '전개', m: 12, t: '책열쇠 시상식', q: '가장 인상 깊었던 활동은 무엇이었나요?', d: ['인상 깊은 활동 투표', '나에게 주는 상장 이름 짓기 (예: 질문왕 상, 목소리 연기상)'], w: 'best' },
+      { s: '정리', m: 8, t: '다음 책을 향해', q: '책열쇠 여행이 끝나도 나는 어떤 책을 읽고 싶나요?', d: ['다음에 읽고 싶은 책 한 권 정하고 소감 발표'] }
+    ],
+    widgets: {
+      map: { type: 'journey' },
+      temp: { type: 'scale', items: ['나는 책 읽기가 좋다', '책을 읽고 내 생각을 말할 수 있다', '친구와 책 이야기를 나누는 것이 즐겁다', '책에서 질문을 찾을 수 있다', '책을 다른 사람에게 소개할 수 있다'], cols: ['처음 (1차시)', '지금 (29차시)'], key: 'l1:temp' },
+      best: { type: 'poll', items: ['🐢 꾸물이 마음 그래프', '🕯️ 인물관계도 그리기', '🎤 인물 면담', '🗣️ 토의 한마당', '🎭 바꾼 이야기 역할극', '🎧 오디오북 만들기', '🖼️ 독서 홍보물', '✍️ N행시 이벤트'] }
+    },
+    eval: '독서 활동 전후의 변화를 성찰하고, 독서의 즐거움과 가치를 말하는가.',
+    ws: { title: '책열쇠 여행 돌아보기', items: [
+      { t: 'stars2', q: '나의 독서 온도 변화', items: ['나는 책 읽기가 좋다', '책을 읽고 내 생각을 말할 수 있다', '친구와 책 이야기를 나누는 것이 즐겁다', '책에서 질문을 찾을 수 있다', '책을 다른 사람에게 소개할 수 있다'] },
+      { t: 'lines', q: '가장 인상 깊었던 활동과 그 까닭', n: 3 },
+      { t: 'box', q: '나에게 주는 상장 (상 이름과 까닭)', h: 120 }
+    ] }
+  }
+  ],
+  rel: {
+    nodes: [
+      { k: 'jean', x: 50, y: 46, info: '빵 하나를 훔친 죄로 19년 동안 감옥에 있었어요(28쪽). 미리엘 주교를 만난 뒤 ‘마들렌’이라는 이름으로 착하게 살아요. 힘이 아주 세서 ‘괴력의 장’이라고도 불려요(40쪽).' },
+      { k: 'bishop', x: 14, y: 15, info: '모두가 피하던 장 발장을 집에 재워 주고, 은그릇과 은촛대를 내어 주며 용서한 디뉴의 주교예요(20~32쪽).' },
+      { k: 'javert', x: 86, y: 15, info: '파리 경찰청의 형사. 법은 틀리지 않는다고 믿으며 장 발장을 끝까지 쫓아요. 범죄자들은 그를 ‘귀신 경찰’이라 불렀어요(38쪽).' },
+      { k: 'fantine', x: 11, y: 58, info: '코제트의 엄마. 딸을 여관에 맡기고 마들렌 시장의 유리구슬 공장에서 일했어요(46~48쪽).' },
+      { k: 'thenard', x: 89, y: 56, info: '코제트를 맡아 돈만 받아 내고 힘든 일을 시킨 여관 주인 부부예요(46~70쪽). 나중에 장 발장에게 함정을 파요(100쪽).' },
+      { k: 'cosette', x: 33, y: 88, info: '테나르디에 여관에서 고생하다 장 발장을 만나 딸처럼 자라요. 이 책의 처음과 끝에서 이야기를 들려주는 사람이에요(14, 138쪽).' },
+      { k: 'marius', x: 64, y: 88, info: '할아버지 질노르망과 살던 귀족 청년. 공원에서 코제트를 보고 사랑에 빠져요(90쪽).' },
+      { k: 'eponine', x: 91, y: 88, info: '테나르디에 부부의 딸. 마리우스를 좋아해 코제트의 주소를 알려 주고, 바리케이드에서 마리우스를 지켜요(104, 112쪽).' }
+    ],
+    edges: [
+      ['bishop', 'jean', 'help', '은그릇은 선물이라고 말하고 은촛대까지 내어 줌 · 정직한 사람이 되라는 당부 (32쪽)'],
+      ['javert', 'jean', 'conflict', '‘괴력의 장’이 아닐까 끝까지 의심하고 쫓음 (38~42, 72, 102쪽) · 바리케이드에서 장 발장이 풀어 줌 (120쪽)'],
+      ['jean', 'fantine', 'help', '눈덩이 소동 때 팡틴을 감싸 주고 병실로 데려감 · 코제트를 데려오겠다고 약속함 (44, 52쪽)'],
+      ['fantine', 'cosette', 'love', '엄마와 딸 · 코제트의 진짜 이름 ‘외프라지’도 팡틴이 지어 줌 (132쪽)'],
+      ['thenard', 'cosette', 'conflict', '하녀처럼 부리고 크리스마스 밤에도 숲속 샘에서 물을 길어 오게 함 (60~64쪽)'],
+      ['jean', 'cosette', 'love', '1,500프랑을 내고 데려와 딸처럼 키움 · “아버지라고 불러도 돼요?” (70쪽)'],
+      ['thenard', 'jean', 'conflict', '고르보 저택 옆방에서 돈을 뜯어내려고 함정을 팜 (100~102쪽)'],
+      ['cosette', 'marius', 'love', '공원에서 처음 만나 사랑하게 되고 결혼함 (90, 130쪽)'],
+      ['jean', 'marius', 'help', '바리케이드에서 다친 마리우스를 업고 하수도로 빠져나옴 (120~124쪽)'],
+      ['javert', 'fantine', 'conflict', '눈덩이 소동 때 팡틴만 체포하려 함 (44쪽)'],
+      ['eponine', 'marius', 'love', '코제트의 주소를 알려 주고, 바리케이드에서 마리우스 대신 총을 맞음 (104, 112쪽)'],
+      ['thenard', 'eponine', 'love', '테나르디에 부부의 딸 (68, 98쪽)']
+    ]
+  },
+  hot: {
+    jean: ['여관에서 쫓겨났을 때 어떤 마음이었나요? (18쪽)', '주교님이 은촛대까지 주셨을 때 무슨 생각이 들었나요? (32쪽)', '소년의 은화를 빼앗고 왜 울었나요? (34쪽)', '다른 사람이 대신 잡혔는데 왜 스스로 정체를 밝혔나요? (52~56쪽)', '코제트가 “아버지라고 불러도 돼요?”라고 했을 때 기분은? (70쪽)', '자베르를 왜 풀어 주었나요? (120쪽)'],
+    bishop: ['처음 보는 사람을 왜 집에 재워 주었나요? (22쪽)', '은그릇을 가져간 사람을 왜 용서했나요? (32쪽)', '장 발장이 정말 착한 사람이 될 거라고 믿었나요?'],
+    javert: ['왜 마들렌 시장을 의심했나요? (38~40쪽)', '시장님께 사과하러 갔을 때 어떤 마음이었나요? (52쪽)', '법을 지키는 것이 가장 중요한가요?', '장 발장이 당신을 놓아주었을 때 어떤 마음이었나요? (120, 126쪽)'],
+    cosette: ['크리스마스 밤에 숲속 샘에 갈 때 무섭지 않았나요? (62~64쪽)', '인형을 받았을 때 어떤 기분이었나요? (68쪽)', '왜 아저씨를 “아버지”라고 부르고 싶었나요? (70쪽)', '아버지의 비밀을 알게 되었을 때 어떤 마음이었나요? (132~136쪽)'],
+    fantine: ['코제트를 왜 테나르디에 부부에게 맡겼나요? (46쪽)', '마들렌 시장이 도와주었을 때 어떤 마음이었나요? (44~50쪽)', '코제트에게 꼭 하고 싶은 말은?'],
+    thenard: ['코제트에게 왜 힘든 일만 시켰나요? (62쪽)', '팡틴에게 왜 자꾸 돈을 보내라고 했나요? (48쪽)', '장 발장에게 함정을 판 까닭은? (100쪽)'],
+    marius: ['코제트를 처음 본 날 어떤 마음이었나요? (90~92쪽)', '할아버지가 결혼을 반대했을 때 어떤 마음이었나요? (106쪽)', '에포닌이 대신 총을 맞았을 때 어떤 마음이었나요? (112쪽)'],
+    eponine: ['마리우스가 준 돈을 왜 길바닥에 던졌나요? (104쪽)', '왜 남자처럼 변장하고 바리케이드에 들어갔나요? (112쪽)', '마리우스에게 꼭 하고 싶었던 말은?']
+  }
+};
+</script>
+<script>/* 학습지 문항 (학생용 웹앱과 종이 활동지가 함께 쓰는 원본)
+   t: text 줄 쓰기 · table 표 · draw 그리기 칸 · stars 별점 · scale 독서 온도 · mood 마음 그래프 · letter 편지
+      acro N행시 · choice 고르기 · mc 내용 확인 퀴즈 · ox OX 퀴즈 · tool 화면 도구(저장 안 됨) · info 안내 */
+window.BK.sheets = {
+  l1: { title: '나와 책, 첫 만남', items: [
+    { t: 'tool', w: 'map', q: '책열쇠 지도를 둘러보아요' },
+    { t: 'table', q: '나는 왜 책을 읽을까?', cols: ['책을 읽는 까닭', '책을 읽지 않는 까닭'], rows: 3 },
+    { t: 'scale', q: '지금 나의 독서 온도', key: 'l1:temp', cols: ['지금 나'], items: ['나는 책 읽기가 좋다', '책을 읽고 내 생각을 말할 수 있다', '친구와 책 이야기를 나누는 것이 즐겁다', '책에서 질문을 찾을 수 있다', '책을 다른 사람에게 소개할 수 있다'] },
+    { t: 'text', q: '이번 학기 나의 책열쇠 다짐 한 문장', n: 2 }
+  ] },
+  l2: { title: '그림책과 동화책 비교하기', items: [
+    { t: 'tool', w: 'sort', q: '분류 놀이: 그림책일까, 동화책일까?' },
+    { t: 'table', q: '두 책을 비교해 보아요', cols: ['', '그림책 「슈퍼 거북」', '동화책 「레 미제라블」'], rowsLabel: ['두께와 쪽수', '그림과 글', '읽는 데 걸리는 시간', '내가 느낀 점'] },
+    { t: 'tool', w: 'chosung', q: '초성 제목 맞히기' },
+    { t: 'table', q: '우리 모둠 초성 제목 문제 만들기', cols: ['초성 문제', '정답'], rows: 3 },
+    { t: 'choice', q: '나는 어떤 책을 더 좋아하나요?', opts: ['그림책', '동화책', '둘 다 좋아요'] },
+    { t: 'text', q: '그렇게 고른 까닭', n: 2 }
+  ] },
+  l3: { title: '나의 책 고르기 기준', items: [
+    { t: 'choice', q: '내가 책을 고르는 기준 TOP 3', multi: 3, opts: ['표지가 끌린다', '제목이 궁금하다', '줄거리가 재미있다', '좋아하는 장르다', '좋아하는 작가다', '그림이 마음에 든다', '두께가 알맞다', '친구가 추천했다'] },
+    { t: 'table', q: '후보 책 별점 매기기 (★ 1~5개)', cols: ['책 제목', '기준 1', '기준 2', '기준 3', '합계'], rows: 3 },
+    { t: 'text', q: '내가 고른 책과 고른 까닭', n: 2 }
+  ] },
+  l4: { title: '「슈퍼 거북」 꾸물이 인물 탐구', items: [
+    { t: 'ox', q: '「슈퍼 거북」 내용 확인 OX', items: [['꾸물이는 토끼와의 경주에서 이겼다.', 'O'], ['동네 사람들은 꾸물이를 ‘슈퍼 거북’이라고 불렀다.', 'O'], ['꾸물이는 빨라지기 위해 아무 노력도 하지 않았다.', 'X'], ['다시 열린 경주에서 꾸물이가 또 이겼다.', 'X'], ['이야기 끝에서 꾸물이는 마음이 홀가분해졌다.', 'O']] },
+    { t: 'table', q: '첫인상과 진짜 모습', cols: ['첫인상 (표지·첫 장면)', '말과 행동', '그래서 알게 된 성격'], rows: 2 },
+    { t: 'mood', q: '꾸물이 마음 그래프 (장면마다 동그라미를 눌러요)', scenes: 'turtle' },
+    { t: 'text', q: '꾸물이의 기분이 가장 낮았던 장면과 그 까닭', n: 2 },
+    { t: 'table', q: '꾸물이와 나', cols: ['닮은 점', '다른 점'], rows: 2 },
+    { t: 'tool', w: 'swap', q: '성격을 바꾸면? 만약에 주사위' },
+    { t: 'choice', q: '꾸물이가 마지막에 가장 중요하게 여긴 가치는?', opts: ['인정받기', '노력', '행복', '나다움', '휴식', '우정', '성공', '자유'] },
+    { t: 'text', q: '내가 가장 중요하게 생각하는 가치와 그 까닭', n: 3 }
+  ] },
+  l5: { title: '「레 미제라블」 인물관계도', items: [
+    { t: 'info', text: '오늘 읽을 곳: 머리말 「코제트가 여러분에게」(14~15쪽) → 1부 1~3장(16~41쪽) → 2부 4~5장(43~59쪽). 읽다가 마음이 ‘쿵’ 한 곳에는 연필로 작은 별을 그려 두세요.' },
+    { t: 'tool', w: 'parts', q: '읽기 체크 (다 읽은 장을 눌러요)' },
+    { t: 'mc', q: '1부·2부 내용 확인 퀴즈', items: [
+      ['장 발장이 처음 감옥에 가게 된 까닭은?', ['배고픈 조카들을 위해 빵 하나를 훔쳐서', '주교의 은그릇을 훔쳐서', '시청에 불을 내서'], 0, '28쪽'],
+      ['여관에서 쫓겨난 장 발장을 집에 재워 준 사람은?', ['미리엘 주교', '테나르디에', '자베르 형사'], 0, '20~22쪽'],
+      ['은그릇을 들고 잡혀 온 장 발장에게 주교는 어떻게 했나요?', ['선물이라고 말하고 은촛대까지 주었다', '경찰에게 넘겼다', '은그릇만 돌려받았다'], 0, '32쪽'],
+      ['장 발장이 ‘마들렌’으로 몽트뢰유 사람들의 믿음을 얻은 사건은?', ['불난 시청에서 아이 두 명을 구했다', '큰 상금을 받았다', '왕을 구했다'], 0, '36쪽'],
+      ['자베르 형사가 마들렌 시장을 ‘괴력의 장’이라며 의심한 사건은?', ['마차에 깔린 노인을 구하려고 마차를 들어 올렸다', '유리구슬 공장을 세웠다', '은촛대를 가지고 있었다'], 0, '40~42쪽'],
+      ['장 발장이 스스로 정체를 밝히러 간 까닭은?', ['죄 없는 사람이 장 발장으로 몰려 재판을 받게 되어서', '자베르에게 잡혀서', '시장 일이 싫어져서'], 0, '52~56쪽'] ] },
+    { t: 'tool', w: 'rel', q: '인물관계도 살펴보기 (인물과 선을 눌러요)' },
+    { t: 'draw', q: '나만의 인물관계도 그리기 (가운데: 장 발장 · 도와준 관계는 파랑, 갈등 관계는 빨강)', center: '장 발장', h: 420 },
+    { t: 'table', q: '주요 인물 분석', cols: ['인물', '성격', '그렇게 생각한 까닭 (쪽)'], rowsLabel: ['장 발장', '미리엘 주교', '자베르 형사', '팡틴'] },
+    { t: 'tool', w: 'qcards', q: '‘왜?’ ‘만약에?’ 질문 카드' },
+    { t: 'table', q: '내가 만든 질문', cols: ['‘왜?’ 질문', '‘만약에?’ 질문'], rows: 2 },
+    { t: 'text', q: '오늘 만난 인물 중 가장 마음이 가는 사람과 그 까닭', n: 2 }
+  ] },
+  l6: { title: '보물 문장과 인물에게 쓰는 편지', items: [
+    { t: 'info', text: '별을 그려 둔 쪽을 다시 펼쳐 보세요. 문장을 찾기 어렵다면 32쪽(주교가 은촛대를 건네는 장면)이나 70쪽(코제트가 장 발장을 부르는 장면)에서 찾아봐도 좋아요.' },
+    { t: 'table', q: '나의 보물 문장', cols: ['문장', '쪽', '고른 까닭'], rows: 3 },
+    { t: 'choice', q: '편지를 받을 인물을 골라요', opts: ['장 발장', '미리엘 주교', '자베르 형사', '팡틴', '코제트', '마리우스', '에포닌'] },
+    { t: 'letter', q: '에게', n: 9, help: '첫인사 → 인상 깊은 장면(쪽) → 묻고 싶은 말 → 해 주고 싶은 말 → 끝인사' }
+  ] },
+  l7: { title: '질문 만들기 탐험대', items: [
+    { t: 'text', q: '① 표지만 보고 만든 질문 3개', n: 3 },
+    { t: 'text', q: '② 내용을 읽고 만든 질문 (누가, 무엇을, 왜, 어떻게)', n: 3 },
+    { t: 'tool', w: 'qsort', q: '질문 분류 놀이' },
+    { t: 'table', q: '③ 내가 만든 질문 나누기', cols: ['내용 확인 질문 (답이 책 속에)', '생각하는 질문 (답이 내 생각 속에)'], rows: 3 },
+    { t: 'text', q: '④ 질문을 먼저 만들고 책을 읽으면 좋은 점', n: 2 }
+  ] },
+  l8: { title: '그림 탐정 보고서', items: [
+    { t: 'tool', w: 'detect', q: '장면 탐정 카드' },
+    { t: 'table', q: '장면 탐정', cols: ['장면', '무엇이 보이나요?', '왜 그렇게 그렸을까요?'], rowsLabel: ['장면 1', '장면 2', '장면 3', '장면 4', '장면 5'] },
+    { t: 'text', q: '작가는 무엇을 말하고 싶었을까? 그렇게 생각한 장면은?', n: 3 },
+    { t: 'text', q: '다시 읽으며 새롭게 찾은 점', n: 2 },
+    { t: 'stars', q: '오늘의 배움 별점', items: ['그림 속 작은 단서까지 살펴보았다', '‘왜’ 질문에 까닭을 들어 답했다', '친구의 생각을 끝까지 들었다'] }
+  ] },
+  l9: { title: '모둠 깊이 읽기 기록지', items: [
+    { t: 'text', q: '우리 모둠이 맡은 장면과 내 역할', n: 1 },
+    { t: 'table', q: '무엇이 · 왜 · 어떻게', cols: ['질문 종류', '우리가 만든 질문', '우리의 답'], rowsLabel: ['무엇이?', '왜?', '어떻게?'] },
+    { t: 'text', q: '우리 모둠의 황금 질문', n: 1 },
+    { t: 'text', q: '모둠이 함께 정리한 작가의 의도', n: 3 },
+    { t: 'text', q: '다른 모둠 발표에서 배운 점', n: 2 }
+  ] },
+  l10: { title: '표지 탐정과 예상 노트', items: [
+    { t: 'tool', w: 'title', q: '제목 수수께끼 카드' },
+    { t: 'table', q: '표지 속 단서', cols: ['보이는 것 (인물·물건·색깔)', '그래서 예상한 내용'], rows: 3 },
+    { t: 'text', q: '작가가 ‘불쌍한 사람들’이라는 제목을 붙인 까닭은 무엇일까?', n: 2 },
+    { t: 'text', q: '이 이야기는 코제트가 들려줘요(14~15쪽). 코제트는 왜 아버지의 이야기를 우리에게 들려주고 싶었을까?', n: 2 },
+    { t: 'info', text: '이어서 읽을 곳: 3부 6~8장(60~85쪽). 다 읽고 아래 퀴즈를 풀어요.' },
+    { t: 'mc', q: '3부 내용 확인 퀴즈', items: [
+      ['크리스마스 밤, 코제트가 혼자 해야 했던 심부름은?', ['어두운 숲속 샘에서 물 길어 오기', '빵 사 오기', '편지 전하기'], 0, '62~64쪽'],
+      ['장 발장이 코제트에게 사 준 선물은?', ['장난감 가게의 큰 인형', '은촛대', '새 구두'], 0, '68쪽'],
+      ['장 발장이 코제트를 데려가려고 테나르디에에게 내놓은 돈은?', ['1,500프랑', '5프랑', '109프랑'], 0, '70쪽'],
+      ['고르보 저택을 빠져나온 두 사람이 담을 넘어 숨은 곳은?', ['수녀원', '성당', '감옥'], 0, '74~78쪽'],
+      ['수녀원에서 두 사람을 도와준 포슐르방은 예전에 어떤 일을 겪었나요?', ['마차에 깔렸다가 마들렌 시장 덕분에 살았다', '주교에게 은촛대를 받았다', '자베르의 부하였다'], 0, '78쪽'],
+      ['장 발장이 수녀원 밖으로 나가려고 숨어 들어간 곳은?', ['빈 관 속', '마차 밑', '우물 속'], 0, '80~84쪽'] ] },
+    { t: 'table', q: '읽고 나서 내 예상 확인하기', cols: ['맞은 예상', '빗나간 예상'], rows: 2 }
+  ] },
+  l11: { title: '갈등의 실타래', items: [
+    { t: 'info', text: '이어서 읽을 곳: 4부 9~13장(86~113쪽).' },
+    { t: 'mc', q: '4부 내용 확인 퀴즈', items: [
+      ['장 발장이 6년 만에 코제트를 수녀원 밖으로 데리고 나온 까닭은?', ['넓은 세상을 보여 주고 싶어서', '자베르에게 들켜서', '돈이 다 떨어져서'], 0, '86~88쪽'],
+      ['코제트와 마리우스가 처음 서로를 본 곳은?', ['공원', '성당', '여관'], 0, '90쪽'],
+      ['마리우스 아버지의 편지에 ‘생명을 구해 준 사람’으로 적힌 이름은?', ['테나르디에', '장 발장', '포슐르방'], 0, '96쪽'],
+      ['고르보 저택 옆방에서 장 발장에게 함정을 판 사람은?', ['테나르디에', '자베르', '질노르망'], 0, '100~102쪽'],
+      ['마리우스와 코제트의 결혼을 반대한 사람은?', ['할아버지 질노르망', '장 발장', '에포닌'], 0, '106쪽'],
+      ['바리케이드에서 마리우스 대신 총을 맞은 사람은?', ['에포닌', '코제트', '자베르'], 0, '112쪽'] ] },
+    { t: 'tool', w: 'rel', q: '관계도에서 ⚡ 갈등 관계 찾기' },
+    { t: 'table', q: '갈등 분석표', cols: ['갈등하는 인물', '무엇 때문에 부딪혔나?', '어떻게 풀렸나? (안 풀렸나?)', '쪽'], rowsLabel: ['장 발장 ↔ 자베르', '코제트 ↔ 테나르디에 부부', '마리우스 ↔ 할아버지', '장 발장의 마음속'] },
+    { t: 'tool', w: 'whatif', q: '만약에 주사위' },
+    { t: 'table', q: '만약에 질문 만들기', cols: ['만약 ○○이(가) ○○했더라면?', '바뀌었을 이야기'], rows: 3 }
+  ] },
+  l12: { title: '기자 수첩: 인물 면담', items: [
+    { t: 'info', text: '이어서 읽을 곳: 5부 14~18장(114~137쪽)과 맺음말 「코제트가 여러분에게」(138~139쪽).' },
+    { t: 'mc', q: '5부 내용 확인 퀴즈', items: [
+      ['장 발장이 총을 들고 바리케이드로 달려간 까닭은?', ['마리우스가 코제트에게 보낸 편지를 읽어서', '자베르를 잡으려고', '정부군이 불러서'], 0, '114~116쪽'],
+      ['밧줄에 묶인 자베르 형사를 장 발장은 어떻게 했나요?', ['줄을 끊고 놓아주었다', '감옥에 가두었다', '정부군에게 넘겼다'], 0, '120쪽'],
+      ['장 발장이 다친 마리우스를 업고 빠져나간 길은?', ['어두운 하수도', '지붕 위', '센강 배'], 0, '120~124쪽'],
+      ['질노르망이 두 사람의 결혼을 허락한 까닭은?', ['코제트의 아버지가 손자를 살렸다는 이야기를 들어서', '코제트가 귀족이 되어서', '마리우스가 졸라서'], 0, '130쪽'],
+      ['장 발장이 마지막에 들려준 이야기가 아닌 것은?', ['자베르의 어린 시절', '코제트의 어머니가 팡틴이라는 것', '은촛대를 준 사람이 미리엘 주교라는 것'], 0, '132~134쪽'] ] },
+    { t: 'tool', w: 'hot', q: '인물 면담 질문 카드' },
+    { t: 'table', q: '면담 기록', cols: ['면담한 인물', '나의 질문', '인물의 대답'], rows: 3 },
+    { t: 'table', q: '다른 사람이 되어 면담하기', cols: ['누구의 입장에서?', '대답', '그 까닭'], rowsLabel: ['나라면', '선생님이라면', '부모님이라면'] },
+    { t: 'text', q: '면담 후 바뀐 내 생각', n: 2 }
+  ] },
+  l13: { title: '토의 기록지', items: [
+    { t: 'choice', q: '내가 함께 이야기하고 싶은 토의 주제', opts: ['배고픈 조카들을 위해 빵을 훔친 장 발장은 19년이나 벌을 받아야 했을까? (28쪽)', '은그릇을 ‘선물’이라고 말한 주교의 거짓말은 옳은 일이었을까? (32쪽)', '자베르는 나쁜 사람일까, 법을 지킨 사람일까? (38, 126쪽)', '장 발장은 재판에서 정체를 꼭 밝혀야 했을까? (52~56쪽)', '용서는 사람을 정말 바꿀 수 있을까?'] },
+    { t: 'text', q: '우리 반이 정한 토의 주제', n: 1 },
+    { t: 'table', q: '나의 의견 정리', cols: ['내 의견', '까닭 (책 장면·쪽)', '내 경험'], rows: 1, tall: true },
+    { t: 'table', q: '친구 의견 듣기', cols: ['친구 이름', '친구 의견', '내 생각'], rows: 3 },
+    { t: 'stars', q: '토의 자기 평가', items: ['까닭을 들어 의견을 말했다', '친구의 말을 끝까지 들었다', '다른 의견도 존중했다'] },
+    { t: 'text', q: '토의하고 나서 생각과 느낀 점', n: 2 }
+  ] },
+  l14: { title: '바뀐 이야기 역할극 계획서', items: [
+    { t: 'tool', w: 'remix', q: '이야기 바꾸기 뽑기' },
+    { t: 'table', q: '우리가 바꾼 재료', cols: ['인물의 성격', '사건', '배경'], rows: 1, tall: true },
+    { t: 'table', q: '바뀐 이야기 4장면', cols: ['장면', '무슨 일이 일어날까?', '나오는 인물'], rowsLabel: ['처음', '가운데 1', '가운데 2', '끝'] },
+    { t: 'table', q: '역할 나누기', cols: ['역할', '이름', '준비할 것'], rows: 4 },
+    { t: 'text', q: '다른 모둠 역할극에서 달라진 점과 좋았던 점', n: 3 }
+  ] },
+  l15: { title: '질문으로 쓰는 내 생각', items: [
+    { t: 'tool', w: 'word', q: '「레 미제라블」을 한 단어로!' },
+    { t: 'table', q: '나의 단어와 나에게 영향을 준 문장', cols: ['한 단어', '문장', '쪽'], rows: 1 },
+    { t: 'choice', q: '글감을 하나 골라요 (책 뒤 ‘더 생각해 보기’와 이어져요)', opts: ['주교는 왜 장 발장의 죄를 덮어 주었을까? 나라면 어떻게 했을까?', '장 발장이 자베르를 용서한 것처럼, 내가 누군가를 용서한 경험은?', '내가 코제트라면 물려받은 돈으로 무엇을 했을까?', '그동안 내가 만든 질문 중 하나'] },
+    { t: 'table', q: '처음 생각과 지금 생각', cols: ['처음 나의 답', '지금 나의 답'], rows: 1, tall: true },
+    { t: 'text', q: '내 생각 글쓰기 (질문 → 처음 생각 → 책 속 장면 → 지금 생각 → 나의 다짐)', n: 8 }
+  ] },
+  l16: { title: '책이 주는 힘', items: [
+    { t: 'choice', q: '「슈퍼 거북」이 나에게 준 선물', multi: 2, opts: ['지식', '재미', '감정', '영감', '위로', '용기'] },
+    { t: 'choice', q: '「레 미제라블」이 나에게 준 선물', multi: 2, opts: ['지식', '재미', '감정', '영감', '위로', '용기'] },
+    { t: 'text', q: '선물을 그렇게 고른 까닭', n: 2 },
+    { t: 'tool', w: 'greats', q: '위인들의 독서 비밀 카드' },
+    { t: 'table', q: '위인들의 독서 습관', cols: ['인물', '독서 습관', '나도 따라 할 수 있을까?'], rowsLabel: ['세종대왕', '정약용', '김득신', '링컨'] },
+    { t: 'text', q: '나의 독서 습관 선언문', n: 3 }
+  ] },
+  l17: { title: '오디오북 스크립트', items: [
+    { t: 'table', q: '우리 모둠 오디오북', cols: ['책', '장면 (쪽)', '내 역할'], rows: 1 },
+    { t: 'tool', w: 'sfx', q: '효과음 패드' },
+    { t: 'table', q: '스크립트', cols: ['순서', '누가', '대사 / 내레이션', '효과음·배경음악'], rows: 8 },
+    { t: 'text', q: '교실에서 만들 수 있는 효과음 아이디어', n: 2 },
+    { t: 'stars', q: '리허설 피드백 (친구 모둠)', items: ['목소리가 또렷하게 들린다', '알맞은 빠르기로 읽는다', '인물의 감정이 느껴진다', '효과음이 장면과 어울린다'] }
+  ] },
+  l18: { title: '녹음 기록표', items: [
+    { t: 'tool', w: 'check', q: '녹음 준비 점검표' },
+    { t: 'table', q: '장면별 녹음 기록', cols: ['장면', '녹음 (○ / 다시)', '고칠 점'], rows: 5 },
+    { t: 'text', q: '녹음하며 생긴 문제와 우리가 해결한 방법', n: 3 }
+  ] },
+  l19: { title: '오디오북 감상 카드', items: [
+    { t: 'table', q: '모둠별 감상', cols: ['모둠', '떠오른 장면', '칭찬 한마디', '별점 (1~5)'], rows: 6 },
+    { t: 'text', q: '오디오북을 만들고 나서 느낀 점', n: 3 }
+  ] },
+  l20: { title: '독서 홍보 프로젝트 계획서', items: [
+    { t: 'tool', w: 'plan', q: '홍보 주제·형태 뽑기' },
+    { t: 'table', q: '우리 모둠 프로젝트', cols: ['홍보 주제', '홍보 형태', '보여 줄 곳'], rows: 1, tall: true },
+    { t: 'table', q: '역할과 준비물', cols: ['이름', '맡은 일', '준비물'], rows: 4 },
+    { t: 'text', q: '우리가 전하고 싶은 한마디', n: 1 }
+  ] },
+  l21: { title: '홍보물 밑그림', items: [
+    { t: 'tool', w: 'poster', q: '홍보물 미리보기' },
+    { t: 'text', q: '우리 홍보 문구 후보 (가장 좋은 것에 ★)', n: 3 },
+    { t: 'draw', q: '포스터 / 카드뉴스 밑그림', h: 460 }
+  ] },
+  l22: { title: '독서 이벤트 참가 카드', items: [
+    { t: 'acro', q: 'N행시 짓기', word: '책열쇠' },
+    { t: 'table', q: '책 속 문장 따라 쓰기', cols: ['문장', '책 제목', '쪽'], rows: 2 },
+    { t: 'text', q: '가장 마음에 든 홍보물과 그 까닭', n: 2 }
+  ] },
+  l23: { title: '책열쇠 여행 돌아보기', items: [
+    { t: 'scale', q: '나의 독서 온도 변화', key: 'l1:temp', cols: ['처음 (1차시)', '지금 (29차시)'], items: ['나는 책 읽기가 좋다', '책을 읽고 내 생각을 말할 수 있다', '친구와 책 이야기를 나누는 것이 즐겁다', '책에서 질문을 찾을 수 있다', '책을 다른 사람에게 소개할 수 있다'] },
+    { t: 'choice', q: '가장 인상 깊었던 활동', opts: ['꾸물이 마음 그래프', '인물관계도 그리기', '인물 면담', '토의 한마당', '바꾼 이야기 역할극', '오디오북 만들기', '독서 홍보물', 'N행시 이벤트'] },
+    { t: 'text', q: '그 활동이 인상 깊었던 까닭', n: 3 },
+    { t: 'text', q: '나에게 주는 상 (상 이름과 까닭)', n: 2 },
+    { t: 'text', q: '다음에 읽고 싶은 책', n: 1 }
+  ] }
+};
+/* 내용 확인 퀴즈의 보기 순서를 섞어요 (항상 같은 순서로 섞여서 종이와 화면이 같아요) */
+(function () {
+  var s = 20261124;
+  function r() { s = (s * 9301 + 49297) % 233280; return s / 233280; }
+  Object.keys(window.BK.sheets).forEach(function (id) {
+    window.BK.sheets[id].items.forEach(function (it) {
+      if (it.t !== 'mc') return;
+      it.items = it.items.map(function (q) {
+        var idx = q[1].map(function (_, i) { return i; });
+        for (var i = idx.length - 1; i > 0; i--) { var j = Math.floor(r() * (i + 1)); var t = idx[i]; idx[i] = idx[j]; idx[j] = t; }
+        return [q[0], idx.map(function (i) { return q[1][i]; }), idx.indexOf(q[2]), q[3]];
+      });
+    });
+  });
+})();
+</script>
+<script>(function () {
+  var D = window.BK, A = window.ART, L = D.lessons;
+  var $ = function (s, r) { return (r || document).querySelector(s); };
+  function h(tag, attrs, kids) {
+    var e = document.createElement(tag);
+    if (attrs) for (var k in attrs) {
+      if (k === 'html') e.innerHTML = attrs[k];
+      else if (k === 'text') e.textContent = attrs[k];
+      else if (k.slice(0, 2) === 'on') e.addEventListener(k.slice(2), attrs[k]);
+      else if (attrs[k] !== null && attrs[k] !== undefined && attrs[k] !== false) e.setAttribute(k, attrs[k]);
+    }
+    (kids || []).forEach(function (c) { if (c == null) return; e.appendChild(typeof c === 'string' ? document.createTextNode(c) : c); });
+    return e;
+  }
+  function esc(s) { return String(s).replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; }); }
+  // 저장: 이 브라우저에만 남는 편의 기능 (실패해도 동작)
+  var mem = {};
+  var S = {
+    get: function (k, d) { try { var v = localStorage.getItem('bk:' + k); if (v != null) return JSON.parse(v); } catch (e) {} return k in mem ? mem[k] : d; },
+    set: function (k, v) { mem[k] = v; try { localStorage.setItem('bk:' + k, JSON.stringify(v)); } catch (e) {} }
+  };
+  function shuffle(a, seed) { a = a.slice(); var s = seed || 7; for (var i = a.length - 1; i > 0; i--) { s = (s * 9301 + 49297) % 233280; var j = Math.floor(s / 233280 * (i + 1)); var t = a[i]; a[i] = a[j]; a[j] = t; } return a; }
+  function rnd(n) { return Math.floor(Math.random() * n); }
+  var bookOf = function (b) { return b === 'turtle' ? 'turtle' : b === 'hugo' ? 'hugo' : b === 'both' ? 'both' : 'none'; };
+  var bookLabel = { turtle: '그림책 「슈퍼 거북」', hugo: '동화책 「레 미제라블」', both: '「슈퍼 거북」·「레 미제라블」', none: '여러 책' };
+
+  /* ───────── 위젯 ───────── */
+  var W = {};
+  W.board = function (o, key) {
+    var st = S.get(key, null);
+    if (!st) st = (o.seed || []).map(function (s, i) { return { c: s[0], t: s[1], l: 0, k: i }; });
+    var root = h('div');
+    var cols = h('div', { class: 'cols', style: 'grid-template-columns:repeat(' + Math.min(o.cols.length, 3) + ',minmax(0,1fr))' });
+    var sel = h('select', { class: 'inp', 'aria-label': '붙일 칸' }, o.cols.map(function (c, i) { return h('option', { value: i, text: c }); }));
+    var inp = h('input', { class: 'inp', placeholder: '생각을 적고 Enter', style: 'flex:1;min-width:180px', 'aria-label': '포스트잇 내용' });
+    function save() { S.set(key, st); }
+    function draw() {
+      cols.innerHTML = '';
+      o.cols.forEach(function (c, ci) {
+        var box = h('div', { class: 'colbox' }, [h('h4', { text: c })]);
+        var wrap = h('div', { class: 'stickies' });
+        st.filter(function (s) { return s.c === ci; }).sort(function (a, b) { return o.like ? b.l - a.l : 0; }).forEach(function (s) {
+          var el = h('div', { class: 'sticky c' + ((s.k || 0) % 5) }, [s.t,
+            h('button', { class: 'x', 'aria-label': '지우기', text: '×', onclick: function () { st.splice(st.indexOf(s), 1); save(); draw(); } })]);
+          if (o.like) el.appendChild(h('button', { class: 'lk', text: '♥ ' + s.l, onclick: function () { s.l++; save(); draw(); } }));
+          wrap.appendChild(el);
+        });
+        box.appendChild(wrap); cols.appendChild(box);
+      });
+    }
+    function add() { var t = inp.value.trim(); if (!t) return; st.push({ c: +sel.value, t: t, l: 0, k: rnd(5) }); inp.value = ''; save(); draw(); inp.focus(); }
+    inp.addEventListener('keydown', function (e) { if (e.key === 'Enter' && !e.isComposing) add(); });
+    var bar = h('div', { class: 'row', style: 'margin-bottom:10px' }, [o.cols.length > 1 ? sel : null, inp, h('button', { class: 'btn pri', text: '붙이기', onclick: add }),
+      h('button', { class: 'btn sm', text: '모두 지우기', onclick: function () { if (st.length && root.dataset.sure !== '1') { root.dataset.sure = '1'; this.textContent = '한 번 더 누르면 지워져요'; return; } st = []; save(); draw(); root.dataset.sure = ''; this.textContent = '모두 지우기'; } })]);
+    root.appendChild(bar); root.appendChild(cols); draw();
+    return root;
+  };
+  W.classify = function (o, key) {
+    var st = S.get(key, {}), selI = null, checked = false;
+    var order = shuffle(o.items.map(function (_, i) { return i; }), o.items.length * 3);
+    var root = h('div');
+    var pool = h('div', { class: 'pool', 'aria-label': '분류할 카드' });
+    var bins = h('div', { class: 'cols', style: 'grid-template-columns:repeat(' + o.bins.length + ',minmax(0,1fr));margin-top:10px' });
+    var msg = h('span', { class: 'muted' });
+    function card(i) {
+      var c = h('button', { class: 'ccard' + (selI === i ? ' sel' : ''), text: o.items[i][0], onclick: function (e) { e.stopPropagation(); selI = selI === i ? null : i; draw(); } });
+      if (checked && st[i] != null) c.className += st[i] === o.items[i][1] ? ' ok' : ' no';
+      return c;
+    }
+    function draw() {
+      pool.innerHTML = ''; bins.innerHTML = '';
+      order.forEach(function (i) { if (st[i] == null) pool.appendChild(card(i)); });
+      if (!pool.children.length) pool.appendChild(h('span', { class: 'muted', text: '모두 분류했어요! ‘정답 확인’을 눌러 보세요.' }));
+      o.bins.forEach(function (b, bi) {
+        var bin = h('button', { class: 'bin' + (selI != null ? ' hot' : ''), onclick: function () { if (selI == null) return; st[selI] = bi; selI = null; checked = false; S.set(key, st); draw(); } }, [h('h4', { text: b + (selI != null ? '  ← 여기에 놓기' : '') })]);
+        var w = h('div', { class: 'stickies' });
+        order.forEach(function (i) { if (st[i] === bi) { var c = card(i); c.onclick = function (e) { e.stopPropagation(); delete st[i]; checked = false; S.set(key, st); draw(); }; c.title = '누르면 다시 꺼내요'; w.appendChild(c); } });
+        bin.appendChild(w); bins.appendChild(bin);
+      });
+      if (checked) { var ok = 0, n = 0; for (var k in st) { n++; if (st[k] === o.items[k][1]) ok++; } msg.textContent = n + '개 중 ' + ok + '개가 맞았어요. 빨간 카드는 왜 그쪽일지 다시 이야기해 봐요.'; } else msg.textContent = '카드를 누른 뒤 바구니를 누르세요.';
+    }
+    root.appendChild(pool); root.appendChild(bins);
+    root.appendChild(h('div', { class: 'row', style: 'margin-top:10px' }, [h('button', { class: 'btn pri', text: '정답 확인', onclick: function () { checked = true; draw(); } }), h('button', { class: 'btn', text: '다시 하기', onclick: function () { st = {}; checked = false; S.set(key, st); draw(); } }), msg]));
+    draw(); return root;
+  };
+  W.quiz = function (o, key) {
+    var st = S.get(key, {});
+    var root = h('div', { class: 'poll' }), score = h('b');
+    function draw() {
+      root.innerHTML = ''; var ok = 0, n = 0;
+      o.items.forEach(function (it, i) {
+        var r = h('div', { class: 'srow' }, [h('span', { text: (i + 1) + '. ' + it[0] })]);
+        var bs = h('div', { class: 'row' });
+        ['O', 'X'].forEach(function (v) {
+          var on = st[i] === v, right = it[1] === v;
+          var cls = 'btn' + (on ? (right ? ' pri' : '') : '');
+          var b = h('button', { class: cls, style: 'font-family:var(--display);font-size:20px;min-width:52px' + (on && !right ? ';background:#FDE7E8;border-color:var(--bad)' : ''), text: v === 'O' ? '⭕' : '❌', 'aria-label': v, onclick: function () { st[i] = v; S.set(key, st); draw(); } });
+          bs.appendChild(b);
+        });
+        if (st[i]) { n++; if (st[i] === it[1]) ok++; bs.appendChild(h('span', { text: st[i] === it[1] ? '딩동댕!' : '다시 생각해 봐요', style: 'min-width:110px;color:' + (st[i] === it[1] ? 'var(--ok)' : 'var(--bad)') })); }
+        r.appendChild(bs); root.appendChild(r);
+      });
+      root.appendChild(h('div', { class: 'row' }, [h('span', { text: '맞힌 개수: ' + ok + ' / ' + o.items.length }), h('button', { class: 'btn sm', text: '다시 풀기', onclick: function () { st = {}; S.set(key, st); draw(); } })]));
+    }
+    draw(); return root;
+  };
+  W.cards = function (o, key) {
+    var root = h('div');
+    var g = h('div', { class: 'flips' });
+    o.items.forEach(function (it) {
+      var f = h('button', { class: 'flip', 'aria-label': it[0] + ' 카드 뒤집기', onclick: function () { f.classList.toggle('on'); } },
+        [h('div', { class: 'in' }, [h('div', { class: 'f' + (o.front === 'big' ? ' big' : ''), text: it[0] }), h('div', { class: 'b', text: it[1] })])]);
+      g.appendChild(f);
+    });
+    root.appendChild(g);
+    root.appendChild(h('div', { class: 'row', style: 'margin-top:8px' }, [h('button', { class: 'btn sm', text: '모두 앞면으로', onclick: function () { g.querySelectorAll('.flip').forEach(function (x) { x.classList.remove('on'); }); } }), h('span', { class: 'muted', text: '카드를 누르면 뒤집혀요.' })]));
+    return root;
+  };
+  W.poll = function (o, key) {
+    var st = S.get(key, o.items.map(function () { return 0; }));
+    var root = h('div', { class: 'poll' });
+    function draw() {
+      root.innerHTML = ''; var mx = Math.max.apply(null, st.concat([1]));
+      o.items.forEach(function (it, i) {
+        var r = h('div', { class: 'prow' + (st[i] && st[i] === mx ? ' top' : '') }, [
+          h('div', { class: 'lbl' }, [h('i', { style: 'width:' + (st[i] / mx * 100) + '%' }), h('span', { text: it })]),
+          h('div', { class: 'n', text: st[i] }),
+          h('div', { class: 'row' }, [h('button', { class: 'btn sm', text: '+1', 'aria-label': it + ' 한 표 더하기', onclick: function () { st[i]++; S.set(key, st); draw(); } }), h('button', { class: 'btn sm', text: '−1', 'aria-label': it + ' 한 표 빼기', onclick: function () { st[i] = Math.max(0, st[i] - 1); S.set(key, st); draw(); } })])]);
+        root.appendChild(r);
+      });
+      root.appendChild(h('div', { class: 'row' }, [h('span', { class: 'muted', text: '손을 든 친구 수만큼 +1을 눌러요. 가장 많은 항목은 분홍색으로 보여요.' }), h('button', { class: 'btn sm', text: '0으로', onclick: function () { st = st.map(function () { return 0; }); S.set(key, st); draw(); } })]));
+    }
+    draw(); return root;
+  };
+  function reelSpin(els, lists, locks, done) {
+    var t = 0, n = 14;
+    els.forEach(function (e, i) { if (!locks[i]) e.classList.add('spin'); });
+    var iv = setInterval(function () {
+      els.forEach(function (e, i) { if (!locks[i]) e.textContent = lists[i][rnd(lists[i].length)]; });
+      if (++t > n) { clearInterval(iv); els.forEach(function (e) { e.classList.remove('spin'); }); done(); }
+    }, 70);
+  }
+  W.whatif = function (o, key) {
+    var st = S.get(key, { a: o.a[0], b: o.b[0], saved: [] });
+    var root = h('div');
+    var va = h('div', { class: 'v', text: st.a }), vb = h('div', { class: 'v', text: st.b });
+    var q = h('div', { class: 'whatq' }), list = h('ol', { class: 'saved' });
+    function draw() { q.textContent = '만약 ' + va.textContent + ' ' + vb.textContent; list.innerHTML = ''; st.saved.forEach(function (s, i) { list.appendChild(h('li', {}, [s, ' ', h('button', { class: 'btn sm', text: '×', 'aria-label': '지우기', onclick: function () { st.saved.splice(i, 1); S.set(key, st); draw(); } })])); }); }
+    root.appendChild(h('div', { class: 'reels' }, [h('div', { class: 'reel' }, [h('span', { class: 'nm', text: '누가' }), va, h('span')]), h('div', { class: 'reel' }, [h('span', { class: 'nm', text: '어떻게' }), vb, h('span')])]));
+    root.appendChild(q);
+    root.appendChild(h('div', { class: 'row', style: 'margin-top:10px' }, [
+      h('button', { class: 'btn pri', text: '🎲 굴리기', onclick: function () { reelSpin([va, vb], [o.a, o.b], [0, 0], function () { st.a = va.textContent; st.b = vb.textContent; S.set(key, st); draw(); }); } }),
+      h('button', { class: 'btn', text: '📌 이 질문 모아 두기', onclick: function () { st.saved.push(q.textContent); S.set(key, st); draw(); } })]));
+    root.appendChild(list); draw(); return root;
+  };
+  W.slot = function (o, key) {
+    var st = S.get(key, { v: o.reels.map(function (r) { return r.items[0]; }), lock: o.reels.map(function () { return 0; }) });
+    var root = h('div', { class: 'reels' }), els = [];
+    o.reels.forEach(function (r, i) {
+      var v = h('div', { class: 'v', text: st.v[i] }); els.push(v);
+      var lk = h('button', { class: 'lock' + (st.lock[i] ? ' on' : ''), text: st.lock[i] ? '🔒 고정' : '🔓', 'aria-label': r.name + ' 고정', onclick: function () { st.lock[i] = st.lock[i] ? 0 : 1; lk.className = 'lock' + (st.lock[i] ? ' on' : ''); lk.textContent = st.lock[i] ? '🔒 고정' : '🔓'; S.set(key, st); } });
+      root.appendChild(h('div', { class: 'reel' }, [h('span', { class: 'nm', text: r.name }), v, lk]));
+    });
+    root.appendChild(h('div', { class: 'row' }, [h('button', { class: 'btn pri', text: '🎰 돌리기', onclick: function () { reelSpin(els, o.reels.map(function (r) { return r.items; }), st.lock, function () { st.v = els.map(function (e) { return e.textContent; }); S.set(key, st); }); } }), h('span', { class: 'muted', text: '마음에 드는 칸은 고정하고 나머지만 다시 돌려요. 모둠은 한 칸만 바꾸어도 좋아요.' })]));
+    return root;
+  };
+  W.pick = function (o, key) {
+    var st = S.get(key, o.slots.map(function () { return ''; })), cur = 0;
+    var root = h('div'), sl = h('div', { class: 'slots' });
+    function draw() {
+      sl.innerHTML = '';
+      o.slots.forEach(function (s, i) { sl.appendChild(h('button', { class: 'slot' + (cur === i ? ' on' : ''), onclick: function () { cur = i; draw(); } }, [h('small', { text: s }), h('b', { text: st[i] || '?' })])); });
+    }
+    root.appendChild(sl);
+    root.appendChild(h('div', { class: 'vchips' }, o.items.map(function (v) { return h('button', { class: 'vchip', text: v, onclick: function () { st[cur] = v; S.set(key, st); cur = (cur + 1) % o.slots.length; draw(); } }); })));
+    root.appendChild(h('p', { class: 'muted', style: 'margin:8px 0 0', text: '칸을 먼저 누르고 가치 카드를 고르세요. 왜 그 가치인지 장면을 근거로 말해 봐요.' }));
+    draw(); return root;
+  };
+  W.mood = function (o, key) {
+    var scenes = D.books[o.scenes].scenes, st = S.get(key, [4, 3, 2, 2, 5]);
+    var root = h('div', { class: 'mood' }), svgW = h('div');
+    var faces = ['😢', '😟', '😐', '🙂', '😄'];
+    function draw() {
+      var W2 = 600, H2 = 250, x = function (i) { return 60 + i * 120; }, y = function (v) { return 220 - (v - 1) * 48; };
+      var s = '<svg viewBox="0 0 ' + W2 + ' ' + H2 + '" role="img" aria-label="' + o.who + ' 마음 그래프">';
+      for (var v = 1; v <= 5; v++) s += '<line x1="20" x2="590" y1="' + y(v) + '" y2="' + y(v) + '" stroke="#E3E9F2" stroke-width="2"/><text x="4" y="' + (y(v) + 7) + '" font-size="20">' + faces[v - 1] + '</text>';
+      s += '<polyline fill="none" stroke="#1F9E66" stroke-width="5" stroke-linejoin="round" stroke-linecap="round" points="' + st.map(function (v, i) { return x(i) + ',' + y(v); }).join(' ') + '"/>';
+      for (var i = 0; i < 5; i++) for (var v2 = 1; v2 <= 5; v2++) {
+        var on = st[i] === v2;
+        s += '<circle data-i="' + i + '" data-v="' + v2 + '" cx="' + x(i) + '" cy="' + y(v2) + '" r="' + (on ? 16 : 11) + '" fill="' + (on ? '#FFB627' : '#fff') + '" stroke="' + (on ? '#B87A00' : '#C9D3E1') + '" stroke-width="3" style="cursor:pointer"/>';
+      }
+      s += '</svg>'; svgW.innerHTML = s;
+      svgW.querySelectorAll('circle').forEach(function (c) { c.addEventListener('click', function () { st[+c.dataset.i] = +c.dataset.v; S.set(key, st); draw(); }); });
+    }
+    root.appendChild(svgW);
+    root.appendChild(h('div', { class: 'scn' }, scenes.map(function (t, i) { return h('div', { text: (i + 1) + '. ' + t }); })));
+    root.appendChild(h('p', { class: 'muted', style: 'margin:8px 0 0', text: '동그라미를 눌러 장면마다 ' + o.who + '의 기분을 정해요. 처음 그래프는 예시예요.' }));
+    draw(); return root;
+  };
+  W.relmap = function (o, key) {
+    var R = D.rel, root = h('div'), cur = null, only = !!o.conflict;
+    var box = h('div', { class: 'rel' }), info = h('div', { class: 'rinfo' });
+    var pos = {}; R.nodes.forEach(function (n) { pos[n.k] = n; });
+    var icon = { help: '🤝', love: '💗', conflict: '⚡' }, col = { help: '#5B7CF0', love: '#EC6A8F', conflict: '#E5484D' };
+    function draw() {
+      box.innerHTML = '';
+      var s = '<svg viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">';
+      R.edges.forEach(function (e) {
+        var a = pos[e[0]], b = pos[e[1]], dim = only && e[2] !== 'conflict';
+        s += '<line x1="' + a.x + '" y1="' + a.y + '" x2="' + b.x + '" y2="' + b.y + '" stroke="' + col[e[2]] + '" stroke-width="' + (e[2] === 'conflict' ? 0.9 : 0.7) + '" ' + (e[2] === 'conflict' ? 'stroke-dasharray="2 1.4"' : '') + ' opacity="' + (dim ? 0.15 : 0.9) + '" vector-effect="non-scaling-stroke" style="stroke-width:' + (e[2] === 'conflict' ? 4 : 3) + 'px"/>';
+      });
+      box.innerHTML = s + '</svg>';
+      R.edges.forEach(function (e, i) {
+        var a = pos[e[0]], b = pos[e[1]];
+        var bd = h('button', { class: 'rbadge ' + e[2] + (cur === 'e' + i ? ' on' : '') + (only && e[2] !== 'conflict' ? ' dim' : ''), style: 'left:' + ((a.x + b.x) / 2) + '%;top:' + ((a.y + b.y) / 2) + '%', text: icon[e[2]], 'aria-label': A.people[e[0]].name + '와 ' + A.people[e[1]].name + ' 관계', onclick: function () { cur = 'e' + i; draw(); } });
+        box.appendChild(bd);
+      });
+      R.nodes.forEach(function (n) {
+        box.appendChild(h('button', { class: 'rnode' + (cur === n.k ? ' on' : ''), style: 'left:' + n.x + '%;top:' + n.y + '%', onclick: function () { cur = n.k; draw(); } }, [h('span', { class: 'fc', html: A.face(n.k, 58) }), h('span', { text: A.people[n.k].name })]));
+      });
+      info.innerHTML = '';
+      if (!cur) { info.appendChild(h('span', { html: A.kiki({ size: 54, gear: 'candle' }) })); info.appendChild(h('span', { text: '인물 얼굴이나 선 위의 동그라미를 눌러 보세요. 🤝 도와준 관계 · 💗 사랑하는 관계 · ⚡ 갈등 관계' })); }
+      else if (cur[0] === 'e') { var e = R.edges[+cur.slice(1)]; info.appendChild(h('span', { html: A.face(e[0], 46) + A.face(e[1], 46) })); info.appendChild(h('span', { html: '<b style="font-family:var(--display);font-weight:400;font-size:18px">' + icon[e[2]] + ' ' + esc(A.people[e[0]].name) + ' ↔ ' + esc(A.people[e[1]].name) + '</b><br>' + esc(e[3]) })); }
+      else { var n0 = pos[cur]; info.appendChild(h('span', { html: A.face(cur, 56) })); info.appendChild(h('span', { html: '<b style="font-family:var(--display);font-weight:400;font-size:18px">' + esc(A.people[cur].name) + '</b><br>' + esc(n0.info) })); }
+    }
+    var tg = h('label', { class: 'row' }, [h('input', { type: 'checkbox', id: key + '-c' }), ' ⚡ 갈등 관계만 또렷하게 보기']);
+    tg.querySelector('input').checked = only;
+    tg.querySelector('input').addEventListener('change', function () { only = this.checked; draw(); });
+    root.appendChild(h('div', { class: 'row', style: 'margin-bottom:8px' }, [tg]));
+    root.appendChild(box); root.appendChild(info); draw(); return root;
+  };
+  W.hotseat = function (o, key) {
+    var keys = Object.keys(D.hot), st = S.get(key, { who: 'jean', role: 0 }), qi = 0;
+    var roles = ['책 속 인물이 되어', '내가 이 인물이라면', '선생님이 이 인물이라면', '부모님이 이 인물이라면'];
+    var root = h('div'), tabs = h('div', { class: 'hs-tabs' }), stage = h('div');
+    function draw() {
+      tabs.innerHTML = '';
+      keys.forEach(function (k) { tabs.appendChild(h('button', { class: 'hs-tab' + (st.who === k ? ' on' : ''), onclick: function () { st.who = k; qi = 0; S.set(key, st); draw(); } }, [h('span', { html: A.face(k, 36) }), A.people[k].name])); });
+      var qs = D.hot[st.who];
+      stage.innerHTML = '';
+      stage.appendChild(h('div', { class: 'hs-stage' }, [h('div', { html: A.face(st.who, 110) }), h('div', {}, [
+        h('div', { class: 'chip pink', text: '🎙️ ' + roles[st.role] + ' 대답해요' }),
+        h('div', { class: 'hs-q', style: 'margin-top:8px', text: '“' + A.people[st.who].name + ' 님, ' + qs[qi] + '”' }),
+        h('div', { class: 'row', style: 'margin-top:10px' }, [
+          h('button', { class: 'btn pri', text: '다음 질문 ▶', onclick: function () { qi = (qi + 1) % qs.length; draw(); } }),
+          h('button', { class: 'btn', text: '🔄 입장 바꾸기', onclick: function () { st.role = (st.role + 1) % roles.length; S.set(key, st); draw(); } })])])]));
+      stage.appendChild(h('div', { class: 'hs-ql' }, qs.map(function (q, i) { return h('button', { text: (i === qi ? '▶ ' : '') + q, onclick: function () { qi = i; draw(); } }); })));
+    }
+    root.appendChild(tabs); root.appendChild(stage); draw(); return root;
+  };
+  W.script = function (o, key) {
+    var st = S.get(key, [
+      { w: '내레이터', l: '옛날 옛적, 토끼와의 달리기 경주에서 이긴 거북이 한 마리가 살았어요.', s: '[잔잔한 배경음악]' },
+      { w: '동네 사람들', l: '우아, 슈퍼 거북이다!', s: '[환호 소리]' },
+      { w: '꾸물이', l: '(작은 목소리로) 어… 고마워요.', s: '' }]);
+    var root = h('div'), tb = h('table', { class: 'stbl' });
+    function draw() {
+      tb.innerHTML = '<tr><th style="width:42px">순서</th><th style="width:22%">누가</th><th>대사 / 내레이션</th><th style="width:24%">효과음·음악</th><th></th></tr>';
+      st.forEach(function (r, i) {
+        var tr = h('tr');
+        tr.appendChild(h('td', { text: i + 1, style: 'font-family:var(--display);text-align:center' }));
+        ['w', 'l', 's'].forEach(function (f) { var inp = h('input', { class: 'inp', value: r[f], 'aria-label': (i + 1) + '번째 줄 ' + { w: '누가', l: '대사', s: '효과음' }[f] }); inp.addEventListener('input', function () { r[f] = inp.value; S.set(key, st); }); tr.appendChild(h('td', {}, [inp])); });
+        tr.appendChild(h('td', {}, [h('button', { class: 'btn sm', text: '×', 'aria-label': '줄 지우기', onclick: function () { st.splice(i, 1); S.set(key, st); draw(); } })]));
+        tb.appendChild(tr);
+      });
+    }
+    var msg = h('span', { class: 'muted' });
+    root.appendChild(h('div', { style: 'overflow-x:auto' }, [tb]));
+    root.appendChild(h('div', { class: 'row', style: 'margin-top:8px' }, [
+      h('button', { class: 'btn pri', text: '+ 줄 추가', onclick: function () { st.push({ w: '', l: '', s: '' }); S.set(key, st); draw(); } }),
+      h('button', { class: 'btn', text: '📋 스크립트 복사', onclick: function () { var t = st.map(function (r, i) { return (i + 1) + '. ' + r.w + ': ' + r.l + (r.s ? '  ' + r.s : ''); }).join('\n'); try { navigator.clipboard.writeText(t).then(function () { msg.textContent = '복사했어요. 한글 문서에 붙여 넣으세요.'; }, function () { msg.textContent = '이 화면에서는 복사가 막혀 있어요.'; }); } catch (e) { msg.textContent = '이 화면에서는 복사가 막혀 있어요.'; } } }), msg]));
+    draw(); return root;
+  };
+  // 효과음: 브라우저에서 바로 만들어 내는 소리 (파일 없음)
+  var AC = null;
+  function ac() { if (!AC) { var C = window.AudioContext || window.webkitAudioContext; if (C) AC = new C(); } if (AC && AC.state === 'suspended') AC.resume(); return AC; }
+  function tone(f, t0, d, type, vol) { var c = ac(); if (!c) return; var o = c.createOscillator(), g = c.createGain(); o.type = type || 'sine'; o.frequency.setValueAtTime(f, c.currentTime + t0); g.gain.setValueAtTime(0.0001, c.currentTime + t0); g.gain.exponentialRampToValueAtTime(vol || 0.3, c.currentTime + t0 + 0.01); g.gain.exponentialRampToValueAtTime(0.0001, c.currentTime + t0 + d); o.connect(g); g.connect(c.destination); o.start(c.currentTime + t0); o.stop(c.currentTime + t0 + d + 0.05); return o; }
+  function noise(t0, d, fType, freq, vol, sweep) {
+    var c = ac(); if (!c) return; var len = Math.floor(c.sampleRate * d), buf = c.createBuffer(1, len, c.sampleRate), ch = buf.getChannelData(0);
+    for (var i = 0; i < len; i++) ch[i] = Math.random() * 2 - 1;
+    var s = c.createBufferSource(); s.buffer = buf; var f = c.createBiquadFilter(); f.type = fType || 'lowpass'; f.frequency.setValueAtTime(freq || 1000, c.currentTime + t0);
+    if (sweep) f.frequency.linearRampToValueAtTime(sweep, c.currentTime + t0 + d);
+    var g = c.createGain(); g.gain.setValueAtTime(0.0001, c.currentTime + t0); g.gain.linearRampToValueAtTime(vol || 0.3, c.currentTime + t0 + Math.min(0.4, d / 4)); g.gain.linearRampToValueAtTime(0.0001, c.currentTime + t0 + d);
+    s.connect(f); f.connect(g); g.connect(c.destination); s.start(c.currentTime + t0); s.stop(c.currentTime + t0 + d);
+  }
+  var SFX = [
+    ['🔔', '종소리', function () { [0, 1.1].forEach(function (t) { tone(660, t, 2.2, 'sine', .35); tone(1320, t, 1.4, 'sine', .12); tone(990, t, 1.8, 'triangle', .08); }); }],
+    ['🌧️', '빗소리', function () { noise(0, 4, 'highpass', 1800, .25); for (var i = 0; i < 30; i++) tone(2000 + rnd(2000), Math.random() * 4, .03, 'sine', .04); }],
+    ['👣', '발소리', function () { for (var i = 0; i < 6; i++) { noise(i * .45, .12, 'lowpass', 400, .6); tone(90, i * .45, .12, 'sine', .4); } }],
+    ['🚪', '문 두드리기', function () { for (var i = 0; i < 3; i++) { tone(180, i * .22, .09, 'square', .25); noise(i * .22, .06, 'bandpass', 900, .5); } }],
+    ['🌬️', '바람', function () { noise(0, 4, 'bandpass', 300, .35, 1200); noise(1, 3, 'bandpass', 900, .2, 250); }],
+    ['👏', '박수·환호', function () { for (var i = 0; i < 40; i++) noise(Math.random() * 2.5, .05, 'bandpass', 1500 + rnd(1500), .4); noise(0, 2.8, 'bandpass', 700, .15); }],
+    ['💓', '두근두근', function () { for (var i = 0; i < 4; i++) { tone(60, i * .8, .15, 'sine', .7); tone(55, i * .8 + .22, .18, 'sine', .55); } }],
+    ['🐎', '말발굽·마차', function () { for (var i = 0; i < 10; i++) { tone(320 + (i % 2) * 80, i * .2, .05, 'square', .12); noise(i * .2, .04, 'bandpass', 1200, .3); } }],
+    ['⏰', '째깍째깍', function () { for (var i = 0; i < 8; i++) tone(i % 2 ? 1400 : 1800, i * .5, .03, 'square', .15); }],
+    ['✨', '짠! 반짝', function () { [523, 659, 784, 1047].forEach(function (f, i) { tone(f, i * .1, .6, 'triangle', .22); }); }],
+    ['😴', '쿨쿨 코 고는 소리', function () { for (var i = 0; i < 3; i++) { noise(i * 1.6, .9, 'lowpass', 300, .4, 150); tone(80, i * 1.6, .9, 'sawtooth', .05); } }],
+    ['🔥', '탁탁 모닥불', function () { noise(0, 4, 'lowpass', 500, .12); for (var i = 0; i < 25; i++) noise(Math.random() * 4, .02, 'highpass', 3000, .5); }]
+  ];
+  W.sfx = function () {
+    var root = h('div');
+    var g = h('div', { class: 'pads' });
+    SFX.forEach(function (s) { var b = h('button', { class: 'pad', onclick: function () { try { s[2](); } catch (e) {} b.classList.add('play'); setTimeout(function () { b.classList.remove('play'); }, 600); } }, [h('i', { text: s[0] }), s[1]]); g.appendChild(b); });
+    root.appendChild(g);
+    root.appendChild(h('p', { class: 'muted', style: 'margin:8px 0 0', text: '누르면 소리가 나요. 들어 보고 우리 장면에 어울리는 소리를 고르거나, 교실 물건으로 비슷한 소리를 만들어 보세요.' }));
+    return root;
+  };
+  W.stars = function (o, key) {
+    var st = S.get(key, o.items.map(function () { return 0; }));
+    var root = h('div', { class: 'stars' });
+    function draw() {
+      root.innerHTML = '';
+      o.items.forEach(function (it, i) {
+        var ss = h('div', { class: 'ss' });
+        for (var n = 1; n <= 5; n++) (function (n) { ss.appendChild(h('button', { class: n <= st[i] ? 'on' : '', text: '★', 'aria-label': it + ' 별 ' + n + '개', onclick: function () { st[i] = st[i] === n ? 0 : n; S.set(key, st); draw(); } })); })(n);
+        root.appendChild(h('div', { class: 'srow' }, [h('span', { text: it }), ss]));
+      });
+      root.appendChild(h('div', { class: 'row' }, [h('button', { class: 'btn sm', text: '다시', onclick: function () { st = st.map(function () { return 0; }); S.set(key, st); draw(); } })]));
+    }
+    draw(); return root;
+  };
+  W.roles = function (o, key) {
+    var st = S.get(key, { names: '', out: [] });
+    var root = h('div');
+    var ta = h('textarea', { class: 'inp', rows: 2, style: 'width:100%', placeholder: '모둠 친구 이름을 쉼표(,)로 써요. 예) 민준, 서연, 하준, 지우', 'aria-label': '모둠 친구 이름' });
+    ta.value = st.names;
+    var out = h('div', { class: 'rolesout' });
+    function draw() { out.innerHTML = ''; (st.out.length ? st.out : o.roles.map(function (r) { return [r, '']; })).forEach(function (p) { out.appendChild(h('div', { class: 'rcard' }, [h('small', { text: p[0] }), h('b', { text: p[1] || '?' })])); }); }
+    root.appendChild(ta);
+    root.appendChild(h('div', { class: 'row', style: 'margin-top:8px' }, [h('button', { class: 'btn pri', text: '🎲 역할 섞기', onclick: function () {
+      st.names = ta.value; var names = ta.value.split(/[,\n、 ]+/).map(function (x) { return x.trim(); }).filter(Boolean);
+      if (!names.length) { st.out = []; draw(); return; }
+      var ns = names.slice().sort(function () { return Math.random() - .5; });
+      st.out = o.roles.map(function (r, i) { return [r, ns[i % ns.length] + (i >= ns.length ? ' (함께)' : '')]; }); S.set(key, st); draw();
+    } }), h('span', { class: 'muted', text: '사람보다 역할이 많으면 한 사람이 두 가지를 맡아요.' })]));
+    root.appendChild(out); draw(); return root;
+  };
+  W.progress = function (o, key) {
+    var parts = D.books[o.book].parts, total = 0;
+    parts.forEach(function (p) { total += p.ch.length; });
+    var st = S.get(key + ':ch', {});
+    var root = h('div'), g = h('div', { class: 'parts' }), bar = h('div', { class: 'tbar' }, [h('i')]), cnt = h('b', { style: 'font-family:var(--display);font-weight:400' });
+    var candle = function (on) { return '<svg viewBox="0 0 34 44" width="30" height="40" aria-hidden="true"><rect x="12" y="16" width="10" height="22" rx="2" fill="#EEF1FF" stroke="#3B4CC0" stroke-width="2"/><path d="M5 38 h24 l-3 5 h-18 z" fill="#C9CEE8" stroke="#3B4CC0" stroke-width="2"/>' + (on ? '<path d="M17 3 C23 10 22 14 17 15 C12 14 11 10 17 3 Z" fill="#FFB627" stroke="#E07B00" stroke-width="1.6"/>' : '<path d="M17 10 v6" stroke="#8A93AD" stroke-width="2"/>') + '</svg>'; };
+    function draw() {
+      g.innerHTML = ''; var n = 0;
+      parts.forEach(function (p) {
+        var done = p.ch.every(function (c) { return st[c]; });
+        var chips = h('div', { class: 'row', style: 'gap:6px' });
+        p.ch.forEach(function (c) {
+          if (st[c]) n++;
+          chips.appendChild(h('button', { class: 'ccard' + (st[c] ? ' ok' : ''), style: 'font-size:14px;padding:3px 10px', 'aria-pressed': st[c] ? 'true' : 'false', text: (st[c] ? '✓ ' : '') + c + (p.cp ? ' · ' + p.cp[p.ch.indexOf(c)] + '쪽' : ''), onclick: function () { st[c] = !st[c]; S.set(key + ':ch', st); draw(); } }));
+        });
+        g.appendChild(h('div', { class: 'part' + (done ? ' done' : '') }, [h('span', { class: 'cd', html: candle(done) }), h('div', {}, [h('b', { text: p.t + (p.pg ? '  (' + p.pg + ')' : ''), style: 'font-family:var(--display);font-weight:400;display:block;margin-bottom:4px' }), chips])]));
+      });
+      bar.firstChild.style.width = (n / total * 100) + '%'; cnt.textContent = n + ' / ' + total + '장 읽음';
+    }
+    root.appendChild(h('div', { class: 'row' }, [cnt])); root.appendChild(bar); root.appendChild(g);
+    root.appendChild(h('p', { class: 'muted', style: 'margin:8px 0 0', text: '은하수미디어 「레 미제라블」(초등학생을 위한 세계 명작 40) 목차예요. 다 읽은 장을 누르면 표시되고, 한 부를 모두 읽으면 촛불이 켜져요.' }));
+    draw(); return root;
+  };
+  W.faces = function (o, key) {
+    var st = S.get(key, o.keys[0]);
+    var root = h('div'), g = h('div', { class: 'faces' }), let = h('div', { class: 'letter' });
+    function draw() {
+      g.innerHTML = '';
+      o.keys.forEach(function (k) { g.appendChild(h('button', { class: 'fbtn' + (st === k ? ' on' : ''), onclick: function () { st = k; S.set(key, st); draw(); } }, [h('span', { html: A.face(k, 52) }), A.people[k].name])); });
+      let.innerHTML = '<p class="to">' + esc(A.people[st].name) + '에게</p><p>✉️ 첫인사: 안녕하세요, 저는 ○○초등학교 4학년 ○○○이에요.</p><p>🌟 인상 깊은 장면: ○○○ 장면을 읽고 ○○○ 마음이 들었어요.</p><p>❓ 묻고 싶은 말: 그때 왜 ○○○ 했나요?</p><p>💌 해 주고 싶은 말: ○○○</p><p>👋 끝인사: 20○○년 ○월 ○일 ○○○ 드림</p>';
+    }
+    root.appendChild(h('p', { style: 'margin:0 0 8px', text: o.prompt })); root.appendChild(g); root.appendChild(let); draw(); return root;
+  };
+  W.cloud = function (o, key) {
+    var st = S.get(key, { '용서': 3, '은촛대': 2, '사랑': 2, '자유': 1 });
+    var root = h('div'), cl = h('div', { class: 'cloud', 'aria-live': 'polite' });
+    var inp = h('input', { class: 'inp', placeholder: '한 단어를 쓰고 Enter', style: 'flex:1', 'aria-label': '한 단어' });
+    var colors = ['#3F55D1', '#1F9E66', '#E9466F', '#B87A00', '#7B4BC4'];
+    function draw() {
+      cl.innerHTML = ''; var mx = Math.max.apply(null, Object.values(st).concat([1]));
+      Object.keys(st).sort(function () { return 0; }).forEach(function (w, i) { cl.appendChild(h('span', { text: w, style: 'font-size:' + (18 + st[w] / mx * 34) + 'px;color:' + colors[i % colors.length] })); });
+    }
+    function add() { var t = inp.value.trim(); if (!t) return; st[t] = (st[t] || 0) + 1; inp.value = ''; S.set(key, st); draw(); }
+    inp.addEventListener('keydown', function (e) { if (e.key === 'Enter' && !e.isComposing) add(); });
+    root.appendChild(h('div', { class: 'row', style: 'margin-bottom:8px' }, [inp, h('button', { class: 'btn pri', text: '넣기', onclick: add }), h('button', { class: 'btn sm', text: '비우기', onclick: function () { st = {}; S.set(key, st); draw(); } })]));
+    root.appendChild(cl);
+    root.appendChild(h('p', { class: 'muted', style: 'margin:8px 0 0', text: '같은 단어가 여러 번 나오면 글자가 커져요. 처음 단어들은 예시예요.' }));
+    draw(); return root;
+  };
+  W.checklist = function (o, key) {
+    var st = S.get(key, o.items.map(function () { return false; }));
+    var root = h('div', { class: 'checks' }), msg = h('div', { class: 'row' });
+    o.items.forEach(function (it, i) { var cb = h('input', { type: 'checkbox', id: key + i }); cb.checked = st[i]; cb.addEventListener('change', function () { st[i] = cb.checked; S.set(key, st); upd(); }); root.appendChild(h('label', { for: key + i }, [cb, it])); });
+    function upd() { var all = st.every(Boolean); msg.innerHTML = all ? A.kiki({ size: 50, gear: 'mic', mood: 'wow' }) + '<b style="font-family:var(--display);font-weight:400;font-size:20px">준비 완료! 녹음 시작!</b>' : '<span class="muted">' + st.filter(Boolean).length + ' / ' + o.items.length + ' 준비됨</span>'; }
+    root.appendChild(msg); upd(); return root;
+  };
+  W.poster = function (o, key) {
+    var themes = [['#FFB627', '#FFF1C9', 'key'], ['#1F9E66', '#DCF5E8', 'turtle'], ['#3F55D1', '#E3E8FF', 'candle'], ['#E9466F', '#FFE2EA', 'mic']];
+    var st = S.get(key, { t: '책 한 권, 마음의 문이 열려요', s: '쉬는 시간 10분, 책과 함께해요!', b: '「슈퍼 거북」', th: 0 });
+    var root = h('div', { class: 'poster-w' }), form = h('div', { style: 'display:grid;gap:10px;align-content:start' }), pv = h('div', { class: 'poster' });
+    function field(lbl, f) { var inp = h('input', { class: 'inp', value: st[f], id: key + f, style: 'width:100%' }); inp.addEventListener('input', function () { st[f] = inp.value; S.set(key, st); draw(); }); return h('label', { for: key + f, style: 'display:grid;gap:4px' }, [lbl, inp]); }
+    form.appendChild(field('큰 문구 (표어·제목)', 't'));
+    form.appendChild(field('작은 문구', 's'));
+    form.appendChild(field('추천하는 책', 'b'));
+    var sws = h('div', { class: 'row' }, ['색깔']);
+    themes.forEach(function (t, i) { sws.appendChild(h('button', { class: 'sw' + (st.th === i ? ' on' : ''), style: 'background:' + t[0], 'aria-label': '색깔 ' + (i + 1), onclick: function () { st.th = i; S.set(key, st); draw(); } })); });
+    form.appendChild(sws);
+    form.appendChild(h('p', { class: 'muted', style: 'margin:0', text: '미리보기를 보며 문구를 다듬은 뒤, 4절지나 카드뉴스에 옮겨 그려요. 문구는 짧을수록 멀리서도 잘 보여요.' }));
+    function draw() {
+      var t = themes[st.th];
+      pv.style.background = 'linear-gradient(170deg,' + t[1] + ' 0%, #fff 70%)'; pv.style.borderColor = t[0];
+      pv.innerHTML = '<div class="pb" style="border:2px solid ' + t[0] + '">생각을 여는 책열쇠</div><div class="pt">' + esc(st.t) + '</div>' + A.kiki({ size: 110, gear: t[2] === 'key' ? 'none' : t[2], mood: 'wink' }) + '<div class="ps">' + esc(st.s) + '</div><div class="pb" style="background:' + t[0] + ';color:#fff">📚 ' + esc(st.b) + '</div>';
+      sws.querySelectorAll('.sw').forEach(function (s, i) { s.className = 'sw' + (st.th === i ? ' on' : ''); });
+    }
+    root.appendChild(form); root.appendChild(pv); draw(); return root;
+  };
+  W.nhaeng = function (o, key) {
+    var st = S.get(key, { w: '책열쇠', lines: {} });
+    var root = h('div'), rows = h('div', { class: 'acro' });
+    var inp = h('input', { class: 'inp', value: st.w, style: 'width:140px', 'aria-label': 'N행시 단어' });
+    function draw() {
+      rows.innerHTML = ''; var chars = Array.from(st.w.replace(/\s/g, '')).slice(0, 8);
+      chars.forEach(function (c, i) { var k = st.w + i; var t = h('input', { class: 'inp', value: st.lines[k] || '', placeholder: c + '(으)로 시작하는 말', 'aria-label': c + ' 줄' }); t.addEventListener('input', function () { st.lines[k] = t.value; S.set(key, st); }); rows.appendChild(h('div', { class: 'ar' }, [h('b', { text: c }), t])); });
+    }
+    inp.addEventListener('input', function () { st.w = inp.value; S.set(key, st); draw(); });
+    var sug = h('div', { class: 'row' }, ['단어:', inp].concat(['책열쇠', '슈퍼거북', '은촛대', '장발장', '도서관'].map(function (w) { return h('button', { class: 'btn sm', text: w, onclick: function () { st.w = w; inp.value = w; S.set(key, st); draw(); } }); })));
+    root.appendChild(sug); root.appendChild(h('div', { style: 'height:8px' })); root.appendChild(rows); draw(); return root;
+  };
+  W.scale = function (o, key) {
+    var base = key.split(':').slice(0, 2).join(':');
+    var ck = o.cols.map(function (_, i) { return (i === 0 && o.key ? o.key : base.split(':')[0] + ':' + base.split(':')[1]) + ':c' + i; });
+    var st = ck.map(function (k) { return S.get(k, o.items.map(function () { return 0; })); });
+    var root = h('div', { class: 'scale' });
+    function draw() {
+      root.innerHTML = '';
+      o.items.forEach(function (it, i) {
+        var dots = h('div', { class: 'dots' });
+        o.cols.forEach(function (c, ci) {
+          var dd = h('div', { class: 'dd c' + ci });
+          for (var n = 1; n <= 5; n++) (function (n) { dd.appendChild(h('button', { class: st[ci][i] >= n ? 'on' : '', text: n, 'aria-label': c + ' ' + it + ' ' + n + '점', onclick: function () { st[ci][i] = st[ci][i] === n ? 0 : n; S.set(ck[ci], st[ci]); draw(); } })); })(n);
+          dots.appendChild(h('div', { class: 'dg' }, [h('small', { text: c }), dd]));
+        });
+        if (o.cols.length > 1) { var d = (st[1][i] || 0) - (st[0][i] || 0); dots.appendChild(h('span', { class: 'diff', text: st[1][i] && st[0][i] ? (d > 0 ? '▲' + d : d < 0 ? '▼' + (-d) : '＝') : '', style: 'color:' + (d > 0 ? 'var(--ok)' : 'var(--muted)') })); }
+        root.appendChild(h('div', { class: 'scrow' }, [h('span', { text: it }), dots]));
+      });
+      if (o.cols.length > 1) root.appendChild(h('p', { class: 'muted', style: 'margin:4px 0 0', text: '‘처음’ 점수는 1차시에 이 브라우저에서 입력한 값이 그대로 보여요. 학생은 활동지의 1차시 별점을 보고 비교해도 좋아요.' }));
+    }
+    draw(); return root;
+  };
+  W.journey = function () {
+    var root = h('div', { class: 'journey' }), seen = S.get('seen', {});
+    D.units.forEach(function (u) {
+      var bg = u.color === 'key' ? 'var(--key-soft)' : u.color === 'turtle' ? 'var(--turtle-soft)' : 'var(--pink-soft)';
+      var st = h('div', { class: 'jstones' });
+      L.filter(function (l) { return l.big === u.big; }).forEach(function (l) {
+        st.appendChild(h('button', { class: 'stone ' + bookOf(l.book) + (seen[l.id] ? ' seen' : ''), onclick: function () { (window.BK_GO || function () {})(l.id); } }, [h('b', { text: l.h + '차시' }), l.title.length > 13 ? l.title.slice(0, 12) + '…' : l.title]));
+      });
+      root.appendChild(h('div', { class: 'jrow' }, [h('div', { class: 'lab', style: 'background:' + bg, text: u.big }), st]));
+    });
+    root.appendChild(h('div', { class: 'legend' }, [h('span', { class: 'chip turtle', html: A.bookIcon('turtle', 18) + ' 슈퍼 거북' }), h('span', { class: 'chip hugo', html: A.bookIcon('hugo', 18) + ' 레 미제라블' }), h('span', { class: 'chip pink', text: '두 책 모두' }), h('span', { class: 'chip', text: '여러 책 · 생활' }), h('span', { class: 'chip', text: '✓ 열어 본 차시' })]));
+    return root;
+  };
+  function widget(l, wk) {
+    var o = l.widgets[wk]; if (!o || !W[o.type]) return h('div');
+    return W[o.type](o, l.id + ':' + wk);
+  }
+  var wname = { board: '생각 포스트잇', classify: '분류 놀이', quiz: 'OX 퀴즈', cards: '뒤집기 카드', poll: '우리 반 투표', whatif: '만약에 주사위', slot: '바꾸기 뽑기', pick: '가치 카드', mood: '마음 그래프', relmap: '인물관계도', hotseat: '인물 면담', script: '스크립트 쓰기', sfx: '효과음 패드', stars: '별점 평가', roles: '역할 정하기', progress: '읽기 지도', faces: '편지 받을 인물', cloud: '한 단어 구름', checklist: '준비 점검표', poster: '홍보물 미리보기', nhaeng: 'N행시', scale: '독서 온도계', journey: '책열쇠 지도' };
+
+  window.WG = { W: W, S: S, h: h, esc: esc, shuffle: shuffle, rnd: rnd, bookOf: bookOf, bookLabel: bookLabel, tone: tone, ac: ac, widget: widget, wname: wname };
+})();
+</script>
+<script>(function () {
+  var D = window.BK, A = window.ART, L = D.lessons, G = window.WG, SH = D.sheets;
+  var W = G.W, S = G.S, h = G.h, esc = G.esc, bookOf = G.bookOf;
+  var $ = function (s) { return document.querySelector(s); };
+  var main = $('#main');
+
+  /* ───── 공통 ───── */
+  var endings = [['피드백한다.', '서로 조언해요.'], ['친해진다.', '친해져요.'], ['알아본다.', '알아봐요.'], ['돌아본다.', '돌아봐요.'], ['나눈다.', '나눠요.'], ['고른다.', '골라요.'], ['읽는다.', '읽어요.'], ['듣는다.', '들어요.'], ['쓴다.', '써요.'], ['만든다.', '만들어요.'], ['높인다.', '높여요.'], ['안다.', '알아요.'], ['한다.', '해요.']];
+  function kid(t) { for (var i = 0; i < endings.length; i++) { var e = endings[i]; if (t.slice(-e[0].length) === e[0]) return t.slice(0, -e[0].length) + e[1]; } return t; }
+  var me = function () { return S.get('me', { name: '', no: '', ban: '' }); };
+  var keys = function () { return S.get('keys', {}); };
+  var AK = function (lid, i) { return 'a:' + lid + ':' + i; };
+  function keyIcon(on, size) {
+    size = size || 34; var c = on ? '#FFC53D' : '#E3E9F2', s = on ? '#C98A00' : '#C9D3E1';
+    return '<svg viewBox="0 0 40 40" width="' + size + '" height="' + size + '" aria-hidden="true"><circle cx="14" cy="14" r="10" fill="' + c + '" stroke="' + s + '" stroke-width="3"/><circle cx="14" cy="14" r="4" fill="#fff" stroke="' + s + '" stroke-width="2"/><path d="M21 21 L35 35 M28 28 L24 32 M32 32 L28 36" stroke="' + s + '" stroke-width="4" stroke-linecap="round"/></svg>';
+  }
+  function topbar() { var m = me(); $('#who').textContent = m.name ? (m.no ? m.no + '번 ' : '') + m.name : '이름을 적어 주세요'; $('#kcount').textContent = Object.keys(keys()).length + ' / ' + L.length; }
+  function sheetOf(l) { return SH[l.id] || { title: l.title, items: [] }; }
+  function scaleKeys(o, key) { var base = key.split(':').slice(0, 2).join(':'); return o.cols.map(function (_, i) { return (i === 0 && o.key ? o.key : base) + ':c' + i; }); }
+  function isDone(l, it, i) {
+    var k = AK(l.id, i), v = S.get(k, null);
+    if (it.t === 'scale') { var ks = scaleKeys(it, k); return (S.get(ks[ks.length - 1], []) || []).some(Boolean); }
+    if (it.t === 'acro') return v && Object.values(v.lines || {}).some(function (x) { return x && x.trim(); });
+    if (v == null) return false;
+    if (typeof v === 'string') return !!v.trim();
+    if (Array.isArray(v)) return v.some(function (x) { return Array.isArray(x) ? x.some(function (y) { return y && String(y).trim(); }) : (x && String(x).trim && String(x).trim()) || x > 0; });
+    if (typeof v === 'object') return Object.keys(v).some(function (x) { return v[x] !== '' && v[x] != null; });
+    return true;
+  }
+  function counted(l) { return sheetOf(l).items.map(function (it, i) { return [it, i]; }).filter(function (p) { return p[0].t !== 'tool' && p[0].t !== 'info'; }); }
+  function progress(l) { var c = counted(l), d = c.filter(function (p) { return isDone(l, p[0], p[1]); }).length; return [d, c.length]; }
+
+  /* ───── 문항 입력 ───── */
+  function grow(ta) { ta.style.height = 'auto'; ta.style.height = Math.max(ta.scrollHeight, 40) + 'px'; }
+  function textArea(key, rows, ph, onChange) {
+    var ta = h('textarea', { class: 'inp ans', rows: rows || 2, placeholder: ph || '여기에 써요' });
+    ta.value = S.get(key, '') || '';
+    ta.addEventListener('input', function () { S.set(key, ta.value); grow(ta); onChange && onChange(); });
+    setTimeout(function () { grow(ta); }, 0); return ta;
+  }
+  var R = {};
+  R.text = function (l, it, k, ch) { return textArea(k, it.n || 2, it.ph, ch); };
+  R.table = function (l, it, k, ch) {
+    var rows = it.rowsLabel ? it.rowsLabel.length : (it.rows || 2), st = S.get(k, []);
+    var tb = h('table', { class: 'stab' });
+    tb.appendChild(h('tr', {}, it.cols.map(function (c) { return h('th', { text: c }); })));
+    for (var r = 0; r < rows; r++) {
+      var tr = h('tr');
+      it.cols.forEach(function (c, ci) {
+        if (ci === 0 && it.rowsLabel) { tr.appendChild(h('td', { class: 'lab', text: it.rowsLabel[r] })); return; }
+        (function (r, ci) {
+          var ta = h('textarea', { class: 'cell', rows: it.tall ? 4 : 2, 'aria-label': (it.rowsLabel ? it.rowsLabel[r] + ' ' : (r + 1) + '번째 줄 ') + c });
+          ta.value = (st[r] && st[r][ci]) || '';
+          ta.addEventListener('input', function () { st[r] = st[r] || []; st[r][ci] = ta.value; S.set(k, st); grow(ta); ch && ch(); });
+          setTimeout(function () { grow(ta); }, 0);
+          tr.appendChild(h('td', {}, [ta]));
+        })(r, ci);
+      });
+      tb.appendChild(tr);
+    }
+    return h('div', { class: 'tscroll' }, [tb]);
+  };
+  R.choice = function (l, it, k, ch) {
+    var max = it.multi || 1, st = S.get(k, []), box = h('div', { class: 'chs' });
+    function draw() {
+      box.innerHTML = '';
+      if (max > 1) box.appendChild(h('p', { class: 'muted', style: 'margin:0 0 4px;width:100%', text: max + '개까지 골라요.' }));
+      it.opts.forEach(function (o) {
+        var on = st.indexOf(o) >= 0;
+        box.appendChild(h('button', { class: 'ch' + (on ? ' on' : ''), 'aria-pressed': on ? 'true' : 'false', text: (on ? '✔ ' : '') + o, onclick: function () {
+          if (on) st.splice(st.indexOf(o), 1); else { if (max === 1) st = []; if (st.length >= max) st.shift(); st.push(o); }
+          S.set(k, st); draw(); ch && ch();
+        } }));
+      });
+    }
+    draw(); return box;
+  };
+  R.mc = function (l, it, k, ch) {
+    var st = S.get(k, {}), box = h('div', { class: 'mcs' });
+    function draw() {
+      box.innerHTML = ''; var ok = 0, n = 0;
+      it.items.forEach(function (q, qi) {
+        var row = h('div', { class: 'mcq' }, [h('div', { class: 'mq', html: '<b>' + (qi + 1) + '.</b> ' + esc(q[0]) + ' <span class="pg">' + esc(q[3] || '') + '</span>' })]);
+        var opts = h('div', { class: 'chs' });
+        q[1].forEach(function (o, oi) {
+          var picked = st[qi] === oi, right = oi === q[2];
+          var cls = 'ch' + (picked ? (right ? ' ok' : ' no') : '');
+          opts.appendChild(h('button', { class: cls, text: (picked ? (right ? '⭕ ' : '❌ ') : '') + o, onclick: function () { st[qi] = oi; S.set(k, st); draw(); ch && ch(); } }));
+        });
+        row.appendChild(opts);
+        if (st[qi] != null) { n++; if (st[qi] === q[2]) ok++; else row.appendChild(h('div', { class: 'hint', text: '💡 ' + (q[3] || '책') + '을 다시 펼쳐 찾아보세요.' })); }
+        box.appendChild(row);
+      });
+      box.appendChild(h('div', { class: 'score', text: '맞힌 문제 ' + ok + ' / ' + it.items.length + (n === it.items.length && ok === n ? '  🎉 모두 맞혔어요!' : '') }));
+    }
+    draw(); return box;
+  };
+  R.ox = function (l, it, k, ch) { var w = W.quiz({ items: it.items }, k); w.addEventListener('click', function () { ch && ch(); }); return w; };
+  R.stars = function (l, it, k, ch) { var w = W.stars({ items: it.items }, k); w.addEventListener('click', function () { ch && ch(); }); return w; };
+  R.mood = function (l, it, k, ch) { var w = W.mood({ who: '꾸물이', scenes: it.scenes }, k); w.addEventListener('click', function () { if (S.get(k, null) == null) S.set(k, [4, 3, 2, 2, 5]); ch && ch(); }); return w; };
+  R.scale = function (l, it, k, ch) { var w = W.scale(it, k); w.addEventListener('click', function () { ch && ch(); }); return w; };
+  R.acro = function (l, it, k, ch) { if (!S.get(k, null)) S.set(k, { w: it.word, lines: {} }); var w = W.nhaeng({}, k); w.addEventListener('input', function () { ch && ch(); }); return w; };
+  R.letter = function (l, it, k, ch) {
+    var st = S.get(k, { to: '', body: '' });
+    var to = h('input', { class: 'inp', value: st.to, placeholder: '받는 인물', style: 'width:150px;font-family:var(--display);font-size:20px', 'aria-label': '받는 인물' });
+    var body = h('textarea', { class: 'inp ans', rows: it.n || 8, placeholder: it.help || '', 'aria-label': '편지 내용' }); body.value = st.body;
+    function save() { S.set(k, { to: to.value, body: body.value }); ch && ch(); }
+    to.addEventListener('input', save); body.addEventListener('input', function () { save(); grow(body); });
+    setTimeout(function () { grow(body); }, 0);
+    return h('div', { class: 'letter' }, [h('div', { class: 'row' }, [to, h('span', { style: 'font-family:var(--display);font-size:20px', text: it.q })]), it.help ? h('p', { class: 'muted', style: 'margin:6px 0', text: '✉️ ' + it.help }) : null, body, h('div', { style: 'text-align:right;font-family:var(--display);margin-top:6px', text: (me().name || '○○○') + ' 드림' })]);
+  };
+  R.draw = function (l, it, k, ch) {
+    var CW = 900, CH = Math.round((it.h || 420) * 900 / 640);
+    var cv = h('canvas', { width: CW, height: CH, class: 'pad', 'aria-label': '그리기 칸' }), ctx = cv.getContext('2d');
+    var color = '#1E2B3C', size = 4, erase = false, undo = [], drawing = false, last = null;
+    function bg() {
+      ctx.fillStyle = '#fff'; ctx.fillRect(0, 0, CW, CH);
+      if (it.center) { ctx.strokeStyle = '#1E2B3C'; ctx.lineWidth = 3; ctx.beginPath(); ctx.arc(CW / 2, CH / 2, 70, 0, Math.PI * 2); ctx.stroke(); ctx.fillStyle = '#1E2B3C'; ctx.font = '32px Jua, sans-serif'; ctx.textAlign = 'center'; ctx.textBaseline = 'middle'; ctx.fillText(it.center, CW / 2, CH / 2); }
+    }
+    var saved = S.get(k, null);
+    bg();
+    if (saved) { var im = new Image(); im.onload = function () { ctx.drawImage(im, 0, 0, CW, CH); }; im.src = saved; }
+    var tmr = null;
+    function save() { clearTimeout(tmr); tmr = setTimeout(function () { try { S.set(k, cv.toDataURL('image/png')); ch && ch(); } catch (e) {} }, 300); }
+    function pos(e) { var r = cv.getBoundingClientRect(); return [(e.clientX - r.left) * CW / r.width, (e.clientY - r.top) * CH / r.height]; }
+    cv.addEventListener('pointerdown', function (e) { e.preventDefault(); try { cv.setPointerCapture(e.pointerId); } catch (x) {} drawing = true; last = pos(e); if (undo.length > 15) undo.shift(); undo.push(ctx.getImageData(0, 0, CW, CH)); dot(last, last, e); });
+    cv.addEventListener('pointermove', function (e) { if (!drawing) return; var p = pos(e); dot(last, p, e); last = p; });
+    function end() { if (drawing) { drawing = false; save(); } }
+    cv.addEventListener('pointerup', end); cv.addEventListener('pointercancel', end); cv.addEventListener('pointerleave', end);
+    function dot(a, b, e) { ctx.strokeStyle = erase ? '#fff' : color; ctx.lineWidth = erase ? size * 5 : size * (e.pressure && e.pointerType === 'pen' ? 0.5 + e.pressure : 1); ctx.lineCap = 'round'; ctx.lineJoin = 'round'; ctx.beginPath(); ctx.moveTo(a[0], a[1]); ctx.lineTo(b[0] + 0.01, b[1]); ctx.stroke(); }
+    var bar = h('div', { class: 'padbar' });
+    var cols = [['#1E2B3C', '검정'], ['#2F6FE4', '파랑'], ['#E5484D', '빨강'], ['#1F9E66', '초록'], ['#F08C00', '주황']];
+    function drawBar() {
+      bar.innerHTML = '';
+      cols.forEach(function (c) { bar.appendChild(h('button', { class: 'pc' + (!erase && color === c[0] ? ' on' : ''), style: 'background:' + c[0], 'aria-label': c[1] + ' 펜', onclick: function () { color = c[0]; erase = false; drawBar(); } })); });
+      bar.appendChild(h('button', { class: 'btn sm' + (size === 4 ? ' pri' : ''), text: '가는 펜', onclick: function () { size = 4; drawBar(); } }));
+      bar.appendChild(h('button', { class: 'btn sm' + (size === 9 ? ' pri' : ''), text: '굵은 펜', onclick: function () { size = 9; drawBar(); } }));
+      bar.appendChild(h('button', { class: 'btn sm' + (erase ? ' pri' : ''), text: '🧽 지우개', onclick: function () { erase = !erase; drawBar(); } }));
+      bar.appendChild(h('button', { class: 'btn sm', text: '↩ 되돌리기', onclick: function () { var d = undo.pop(); if (d) { ctx.putImageData(d, 0, 0); save(); } } }));
+      var clr = h('button', { class: 'btn sm', text: '모두 지우기', onclick: function () { if (clr.dataset.s !== '1') { clr.dataset.s = '1'; clr.textContent = '한 번 더 누르면 지워져요'; return; } undo.push(ctx.getImageData(0, 0, CW, CH)); bg(); save(); clr.dataset.s = ''; clr.textContent = '모두 지우기'; } });
+      bar.appendChild(clr);
+    }
+    drawBar();
+    return h('div', {}, [bar, cv, h('p', { class: 'muted', style: 'margin:6px 0 0;font-size:14px', text: '손가락이나 펜으로 그려요. 글씨도 쓸 수 있어요.' })]);
+  };
+
+  /* ───── 화면 ───── */
+  function home() {
+    var m = me(), w = h('div', { class: 'wrap' }), ks = keys();
+    var banIn = h('input', { class: 'inp', id: 'ban', value: m.ban || '', placeholder: '반', inputmode: 'numeric', style: 'width:60px' });
+    var noIn = h('input', { class: 'inp', id: 'no', value: m.no, placeholder: '번호', inputmode: 'numeric', style: 'width:70px' });
+    var nameIn = h('input', { class: 'inp', id: 'nm', value: m.name, placeholder: '이름', style: 'width:130px' });
+    function saveMe() { S.set('me', { ban: banIn.value.trim(), no: noIn.value.trim(), name: nameIn.value.trim() }); topbar(); }
+    [banIn, noIn, nameIn].forEach(function (x) { x.addEventListener('input', saveMe); });
+    w.appendChild(h('section', { class: 'card hero' }, [h('div', { class: 'k', html: A.kiki({ size: 120, mood: 'wink' }) }), h('div', {}, [
+      h('div', { class: 'bubble', style: 'display:inline-block;margin-bottom:10px', text: '반가워! 나는 키키야. 학습지를 다 채우면 PDF로 저장해서 간직할 수 있어!' }),
+      h('h1', { text: '나의 책열쇠 학습지' }),
+      h('div', { class: 'row', style: 'margin-top:10px' }, [h('label', { for: 'ban', text: '4학년' }), banIn, h('label', { for: 'no', text: '반' }), noIn, h('label', { for: 'nm', text: '번' }), nameIn])])]));
+    var next = L.filter(function (l) { return !ks[l.id]; })[0] || L[L.length - 1];
+    w.appendChild(h('button', { class: 'card gonext ' + bookOf(next.book), onclick: function () { go(next.id); } }, [h('span', { html: A.kiki({ size: 70, gear: next.gear }) }), h('span', {}, [h('small', { text: '이어서 하기' }), h('b', { text: next.h + '차시 · ' + sheetOf(next).title })]), h('span', { class: 'arrow', text: '▶' })]));
+    w.appendChild(h('section', { class: 'card exportc' }, [h('div', { html: A.kiki({ size: 60, gear: 'cap', mood: 'wow' }) }), h('div', {}, [h('h2', { text: '📚 내 학습지 모두 PDF로 저장', style: 'font-size:21px' }), h('p', { class: 'muted', style: 'margin:2px 0 0', text: '표지와 지금까지 쓴 모든 학습지를 한 파일로 저장해요. 학기 마지막에 꼭 저장하세요!' })]), h('button', { class: 'tbtn key big', text: '📄 PDF 만들기', onclick: function () { exportPdf(null); } })]));
+    var kg = h('div', { class: 'keys' });
+    L.forEach(function (l) { kg.appendChild(h('button', { class: 'kslot' + (ks[l.id] ? ' on' : ''), title: l.h + '차시', onclick: function () { go(l.id); } }, [h('span', { html: keyIcon(!!ks[l.id], 34) }), h('small', { text: l.h })])); });
+    w.appendChild(h('section', { class: 'card' }, [h('div', { class: 'sec-h' }, [h('h2', { text: '🔑 내가 모은 생각 열쇠' })]), h('p', { class: 'muted', style: 'margin:0 0 10px', text: '학습지를 마치고 ‘다 했어요!’를 누르면 열쇠를 받아요.' }), kg]));
+    D.units.forEach(function (u) {
+      var g = h('div', { class: 'lgrid' });
+      L.filter(function (l) { return l.big === u.big; }).forEach(function (l) {
+        var p = progress(l);
+        g.appendChild(h('button', { class: 'lcard ' + bookOf(l.book) + (ks[l.id] ? ' done' : ''), onclick: function () { go(l.id); } }, [
+          h('span', { class: 'no', text: l.h + '차시' }), h('b', { text: sheetOf(l).title }), h('small', { text: l.unit }),
+          h('span', { class: 'mini' }, [h('i', { style: 'width:' + (p[1] ? p[0] / p[1] * 100 : 0) + '%' })]),
+          h('small', { text: p[0] + ' / ' + p[1] + ' 문항' }),
+          l.book === 'turtle' || l.book === 'hugo' ? h('span', { class: 'bi', html: A.bookIcon(l.book, 26) }) : null,
+          ks[l.id] ? h('span', { class: 'got', html: keyIcon(true, 26) }) : null]));
+      });
+      w.appendChild(h('section', {}, [h('div', { class: 'sec-h' }, [h('h2', { text: u.big })]), g]));
+    });
+    w.appendChild(h('section', { class: 'card' }, [h('div', { class: 'sec-h' }, [h('h2', { html: A.bookIcon('hugo', 30) + ' 「레 미제라블」 읽기 체크' })]), W.progress({ book: 'hugo' }, 'me:hugo')]));
+    var pc = h('div', { class: 'people' });
+    D.rel.nodes.forEach(function (n) { pc.appendChild(h('div', { class: 'person' }, [h('span', { html: A.face(n.k, 64) }), h('div', {}, [h('b', { text: A.people[n.k].name }), h('p', { text: n.info })])])); });
+    w.appendChild(h('section', { class: 'card' }, [h('div', { class: 'sec-h' }, [h('h2', { text: '🕯️ 레 미제라블 인물 소개' })]), pc]));
+    return w;
+  }
+
+  function lesson(l) {
+    var bk = bookOf(l.book), sh = sheetOf(l), idx = L.indexOf(l), m = me();
+    var w = h('div', { class: 'wrap' });
+    var prog = h('div', { class: 'sprog' }, [h('i')]), ptxt = h('span');
+    function upd() { var p = progress(l); prog.firstChild.style.width = (p[1] ? p[0] / p[1] * 100 : 0) + '%'; ptxt.textContent = p[0] + ' / ' + p[1] + ' 문항 완료'; }
+    var paper = h('article', { class: 'sheet ' + bk });
+    paper.appendChild(h('header', { class: 'shead' }, [h('div', { html: A.kiki({ size: 70, gear: l.gear }) }), h('div', { style: 'flex:1;min-width:0' }, [
+      h('div', { class: 'crumb', text: '생각을 여는 책열쇠 · ' + l.big + ' › ' + l.unit }), h('h1', { text: l.h + '차시 · ' + sh.title })]),
+      h('div', { class: 'idl' }, [h('span', { text: '4학년 ' + (m.ban || '○') + '반 ' + (m.no || '○') + '번' }), h('b', { text: m.name || '이름 ○○○' })])]));
+    paper.appendChild(h('div', { class: 'sgoal' }, [h('b', { text: '🎯 오늘의 목표' }), h('ul', {}, l.goal.map(function (g) { return h('li', { text: kid(g) }); }))]));
+    paper.appendChild(h('div', { class: 'row', style: 'margin:0 0 6px' }, [prog, ptxt]));
+    var no = 0;
+    sh.items.forEach(function (it, i) {
+      var k = AK(l.id, i);
+      if (it.t === 'info') { paper.appendChild(h('div', { class: 'sinfo', html: A.kiki({ size: 44, gear: l.gear }) + '<span>' + esc(it.text) + '</span>' })); return; }
+      if (it.t === 'tool') {
+        var tb = h('details', { class: 'stool' }, [h('summary', { text: '🧰 도움 도구 · ' + it.q })]);
+        var opened = false; tb.addEventListener('toggle', function () { if (tb.open && !opened) { opened = true; tb.appendChild(h('div', { class: 'tbody' }, [G.widget(l, it.w)])); } });
+        if (['rel', 'parts', 'hot', 'remix', 'sfx'].indexOf(it.w) >= 0) { tb.open = true; opened = true; tb.appendChild(h('div', { class: 'tbody' }, [G.widget(l, it.w)])); }
+        paper.appendChild(tb); return;
+      }
+      no++;
+      var done = h('span', { class: 'dchk', 'aria-hidden': 'true' });
+      function ch() { done.className = 'dchk' + (isDone(l, it, i) ? ' on' : ''); upd(); }
+      var q = h('div', { class: 'sq' }, [h('span', { class: 'sn', text: '활동 ' + no }), h('h2', { text: it.q }), done]);
+      paper.appendChild(h('section', { class: 'sitem' }, [q, (R[it.t] || R.text)(l, it, k, ch)]));
+      ch();
+    });
+    var ks = keys(), got = !!ks[l.id];
+    var party = h('div', { class: 'party' + (got ? ' on' : ''), html: got ? keyIcon(true, 40) + '<b>이 학습지의 열쇠를 모았어요.</b>' : '' });
+    var btn = h('button', { class: 'tbtn key big', text: got ? '🔑 열쇠를 받았어요!' : '🎉 다 했어요! 열쇠 받기', onclick: function () {
+      var p = progress(l);
+      if (p[0] < p[1] && btn.dataset.sure !== '1') { btn.dataset.sure = '1'; btn.textContent = '아직 ' + (p[1] - p[0]) + '문항이 비어 있어요. 그래도 받을래요?'; return; }
+      var k2 = keys(); k2[l.id] = 1; S.set('keys', k2); topbar(); btn.textContent = '🔑 열쇠를 받았어요!';
+      party.innerHTML = A.kiki({ size: 80, gear: l.gear, mood: 'wow' }) + '<b>' + esc(l.h) + '차시 생각 열쇠 획득!</b>'; party.classList.add('on');
+      try { [523, 659, 784, 1047].forEach(function (f, i) { G.tone(f, i * .1, .5, 'triangle', .2); }); } catch (e) {}
+    } });
+    paper.appendChild(h('footer', { class: 'sfoot' }, [h('div', { class: 'row' }, [btn, h('button', { class: 'tbtn big', text: '📄 이 학습지 PDF로 저장', onclick: function () { exportPdf([l]); } })]), party]));
+    w.appendChild(paper); upd();
+    var pg = h('div', { class: 'pager' });
+    pg.appendChild(idx > 0 ? h('button', { class: 'tbtn', text: '◀ ' + L[idx - 1].h + '차시', onclick: function () { go(L[idx - 1].id); } }) : h('span'));
+    pg.appendChild(h('button', { class: 'tbtn', text: '🏠 처음으로', onclick: function () { go('home'); } }));
+    pg.appendChild(idx < L.length - 1 ? h('button', { class: 'tbtn', text: L[idx + 1].h + '차시 ▶', onclick: function () { go(L[idx + 1].id); } }) : h('span'));
+    w.appendChild(pg);
+    return w;
+  }
+
+  /* ───── 인쇄용 쪽 만들기 ───── */
+  function pv(v) { return v && String(v).trim() ? esc(v).replace(/\n/g, '<br>') : '<span class="empty">(비어 있음)</span>'; }
+  function moodSvg(vals, scenes) {
+    var x = function (i) { return 50 + i * 120; }, y = function (v) { return 170 - (v - 1) * 36; }, f = ['😢', '😟', '😐', '🙂', '😄'];
+    var s = '<svg viewBox="0 0 600 200" width="600" height="200">';
+    for (var v = 1; v <= 5; v++) s += '<line x1="30" x2="590" y1="' + y(v) + '" y2="' + y(v) + '" stroke="#E3E9F2" stroke-width="2"/><text x="2" y="' + (y(v) + 7) + '" font-size="18">' + f[v - 1] + '</text>';
+    s += '<polyline fill="none" stroke="#1F9E66" stroke-width="4" points="' + vals.map(function (v, i) { return x(i) + ',' + y(v); }).join(' ') + '"/>';
+    vals.forEach(function (v, i) { s += '<circle cx="' + x(i) + '" cy="' + y(v) + '" r="9" fill="#FFB627" stroke="#B87A00" stroke-width="3"/>'; });
+    return s + '</svg><div class="pscn">' + scenes.map(function (t, i) { return '<span>' + (i + 1) + '. ' + esc(t) + '</span>'; }).join('') + '</div>';
+  }
+  function printItem(l, it, i, no) {
+    var k = AK(l.id, i), v = S.get(k, null), b = '';
+    if (it.t === 'text') b = '<div class="pans">' + pv(v) + '</div>';
+    if (it.t === 'table') {
+      var rows = it.rowsLabel ? it.rowsLabel.length : (it.rows || 2); v = v || [];
+      b = '<table class="ptab"><tr>' + it.cols.map(function (c) { return '<th>' + esc(c) + '</th>'; }).join('') + '</tr>';
+      for (var r = 0; r < rows; r++) b += '<tr>' + it.cols.map(function (c, ci) { return ci === 0 && it.rowsLabel ? '<td class="lab">' + esc(it.rowsLabel[r]) + '</td>' : '<td>' + (v[r] && v[r][ci] ? esc(v[r][ci]).replace(/\n/g, '<br>') : '') + '</td>'; }).join('') + '</tr>';
+      b += '</table>';
+    }
+    if (it.t === 'choice') b = '<div class="pchs">' + it.opts.map(function (o) { var on = (v || []).indexOf(o) >= 0; return '<span class="' + (on ? 'on' : '') + '">' + (on ? '✔ ' : '') + esc(o) + '</span>'; }).join('') + '</div>';
+    if (it.t === 'mc') { v = v || {}; var ok = 0; b = '<ol class="pmc">' + it.items.map(function (q, qi) { var a = v[qi]; if (a === q[2]) ok++; return '<li>' + esc(q[0]) + ' <small>(' + esc(q[3] || '') + ')</small><br><b>' + (a == null ? '<span class="empty">(풀지 않음)</span>' : (a === q[2] ? '⭕ ' : '❌ ') + esc(q[1][a])) + '</b></li>'; }).join('') + '</ol><div class="pscore">맞힌 문제 ' + ok + ' / ' + it.items.length + '</div>'; }
+    if (it.t === 'ox') { v = v || {}; b = '<ol class="pmc">' + it.items.map(function (q, qi) { var a = v[qi]; return '<li>' + esc(q[0]) + ' → <b>' + (a ? (a === q[1] ? '⭕ ' : '❌ ') + a : '<span class="empty">(풀지 않음)</span>') + '</b></li>'; }).join('') + '</ol>'; }
+    if (it.t === 'stars') { v = v || []; b = '<div class="pst">' + it.items.map(function (s, si) { var n = v[si] || 0; return '<div><span>' + esc(s) + '</span><b>' + '★'.repeat(n) + '<i>' + '★'.repeat(5 - n) + '</i></b></div>'; }).join('') + '</div>'; }
+    if (it.t === 'scale') { var cks = scaleKeys(it, k), vals = cks.map(function (c) { return S.get(c, []); }); b = '<table class="ptab"><tr><th></th>' + it.cols.map(function (c) { return '<th>' + esc(c) + '</th>'; }).join('') + '</tr>' + it.items.map(function (s, si) { return '<tr><td>' + esc(s) + '</td>' + vals.map(function (vv) { var n = vv[si] || 0; return '<td class="c">' + (n ? '●'.repeat(n) + '<i>' + '●'.repeat(5 - n) + '</i> ' + n : '<span class="empty">-</span>') + '</td>'; }).join('') + '</tr>'; }).join('') + '</table>'; }
+    if (it.t === 'mood') b = v ? moodSvg(v, D.books[it.scenes].scenes) : '<div class="pans"><span class="empty">(그래프를 정하지 않음)</span></div>';
+    if (it.t === 'draw') b = v ? '<img class="pimg" src="' + v + '" alt="">' : '<div class="pans" style="height:120px"><span class="empty">(그리지 않음)</span></div>';
+    if (it.t === 'letter') { v = v || {}; b = '<div class="plet"><div class="to">' + esc(v.to || '○○○') + ' ' + esc(it.q) + '</div>' + pv(v.body) + '<div class="from">' + esc(me().name || '') + ' 드림</div></div>'; }
+    if (it.t === 'acro') { v = v || { w: it.word, lines: {} }; b = '<div class="pacro">' + Array.from((v.w || '').replace(/\s/g, '')).slice(0, 8).map(function (c, ci) { return '<div><b>' + esc(c) + '</b><span>' + esc((v.lines || {})[v.w + ci] || '') + '</span></div>'; }).join('') + '</div>'; }
+    return '<section class="pitem"><div class="pq"><span>활동 ' + no + '</span>' + esc(it.q) + '</div>' + b + '</section>';
+  }
+  function blocksFor(l) {
+    var m = me(), sh = sheetOf(l), bk = bookOf(l.book), out = [], no = 0;
+    out.push('<header class="phead ' + bk + '">' + A.kiki({ size: 56, gear: l.gear }) + '<div class="pt"><small>생각을 여는 책열쇠 · ' + esc(l.big + ' › ' + l.unit) + '</small><h1>' + esc(l.h + '차시 · ' + sh.title) + '</h1></div><div class="pid">4학년 ' + esc(m.ban || '  ') + '반 ' + esc(m.no || '  ') + '번<br><b>' + esc(m.name || '') + '</b></div></header>');
+    out.push('<div class="pgoal"><b>🎯 오늘의 목표</b> ' + l.goal.map(function (g) { return esc(kid(g)); }).join(' ') + '</div>');
+    sh.items.forEach(function (it, i) { if (it.t === 'tool' || it.t === 'info') return; no++; out.push(printItem(l, it, i, no)); });
+    return out;
+  }
+  function coverBlocks() {
+    var m = me(), ks = keys();
+    return ['<div class="pcover">' + A.kiki({ size: 190, mood: 'wink' }) + '<h1>나의 책열쇠 학습지</h1><p>생각을 여는 책열쇠 · 4학년 2학기 학교자율시간</p><div class="pname">4학년 ' + esc(m.ban || '   ') + '반 ' + esc(m.no || '   ') + '번 &nbsp; <b>' + esc(m.name || '') + '</b></div>' +
+      '<div class="pbooks"><div>' + A.bookIcon('turtle', 54) + '<b>그림책 「슈퍼 거북」</b></div><div>' + A.bookIcon('hugo', 54) + '<b>동화책 「레 미제라블」</b></div></div>' +
+      '<div class="pkeys">' + L.map(function (l) { return '<span>' + keyIcon(!!ks[l.id], 30) + '<small>' + esc(l.h) + '</small></span>'; }).join('') + '</div><p class="pdate">저장한 날: ' + new Date().toLocaleDateString('ko-KR') + ' · 모은 열쇠 ' + Object.keys(ks).length + '개</p></div>'];
+  }
+  // 쪽 나누기: 794×1123(A4) 안에 블록을 차례로 담아요
+  function paginate(groups, host) {
+    var pages = [];
+    groups.forEach(function (blocks) {
+      var page = null, used = 0, LIM = 1123 - 96;
+      function newPage() { page = h('div', { class: 'ppage' }); host.appendChild(page); pages.push(page); used = 0; }
+      newPage();
+      blocks.forEach(function (html) {
+        var tmp = h('div', { html: html }), el = tmp.firstChild; page.appendChild(el);
+        var hh = el.offsetHeight + 14;
+        if (used > 0 && used + hh > LIM) { page.removeChild(el); newPage(); page.appendChild(el); used = 0; }
+        used += hh;
+        if (used > LIM) { page.style.height = 'auto'; page.dataset.tall = '1'; }
+      });
+    });
+    return pages;
+  }
+  function waitImgs(host) { var ims = host.querySelectorAll('img'); return Promise.all(Array.prototype.map.call(ims, function (im) { return im.complete ? 1 : new Promise(function (r) { im.onload = im.onerror = r; }); })); }
+  function loadScript(src) { return new Promise(function (res, rej) { if (document.querySelector('script[src="' + src + '"]')) return res(); var s = document.createElement('script'); s.src = src; s.onload = res; s.onerror = rej; document.head.appendChild(s); setTimeout(function () { rej(new Error('timeout')); }, 15000); }); }
+  // 작은 PDF 만들기: 쪽마다 JPEG 한 장
+  function b64ToBytes(d) { var bin = atob(d.split(',')[1]), u = new Uint8Array(bin.length); for (var i = 0; i < bin.length; i++) u[i] = bin.charCodeAt(i); return u; }
+  function makePdf(imgs) {
+    var enc = new TextEncoder(), parts = [], off = 0, xref = [];
+    function push(x) { var u = typeof x === 'string' ? enc.encode(x) : x; parts.push(u); off += u.length; }
+    var n = imgs.length, total = 2 + n * 3;
+    push('%PDF-1.4\n%\xE2\xE3\xCF\xD3\n');
+    xref[1] = off; push('1 0 obj\n<< /Type /Catalog /Pages 2 0 R >>\nendobj\n');
+    var kids = []; for (var i = 0; i < n; i++) kids.push((3 + i * 3) + ' 0 R');
+    xref[2] = off; push('2 0 obj\n<< /Type /Pages /Kids [' + kids.join(' ') + '] /Count ' + n + ' >>\nendobj\n');
+    imgs.forEach(function (im, i) {
+      var po = 3 + i * 3, co = po + 1, io = po + 2, wpt = 595.28, hpt = 595.28 * im.h / im.w; if (hpt > 841.89) { wpt = wpt * 841.89 / hpt; hpt = 841.89; } var c = 'q ' + wpt.toFixed(2) + ' 0 0 ' + hpt.toFixed(2) + ' ' + ((595.28 - wpt) / 2).toFixed(2) + ' ' + (841.89 - hpt).toFixed(2) + ' cm /Im0 Do Q';
+      xref[po] = off; push(po + ' 0 obj\n<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595.28 841.89] /Resources << /XObject << /Im0 ' + io + ' 0 R >> >> /Contents ' + co + ' 0 R >>\nendobj\n');
+      xref[co] = off; push(co + ' 0 obj\n<< /Length ' + c.length + ' >>\nstream\n' + c + '\nendstream\nendobj\n');
+      xref[io] = off; push(io + ' 0 obj\n<< /Type /XObject /Subtype /Image /Width ' + im.w + ' /Height ' + im.h + ' /ColorSpace /DeviceRGB /BitsPerComponent 8 /Filter /DCTDecode /Length ' + im.data.length + ' >>\nstream\n'); push(im.data); push('\nendstream\nendobj\n');
+    });
+    var xo = off, x = 'xref\n0 ' + (total + 1) + '\n0000000000 65535 f \n';
+    for (var j = 1; j <= total; j++) x += String(xref[j]).padStart(10, '0') + ' 00000 n \n';
+    push(x + 'trailer\n<< /Size ' + (total + 1) + ' /Root 1 0 R >>\nstartxref\n' + xo + '\n%%EOF');
+    return new Blob(parts, { type: 'application/pdf' });
+  }
+  var busy = false;
+  function overlay(title) {
+    var ov = h('div', { class: 'xov', role: 'dialog', 'aria-label': title });
+    var box = h('div', { class: 'xbox' }); ov.appendChild(box); document.body.appendChild(ov);
+    return { ov: ov, box: box, close: function () { ov.remove(); } };
+  }
+  function exportPdf(lessons) {
+    if (busy) return; busy = true;
+    var all = !lessons, list = lessons || L.filter(function (l) { return progress(l)[0] > 0 || keys()[l.id]; });
+    var m = me(), fname = (all ? '책열쇠_학습지_모음' : '책열쇠_' + list[0].h + '차시_학습지') + (m.name ? '_' + m.name : '') + '.pdf';
+    var o = overlay('PDF 만들기'), msg = h('p', { style: 'font-size:18px', text: '학습지를 PDF로 만들고 있어요…' }), bar = h('div', { class: 'sprog', style: 'width:100%' }, [h('i')]);
+    o.box.appendChild(h('div', { class: 'row' }, [h('span', { html: A.kiki({ size: 70, mood: 'wow' }) }), msg])); o.box.appendChild(bar);
+    var host = h('div', { class: 'phost' }); document.body.appendChild(host);
+    var groups = []; if (all) groups.push(coverBlocks()); list.forEach(function (l) { groups.push(blocksFor(l)); });
+    if (!list.length && !all) { busy = false; return; }
+    var pages = paginate(groups, host);
+    var dlP = (window.claude && window.claude.use) ? window.claude.use('downloads').catch(function () { return null; }) : Promise.resolve(null);
+    waitImgs(host).then(function () { return loadScript('https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js'); }).then(function () {
+      var imgs = [], i = 0;
+      function step() {
+        if (i >= pages.length) return Promise.resolve();
+        msg.textContent = '학습지를 PDF로 만들고 있어요… (' + (i + 1) + ' / ' + pages.length + '쪽)'; bar.firstChild.style.width = ((i + 1) / pages.length * 100) + '%';
+        var ph = Math.max(1123, pages[i].offsetHeight); return window.html2canvas(pages[i], { scale: 2, backgroundColor: '#ffffff', logging: false, width: 794, height: ph, windowWidth: 794 }).then(function (cv) {
+          var d = cv.toDataURL('image/jpeg', 0.86); imgs.push({ data: b64ToBytes(d), w: cv.width, h: cv.height, url: d }); i++; return step();
+        });
+      }
+      return step().then(function () { return imgs; });
+    }).then(function (imgs) {
+      var blob = makePdf(imgs);
+      return dlP.then(function (dl) {
+        o.box.innerHTML = '';
+        var done = h('div', { class: 'row' }, [h('span', { html: A.kiki({ size: 70, mood: 'wink' }) }), h('b', { style: 'font-family:var(--display);font-weight:400;font-size:22px', text: 'PDF가 준비됐어요! (' + imgs.length + '쪽)' })]);
+        o.box.appendChild(done);
+        var st = h('p', { class: 'muted' });
+        if (dl) {
+          var sb = h('button', { class: 'tbtn key big', text: '💾 내 태블릿에 저장하기', onclick: function () {
+            dl.save({ filename: fname, data: blob }).then(function () { st.textContent = '저장했어요! 파일 앱이나 다운로드 폴더에서 ‘' + fname + '’을 찾아보세요.'; }, function (e) {
+              var c = e && e.code; st.textContent = c === 'declined' ? '저장을 취소했어요. 다시 누르면 저장할 수 있어요.' : c === 'rate_limited' ? '잠시 뒤에 다시 눌러 주세요.' : c === 'host_unavailable' ? '이 앱에서는 저장이 안 돼요. 인터넷 브라우저에서 열어 저장해 주세요.' : '저장하지 못했어요. 아래 쪽 그림을 선생님께 보여 주세요.';
+            });
+          } });
+          o.box.appendChild(h('div', { class: 'row', style: 'margin:10px 0' }, [sb]));
+        } else st.textContent = '이 화면에서는 파일 저장이 막혀 있어요. 아래 쪽 그림을 꾹 눌러 사진으로 저장하거나 선생님께 보여 주세요.';
+        o.box.appendChild(st);
+        var gal = h('div', { class: 'xgal' }); imgs.forEach(function (im) { gal.appendChild(h('img', { src: im.url, alt: '학습지 쪽' })); });
+        o.box.appendChild(gal);
+        o.box.appendChild(h('button', { class: 'btn', text: '닫기', onclick: function () { o.close(); } }));
+      });
+    }).catch(function () {
+      // 그림으로 바꾸는 도구를 못 불러오면, 쪽 미리보기를 그대로 보여 줘요
+      o.box.innerHTML = '';
+      o.box.appendChild(h('div', { class: 'row' }, [h('span', { html: A.kiki({ size: 60 }) }), h('p', { text: 'PDF 만드는 도구를 불러오지 못했어요. 인터넷 연결을 확인하고 다시 해 보세요. 그동안은 아래 미리보기를 선생님께 보여 주거나 화면을 캡처해요.' })]));
+      var prev = h('div', { class: 'xprev' }); pages.forEach(function (p) { prev.appendChild(p); }); o.box.appendChild(prev);
+      o.box.appendChild(h('button', { class: 'btn', text: '닫기', onclick: function () { o.close(); } }));
+    }).then(function () { busy = false; if (host.parentNode) host.remove(); });
+  }
+
+  function render() {
+    var id = (location.hash || '').slice(1), l = L.filter(function (x) { return x.id === id; })[0];
+    main.innerHTML = ''; main.appendChild(l ? lesson(l) : home()); window.scrollTo(0, 0); topbar();
+  }
+  function go(id) { if (location.hash === '#' + id) render(); else location.hash = id; }
+  window.BK_GO = go;
+  window.addEventListener('hashchange', render);
+  $('#homeBtn').addEventListener('click', function () { go('home'); });
+  $('#keyBtn').addEventListener('click', function () { go('home'); });
+  $('#brandK').innerHTML = A.kiki({ size: 40 });
+  $('#kicon').innerHTML = keyIcon(true, 22);
+  render();
+})();
+</script>
+</body>
+</html>
